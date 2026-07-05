@@ -63,7 +63,7 @@ test("Assessment constructor throws on invalid definitions", () => {
 test("predefined inventories are valid and localized", () => {
   for (const id of Object.keys(inventories)) {
     const assessment = loadInventory(id);
-    assert.deepEqual(assessment.locales, ["de", "en", "tr"]);
+    assert.deepEqual(assessment.locales, ["de", "en", "es", "tr", "zh"]);
   }
 });
 

@@ -21,6 +21,8 @@ The same provenance applies to every bundled inventory. If an inventory ever dev
 | en | Reproduced from the original published instrument | Yes |
 | tr | AI translation (Anthropic Claude, `claude-fable-5`) from the original English | No |
 | de | AI translation (Anthropic Claude, `claude-fable-5`) from the original English | No |
+| zh | AI translation (Anthropic Claude, `claude-fable-5`) from the original English | No |
+| es | AI translation (Anthropic Claude, `claude-fable-5`) from the original English | No |
 
 Official validated translations exist for most of these instruments, but they were **not consulted** in preparing the bundled texts, so they are deliberately not cited as sources. The packaged Turkish and German wording has not been checked against them and has not been psychometrically validated. Validated instruments are only validated for their exact wording — before clinical or research use, obtain the official version for your language and compare or replace the text. Verification contributions from native speakers are very welcome.
 

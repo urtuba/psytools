@@ -19,7 +19,7 @@ That's a complete depression screening: standardized items, answer validation, p
 
 ## Why psytools
 
-- **Batteries included** — PHQ-9, GAD-7, and DASS-21 ship ready to use in English, Turkish, and German, with published scoring rules and citations.
+- **Batteries included** — eight instruments (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP) ship ready to use in English, Turkish, German, Chinese, and Spanish, with published scoring rules and citations.
 - **Your tests too** — therapists and researchers can define their own instruments as one plain JSON object; psytools validates, localizes, and scores them the same way.
 - **Everything is plain JSON** — assessments and responses `stringify()`/`parse()` losslessly, so definitions live in your database and travel between backend and frontend. Scoring rules are data, not code, and survive the round trip.
 - **Safe by default** — every answer is validated against the option scale, incomplete responses can't be scored accidentally, and submitted responses are immutable.
@@ -81,14 +81,14 @@ const response = AssessmentResponse.parse(assessment, rowFromDb); // answers re-
 
 | Id | Instrument | Items | Scoring | Locales |
 | --- | --- | --- | --- | --- |
-| `phq9` | Patient Health Questionnaire-9 (depression) | 9 | Sum 0–27, 5 severity bands, item-9 suicidality flag | en, tr, de |
-| `gad7` | Generalized Anxiety Disorder-7 | 7 | Sum 0–21, 4 severity bands | en, tr, de |
-| `dass21` | Depression Anxiety Stress Scales (short form) | 21 | 3 subscales × 7 items, sums doubled, banded per subscale | en, tr, de |
-| `who5` | WHO-5 Well-Being Index | 5 | Sum × 4 → 0–100 (higher is better), 3 well-being bands | en, tr, de |
-| `asrs6` | Adult ADHD Self-Report Scale (ASRS-v1.1) screener | 6 | Count of screen-positive items (per-item thresholds), ≥4 positive | en, tr, de |
-| `aq10` | Autism Spectrum Quotient (AQ-10, adult) | 10 | 1 point per item in trait direction (agree/disagree), ≥6 refer | en, tr, de |
-| `audit` | Alcohol Use Disorders Identification Test (WHO) | 10 | Sum 0–40 with per-question point systems, 4 WHO risk zones | en, tr, de |
-| `mini-ipip` | Mini-IPIP Big Five personality scale | 20 | 5 trait subscales (4–20 each), reverse-keyed items, no cutoffs | en, tr, de |
+| `phq9` | Patient Health Questionnaire-9 (depression) | 9 | Sum 0–27, 5 severity bands, item-9 suicidality flag | en, tr, de, zh, es |
+| `gad7` | Generalized Anxiety Disorder-7 | 7 | Sum 0–21, 4 severity bands | en, tr, de, zh, es |
+| `dass21` | Depression Anxiety Stress Scales (short form) | 21 | 3 subscales × 7 items, sums doubled, banded per subscale | en, tr, de, zh, es |
+| `who5` | WHO-5 Well-Being Index | 5 | Sum × 4 → 0–100 (higher is better), 3 well-being bands | en, tr, de, zh, es |
+| `asrs6` | Adult ADHD Self-Report Scale (ASRS-v1.1) screener | 6 | Count of screen-positive items (per-item thresholds), ≥4 positive | en, tr, de, zh, es |
+| `aq10` | Autism Spectrum Quotient (AQ-10, adult) | 10 | 1 point per item in trait direction (agree/disagree), ≥6 refer | en, tr, de, zh, es |
+| `audit` | Alcohol Use Disorders Identification Test (WHO) | 10 | Sum 0–40 with per-question point systems, 4 WHO risk zones | en, tr, de, zh, es |
+| `mini-ipip` | Mini-IPIP Big Five personality scale | 20 | 5 trait subscales (4–20 each), reverse-keyed items, no cutoffs | en, tr, de, zh, es |
 
 ```ts
 import { loadInventory, inventories, dass21 } from "psytools";
