@@ -24,6 +24,13 @@ The inventories bundled with psytools implement published, freely usable instrum
 - **Translations:** Turkish text follows the validated Turkish adaptation (Konkan et al., 2013); German text follows the validated German version (Löwe et al., 2008).
 - **Scoring:** Sum of 7 items (0–21); severity bands per Spitzer et al. (2006).
 
+## WHO-5 — World Health Organization Well-Being Index (`who5`)
+
+- **Original:** WHO Regional Office for Europe / Psychiatric Research Unit, Hillerød (1998 revision). Review: Topp, C. W., Østergaard, S. D., Søndergaard, S., & Bech, P. (2015). The WHO-5 Well-Being Index: A systematic review of the literature. *Psychotherapy and Psychosomatics, 84*(3), 167–176.
+- **Rights:** Free to use without permission; official translations are distributed by the Psychiatric Research Unit.
+- **Translations:** Turkish text follows the validated Turkish version (Eser et al., 2019); German text follows the official German version distributed by the Psychiatric Research Unit.
+- **Scoring:** Raw sum (0–25) multiplied by 4 and reported as 0–100; higher is better. Cutoffs (≤50 reduced well-being, ≤28 likely depression) per Topp et al. (2015).
+
 ## DASS-21 — Depression Anxiety Stress Scales, short form (`dass21`)
 
 - **Original:** Lovibond, S. H., & Lovibond, P. F. (1995). *Manual for the Depression Anxiety Stress Scales* (2nd ed.). Sydney: Psychology Foundation of Australia.

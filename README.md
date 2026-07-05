@@ -84,6 +84,7 @@ const response = AssessmentResponse.parse(assessment, rowFromDb); // answers re-
 | `phq9` | Patient Health Questionnaire-9 (depression) | 9 | Sum 0–27, 5 severity bands, item-9 suicidality flag | en, tr, de |
 | `gad7` | Generalized Anxiety Disorder-7 | 7 | Sum 0–21, 4 severity bands | en, tr, de |
 | `dass21` | Depression Anxiety Stress Scales (short form) | 21 | 3 subscales × 7 items, sums doubled, banded per subscale | en, tr, de |
+| `who5` | WHO-5 Well-Being Index | 5 | Sum × 4 → 0–100 (higher is better), 3 well-being bands | en, tr, de |
 
 ```ts
 import { loadInventory, inventories, dass21 } from "psytools";

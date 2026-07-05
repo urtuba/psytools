@@ -4,8 +4,9 @@ import { PsytoolsError } from "../errors.ts";
 import { phq9 } from "./phq9.ts";
 import { gad7 } from "./gad7.ts";
 import { dass21 } from "./dass21.ts";
+import { who5 } from "./who5.ts";
 
-export { phq9, gad7, dass21 };
+export { phq9, gad7, dass21, who5 };
 export { twoWeekFrequencyOptions, twoWeekInstructions } from "./common.ts";
 
 /** All predefined inventory definitions shipped with psytools, by id. */
@@ -13,9 +14,10 @@ export const inventories: Readonly<Record<string, AssessmentDefinition>> = {
   phq9,
   gad7,
   dass21,
+  who5,
 };
 
-export type InventoryId = "phq9" | "gad7" | "dass21";
+export type InventoryId = "phq9" | "gad7" | "dass21" | "who5";
 
 /**
  * Instantiates a predefined inventory as an `Assessment`.

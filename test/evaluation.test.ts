@@ -101,6 +101,26 @@ test("sum scoring applies an optional multiplier to score and range", () => {
   assert.equal(result.max, 40);
 });
 
+test("WHO-5: raw sum is reported as a 0-100 percentage with well-being bands", () => {
+  const assessment = loadInventory("who5");
+
+  const good = assessment.evaluate({ "who5-1": 3, "who5-2": 3, "who5-3": 3, "who5-4": 3, "who5-5": 3 });
+  if (good.kind !== "scale") return assert.fail();
+  assert.equal(good.score, 60); // raw 15 x 4
+  assert.equal(good.max, 100);
+  assert.equal(good.band?.id, "good");
+
+  const low = assessment.evaluate({ "who5-1": 1, "who5-2": 1, "who5-3": 1, "who5-4": 1, "who5-5": 1 });
+  if (low.kind !== "scale") return assert.fail();
+  assert.equal(low.score, 20);
+  assert.equal(low.band?.id, "low");
+
+  const reduced = assessment.evaluate({ "who5-1": 2, "who5-2": 2, "who5-3": 2, "who5-4": 2, "who5-5": 2 });
+  if (reduced.kind !== "scale") return assert.fail();
+  assert.equal(reduced.score, 40);
+  assert.equal(reduced.band?.id, "reduced");
+});
+
 test("reverse-scored questions are inverted against their scale", () => {
   const assessment = new Assessment({
     id: "rev",
