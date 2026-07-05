@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0](https://github.com/urtuba/psytools/compare/v0.2.0...v0.3.0) (2026-07-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* PsykitError is now PsytoolsError.
+
+### Bug Fixes
+
+* rename package to psytools ([1b3e342](https://github.com/urtuba/psytools/commit/1b3e3423df47afc90c523fb1862245b28b72c304))
+
 ## [0.2.0](https://github.com/urtuba/psykit/compare/v0.1.0...v0.2.0) (2026-07-05)
 
 
