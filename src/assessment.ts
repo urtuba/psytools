@@ -9,9 +9,9 @@ import type {
   ValidationResult,
 } from "./types.ts";
 import { PsytoolsError } from "./errors.ts";
-import { collectLocales, localize } from "./i18n.ts";
+import { collectLocales, localizeText } from "./i18n.ts";
 import { AssessmentResponse } from "./response.ts";
-import { evaluate } from "./evaluation.ts";
+import { evaluate, type EvaluateOptions } from "./evaluation.ts";
 
 /**
  * Structurally validates an assessment definition (useful before persisting
@@ -216,20 +216,26 @@ export class Assessment {
 
   /**
    * Evaluates a response (or raw answers) with the definition's declarative
-   * scoring, or with `evaluator` when provided.
+   * scoring, or with `options.evaluator` when provided.
    *
    * When given an `AssessmentResponse`, its status must be `complete` or
    * `submitted` — pass `allowIncomplete` to score partial responses anyway.
    * Raw answer maps skip the completeness check, but their values are
-   * still validated against the option scales.
+   * still validated against the option scales, and the scoring definition's
+   * missing-data policy still applies.
    *
    * @throws PsytoolsError `incomplete_response` | `unknown_question` | `invalid_value` | `no_scoring`
    */
   evaluate(
     response: AssessmentResponse | Record<string, number>,
-    evaluator?: Evaluator,
-    options?: { allowIncomplete?: boolean },
+    options?: EvaluateOptions & { allowIncomplete?: boolean },
   ): EvaluationResult {
+    if (typeof options === "function") {
+      throw new PsytoolsError(
+        "invalid_argument",
+        "Pass the evaluator as an option: assessment.evaluate(response, { evaluator })",
+      );
+    }
     if (response instanceof AssessmentResponse) {
       const scorable = response.status === "complete" || response.status === "submitted";
       if (!scorable && !options?.allowIncomplete) {
@@ -240,9 +246,9 @@ export class Assessment {
             "pass { allowIncomplete: true } to score it anyway",
         );
       }
-      return evaluate(this.definition, response.answers, evaluator);
+      return evaluate(this.definition, response.answers, { evaluator: options?.evaluator });
     }
-    return evaluate(this.definition, response, evaluator);
+    return evaluate(this.definition, response, { evaluator: options?.evaluator });
   }
 
   /** The plain serializable definition (used by `JSON.stringify`). */
@@ -272,6 +278,6 @@ export class Assessment {
   }
 
   private text(text: Record<string, string>, locale?: string): string {
-    return localize(text, locale ?? this.definition.defaultLocale, this.definition.defaultLocale);
+    return localizeText(text, locale ?? this.definition.defaultLocale, this.definition.defaultLocale);
   }
 }

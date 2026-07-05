@@ -322,14 +322,89 @@ test("evaluate throws without scoring, custom evaluators take over", () => {
     label: { en: "Example category" },
   });
 
-  const viaClass = assessment.evaluate({ q1: 1, q2: 1 }, categorize);
+  const viaClass = assessment.evaluate({ q1: 1, q2: 1 }, { evaluator: categorize });
   assert.equal(viaClass.kind, "categorical");
   if (viaClass.kind !== "categorical") return;
   assert.equal(viaClass.category, "high");
 
-  const standalone = evaluate(definition, { q1: 0, q2: 1 }, categorize);
+  const standalone = evaluate(definition, { q1: 0, q2: 1 }, { evaluator: categorize });
   if (standalone.kind !== "categorical") return assert.fail();
   assert.equal(standalone.category, "low");
+});
+
+test("missing-data policy: prorate scales partial sums, minAnswered guards", () => {
+  const definition = structuredClone(loadInventory("phq9").definition);
+  if (definition.scoring?.kind !== "sum") return assert.fail();
+  definition.scoring.missing = { strategy: "prorate", minAnswered: 7 };
+  const assessment = new Assessment(definition);
+
+  // 7 of 9 answered, raw sum 7 -> prorated round(7 * 9/7) = 9 -> mild.
+  const answers = Object.fromEntries(Array.from({ length: 7 }, (_, i) => [`phq9-${i + 1}`, 1]));
+  const result = assessment.evaluate(answers);
+  if (result.kind !== "scale") return assert.fail();
+  assert.equal(result.score, 9);
+  assert.equal(result.band?.id, "mild");
+  assert.equal(result.max, 27); // range stays full-scale
+
+  // Below minAnswered -> refuses to score.
+  assert.throws(
+    () => assessment.evaluate({ "phq9-1": 1 }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "incomplete_response",
+  );
+
+  // Complete answers are untouched by prorating.
+  const complete = assessment.evaluate(Object.fromEntries(definition.questions.map((q) => [q.id, 1])));
+  if (complete.kind !== "scale") return assert.fail();
+  assert.equal(complete.score, 9);
+});
+
+test("missing-data policy: require-complete closes the raw-map loophole", () => {
+  const definition = structuredClone(loadInventory("gad7").definition);
+  if (definition.scoring?.kind !== "sum") return assert.fail();
+  definition.scoring.missing = { strategy: "require-complete" };
+  const assessment = new Assessment(definition);
+
+  // Raw maps skip the response-status gate but not the scoring policy.
+  assert.throws(
+    () => assessment.evaluate({ "gad7-1": 1 }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "incomplete_response",
+  );
+
+  const full = assessment.evaluate(Object.fromEntries(definition.questions.map((q) => [q.id, 1])));
+  if (full.kind !== "scale") return assert.fail();
+  assert.equal(full.score, 7);
+});
+
+test("missing-data policy: applies per subscale and to count scoring", () => {
+  const dass = structuredClone(loadInventory("dass21").definition);
+  if (dass.scoring?.kind !== "subscales") return assert.fail();
+  dass.scoring.missing = { strategy: "prorate", minAnswered: 4 };
+  const assessment = new Assessment(dass);
+
+  // Depression subscale: 5 of 7 answered with 2s (raw 10 -> round(10*7/5) = 14);
+  // anxiety and stress subscales fully answered with 0s stay 0.
+  const answers: Record<string, number> = Object.fromEntries(
+    dass.questions.map((q) => [q.id, 0]),
+  );
+  const depressionIds = ["dass21-3", "dass21-5", "dass21-10", "dass21-13", "dass21-16"];
+  for (const id of depressionIds) answers[id] = 2;
+  delete answers["dass21-17"];
+  delete answers["dass21-21"];
+
+  const result = assessment.evaluate(answers);
+  if (result.kind !== "multiscale") return assert.fail();
+  const depression = result.scales.find((s) => s.id === "depression");
+  assert.equal(depression?.score, 28); // prorated raw 14 x multiplier 2
+  assert.equal(depression?.band?.id, "extremely-severe");
+
+  // Count scoring with require-complete.
+  const asrs = structuredClone(loadInventory("asrs6").definition);
+  if (asrs.scoring?.kind !== "count") return assert.fail();
+  asrs.scoring.missing = { strategy: "require-complete" };
+  assert.throws(
+    () => new Assessment(asrs).evaluate({ "asrs6-1": 2 }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "incomplete_response",
+  );
 });
 
 test("evaluate refuses incomplete responses unless explicitly allowed", () => {
@@ -341,7 +416,7 @@ test("evaluate refuses incomplete responses unless explicitly allowed", () => {
     (error: unknown) => error instanceof PsytoolsError && error.code === "incomplete_response",
   );
 
-  const result = assessment.evaluate(response, undefined, { allowIncomplete: true });
+  const result = assessment.evaluate(response, { allowIncomplete: true });
   if (result.kind !== "scale") return assert.fail();
   assert.equal(result.score, 4);
   assert.equal(result.max, 27);
@@ -365,7 +440,13 @@ test("evaluate rejects out-of-scale values and unknown questions in raw maps", (
   );
   // Custom evaluators also only ever see validated answers.
   assert.throws(
-    () => assessment.evaluate({ "phq9-1": -1 }, () => ({ kind: "custom", data: null })),
+    () => assessment.evaluate({ "phq9-1": -1 }, { evaluator: () => ({ kind: "custom", data: null }) }),
     (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_value",
+  );
+
+  // Passing a bare function (the pre-v1 signature) is rejected loudly.
+  assert.throws(
+    () => assessment.evaluate({ "phq9-1": 1 }, (() => ({ kind: "custom", data: null })) as never),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_argument",
   );
 });

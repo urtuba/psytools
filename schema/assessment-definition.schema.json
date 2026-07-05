@@ -86,6 +86,15 @@
         "label": { "$ref": "#/$defs/localizedText" }
       }
     },
+    "missingDataPolicy": {
+      "type": "object",
+      "required": ["strategy"],
+      "additionalProperties": false,
+      "properties": {
+        "strategy": { "enum": ["ignore", "prorate", "require-complete"] },
+        "minAnswered": { "type": "number" }
+      }
+    },
     "sumScoring": {
       "type": "object",
       "required": ["kind"],
@@ -94,7 +103,8 @@
         "kind": { "const": "sum" },
         "multiplier": { "type": "number" },
         "bands": { "type": "array", "items": { "$ref": "#/$defs/scoreBand" } },
-        "flags": { "type": "array", "items": { "$ref": "#/$defs/scoreFlag" } }
+        "flags": { "type": "array", "items": { "$ref": "#/$defs/scoreFlag" } },
+        "missing": { "$ref": "#/$defs/missingDataPolicy" }
       }
     },
     "subscale": {
@@ -134,7 +144,8 @@
           "items": { "$ref": "#/$defs/countScoringItem" }
         },
         "bands": { "type": "array", "items": { "$ref": "#/$defs/scoreBand" } },
-        "flags": { "type": "array", "items": { "$ref": "#/$defs/scoreFlag" } }
+        "flags": { "type": "array", "items": { "$ref": "#/$defs/scoreFlag" } },
+        "missing": { "$ref": "#/$defs/missingDataPolicy" }
       }
     },
     "subscaleScoring": {
@@ -148,7 +159,8 @@
           "minItems": 1,
           "items": { "$ref": "#/$defs/subscale" }
         },
-        "flags": { "type": "array", "items": { "$ref": "#/$defs/scoreFlag" } }
+        "flags": { "type": "array", "items": { "$ref": "#/$defs/scoreFlag" } },
+        "missing": { "$ref": "#/$defs/missingDataPolicy" }
       }
     }
   }

@@ -63,6 +63,30 @@ export interface ScoreFlag {
   label: LocalizedText;
 }
 
+/** How a scorer treats unanswered items among the ones it uses. */
+export type MissingDataStrategy = "ignore" | "prorate" | "require-complete";
+
+/**
+ * Missing-data policy for declarative scoring. Applies when incomplete
+ * answers reach the scorer (raw answer maps, or `allowIncomplete`).
+ *
+ * - `ignore` (default): unanswered items contribute nothing — partial
+ *   totals understate severity, so use deliberately.
+ * - `prorate`: the raw score is scaled up by totalItems / answeredItems
+ *   and rounded before any multiplier, per scale/subscale.
+ * - `require-complete`: evaluation throws `incomplete_response` when any
+ *   contributing item is unanswered.
+ */
+export interface MissingDataPolicy {
+  strategy: MissingDataStrategy;
+  /**
+   * Minimum answered contributing items (per scale/subscale) needed to
+   * produce a score; below it evaluation throws `incomplete_response`.
+   * Defaults to 1 for `prorate`, 0 otherwise.
+   */
+  minAnswered?: number;
+}
+
 /** Sums all answers into a single total score (PHQ-9, GAD-7, ...). */
 export interface SumScoring {
   kind: "sum";
@@ -71,6 +95,7 @@ export interface SumScoring {
   /** Severity bands the (multiplied) total is matched against. */
   bands?: ScoreBand[];
   flags?: ScoreFlag[];
+  missing?: MissingDataPolicy;
 }
 
 /** One subscale of a multi-scale scoring definition. */
@@ -90,6 +115,8 @@ export interface SubscaleScoring {
   kind: "subscales";
   subscales: SubscaleDefinition[];
   flags?: ScoreFlag[];
+  /** Applied to each subscale independently. */
+  missing?: MissingDataPolicy;
 }
 
 /** One item of a `count` scoring: when it counts as screen-positive. */
@@ -112,6 +139,8 @@ export interface CountScoring {
   /** Bands the positive-item count is matched against. */
   bands?: ScoreBand[];
   flags?: ScoreFlag[];
+  /** `prorate` scales the positive count by totalItems / answeredItems. */
+  missing?: MissingDataPolicy;
 }
 
 /** Declarative, serializable scoring rules built into psytools. */
@@ -172,14 +201,17 @@ export interface ResponseData {
   meta?: Record<string, unknown>;
 }
 
+/** Codes a validation issue can carry (a subset of `PsytoolsErrorCode`). */
+export type ValidationIssueCode =
+  | "unknown_question"
+  | "invalid_value"
+  | "missing_answer"
+  | "duplicate_question"
+  | "malformed";
+
 /** A single validation problem. */
 export interface ValidationIssue {
-  code:
-    | "unknown_question"
-    | "invalid_value"
-    | "missing_answer"
-    | "duplicate_question"
-    | "malformed";
+  code: ValidationIssueCode;
   message: string;
   questionId?: string;
 }

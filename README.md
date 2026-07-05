@@ -61,7 +61,7 @@ const result = phq9.evaluate(response);
 
 // evaluate() refuses responses that are not complete/submitted;
 // score partial data explicitly:
-phq9.evaluate(inProgressResponse, undefined, { allowIncomplete: true });
+phq9.evaluate(inProgressResponse, { allowIncomplete: true });
 
 // 4. Persist — both sides are plain JSON.
 db.save(response.stringify());           // response -> DB
@@ -147,6 +147,20 @@ Questions may also carry their own `options` to override the default scale, and 
 
 Non-JavaScript backends can validate stored definitions against the published [JSON Schema](schema/assessment-definition.schema.json) (shipped in the npm package under `schema/`).
 
+### Missing answers
+
+Declarative scoring takes an optional missing-data policy governing how incomplete answer sets are scored (they reach the scorer via raw answer maps or `allowIncomplete`):
+
+```ts
+scoring: {
+  kind: "sum",
+  missing: { strategy: "prorate", minAnswered: 7 }, // or "ignore" (default) / "require-complete"
+  ...
+}
+```
+
+`ignore` sums what is answered (partial totals understate severity — use deliberately); `prorate` scales the raw score up to the full item count (rounded) and refuses to score below `minAnswered`; `require-complete` throws unless every contributing non-optional item is answered. For subscale scoring the policy applies to each subscale independently.
+
 ## Custom evaluation
 
 Declarative scoring is optional. Pass an evaluator for anything beyond sums and subscales — it can return a single scale, multiple scales, a category, or arbitrary data:
@@ -163,7 +177,7 @@ const attachmentStyle: Evaluator = (definition, answers) => {
   };
 };
 
-assessment.evaluate(response, attachmentStyle);
+assessment.evaluate(response, { evaluator: attachmentStyle });
 ```
 
 Result shapes: `scale` (single score + band + flags), `multiscale` (named subscales), `categorical`, and `custom` (escape hatch).
@@ -184,11 +198,11 @@ const history = rows
 | --- | --- |
 | `Assessment` | Wraps a definition: validation, `localize()`, `createResponse()`, `evaluate()`, `stringify()`/`parse()` |
 | `AssessmentResponse` | `answer()`, `answerAll()`, `clearAnswer()`, `status`, `progress()`, `validate()`, `submit()`, `stringify()`/`parse()` |
-| `evaluate(definition, answers, evaluator?)` | Standalone scoring (also available as `Assessment#evaluate`) |
+| `evaluate(definition, answers, { evaluator? })` | Standalone scoring (also available as `Assessment#evaluate`) |
 | `validateDefinition(input)` | Non-throwing structural validation of definitions |
-| `loadInventory(id)` / `inventories` / `phq9`, `gad7`, `dass21` | Predefined instruments |
-| `localize(text, locale, fallback?)` / `collectLocales(texts)` | Locale helpers |
-| `PsytoolsError` | All errors carry a stable `code` (e.g. `invalid_value`, `already_submitted`) |
+| `loadInventory(id)` / `inventories` | Predefined instruments (definitions also exported by name) |
+| `localizeText(text, locale, fallback?)` / `collectLocales(texts)` | Locale helpers |
+| `PsytoolsError` | All errors carry a `code` typed as `PsytoolsErrorCode` (e.g. `invalid_value`, `already_submitted`) |
 
 ## Development
 

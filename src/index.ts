@@ -10,7 +10,10 @@ export type {
   SubscaleScoring,
   CountScoringItem,
   CountScoring,
+  MissingDataPolicy,
+  MissingDataStrategy,
   ScoringDefinition,
+  ValidationIssueCode,
   AnswerMap,
   ResponseStatus,
   ResponseData,
@@ -29,10 +32,12 @@ export type {
 } from "./types.ts";
 
 export { PsytoolsError } from "./errors.ts";
-export { localize, collectLocales } from "./i18n.ts";
+export type { PsytoolsErrorCode } from "./errors.ts";
+export { localizeText, collectLocales } from "./i18n.ts";
 export { Assessment, validateDefinition } from "./assessment.ts";
 export { AssessmentResponse } from "./response.ts";
 export { evaluate } from "./evaluation.ts";
+export type { EvaluateOptions } from "./evaluation.ts";
 export {
   phq9,
   gad7,

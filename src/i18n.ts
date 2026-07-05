@@ -6,7 +6,7 @@ import type { LocalizedText } from "./types.ts";
  * Resolution order: exact locale -> base language of the locale
  * (`"de-AT"` -> `"de"`) -> `fallbackLocale` -> first available entry.
  */
-export function localize(
+export function localizeText(
   text: LocalizedText,
   locale: string,
   fallbackLocale?: string,
