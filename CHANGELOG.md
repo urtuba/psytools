@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/urtuba/psytools/compare/v0.3.2...v0.4.0) (2026-07-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** evaluate(definition, answers, evaluatorFn) and Assessment#evaluate(response, evaluatorFn, opts) no longer accept a positional evaluator; localize() is renamed localizeText().
+
+### Features
+
+* **core:** v1 API pass and missing-data scoring policy ([1494677](https://github.com/urtuba/psytools/commit/1494677157ec43cf3f76a460ae290012e56d0cc7))
+* **i18n:** add Simplified Chinese and Spanish translations to all inventories ([34a8e34](https://github.com/urtuba/psytools/commit/34a8e347104eebde37ed5bebef12ceb2baddd86d))
+
 ## [0.3.2](https://github.com/urtuba/psytools/compare/v0.3.1...v0.3.2) (2026-07-05)
 
 
