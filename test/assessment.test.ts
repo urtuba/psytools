@@ -66,6 +66,22 @@ test("predefined inventories are valid and localized", () => {
   }
 });
 
+test("every predefined inventory declares license and translation provenance", () => {
+  for (const id of ["phq9", "gad7", "dass21", "who5", "asrs6", "aq10"]) {
+    const meta = loadInventory(id).definition.meta ?? {};
+    assert.ok(
+      meta["licenseFlag"] === "free" || meta["licenseFlag"] === "free-with-conditions",
+      `${id}: meta.licenseFlag must be a known flag`,
+    );
+    assert.equal(typeof meta["reference"], "string", `${id}: meta.reference missing`);
+    assert.match(
+      String(meta["translationProvenance"]),
+      /claude-fable-5/,
+      `${id}: meta.translationProvenance must disclose the AI translator`,
+    );
+  }
+});
+
 test("loadInventory throws on unknown ids", () => {
   assert.throws(
     () => loadInventory("mmpi"),

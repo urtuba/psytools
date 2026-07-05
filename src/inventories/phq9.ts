@@ -150,7 +150,10 @@ export const phq9: AssessmentDefinition = {
   meta: {
     reference:
       "Kroenke, K., Spitzer, R. L., & Williams, J. B. (2001). The PHQ-9: validity of a brief depression severity measure. Journal of General Internal Medicine, 16(9), 606-613.",
-    license: "Public domain",
+    license: "Free — no permission required to reproduce, translate, display or distribute (Pfizer educational grant)",
+    licenseFlag: "free",
+    translationProvenance:
+      "en: reproduced from the original. tr/de: AI-assisted (Anthropic Claude, claude-fable-5) following the validated versions; not verified against the official documents. See SOURCES.md.",
     timeframe: "past 2 weeks",
   },
 };

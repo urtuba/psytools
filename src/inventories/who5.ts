@@ -143,7 +143,10 @@ export const who5: AssessmentDefinition = {
   meta: {
     reference:
       "Topp, C. W., Østergaard, S. D., Søndergaard, S., & Bech, P. (2015). The WHO-5 Well-Being Index: a systematic review of the literature. Psychotherapy and Psychosomatics, 84(3), 167-176.",
-    license: "Free to use (WHO Regional Office for Europe / Psychiatric Research Unit, Hillerød)",
+    license: "Free — may be used without permission (WHO Regional Office for Europe / Psychiatric Research Unit, Hillerød)",
+    licenseFlag: "free",
+    translationProvenance:
+      "en: reproduced from the original. tr/de: AI-assisted (Anthropic Claude, claude-fable-5) following the official/validated versions; not verified against the official documents. See SOURCES.md.",
     timeframe: "past 2 weeks",
     note: "Positively worded: higher scores mean better well-being.",
   },

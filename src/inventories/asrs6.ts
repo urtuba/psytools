@@ -121,7 +121,11 @@ export const asrs6: AssessmentDefinition = {
   meta: {
     reference:
       "Kessler, R. C., Adler, L., Ames, M., Demler, O., Faraone, S., Hiripi, E., et al. (2005). The World Health Organization Adult ADHD Self-Report Scale (ASRS): a short screening scale for use in the general population. Psychological Medicine, 35(2), 245-256.",
-    license: "Free to distribute and score (WHO / Workgroup on Adult ADHD)",
+    license:
+      "Free with conditions — (c) WHO / Workgroup on Adult ADHD; free for clinical and research use. Verify licensing with the rights holders before embedding in commercial products.",
+    licenseFlag: "free-with-conditions",
+    translationProvenance:
+      "en: reproduced from the original. tr/de: AI-assisted (Anthropic Claude, claude-fable-5) following the validated/official versions; not verified against the official documents. See SOURCES.md.",
     timeframe: "past 6 months",
     note: "The score counts screen-positive items, not symptom severity.",
   },

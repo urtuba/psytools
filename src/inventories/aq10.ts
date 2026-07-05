@@ -175,7 +175,11 @@ export const aq10: AssessmentDefinition = {
   meta: {
     reference:
       "Allison, C., Auyeung, B., & Baron-Cohen, S. (2012). Toward brief \"Red Flags\" for autism screening: The Short Autism Spectrum Quotient and the Short Quantitative Checklist in 1,000 cases and 3,000 controls. Journal of the American Academy of Child & Adolescent Psychiatry, 51(2), 202-212.",
-    license: "Free to use (Autism Research Centre, University of Cambridge)",
+    license:
+      "Free with conditions — (c) Autism Research Centre, University of Cambridge; distributed free of charge, NICE-recommended for clinical screening. Verify licensing with ARC before embedding in commercial products.",
+    licenseFlag: "free-with-conditions",
+    translationProvenance:
+      "en: reproduced from the original. tr/de: PROVISIONAL — AI-assisted (Anthropic Claude, claude-fable-5), condensed from AQ-50 adaptations; no published AQ-10 translation was followed and the texts are unverified. See SOURCES.md.",
     note: "Each item scores 1 point in the trait direction; disagree-scored items are modeled as reverseScored.",
   },
 };

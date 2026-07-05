@@ -285,7 +285,10 @@ export const dass21: AssessmentDefinition = {
   meta: {
     reference:
       "Lovibond, S. H., & Lovibond, P. F. (1995). Manual for the Depression Anxiety Stress Scales (2nd ed.). Sydney: Psychology Foundation.",
-    license: "Public domain",
+    license: "Free — public domain per the official DASS site, including translations",
+    licenseFlag: "free",
+    translationProvenance:
+      "en: reproduced from the original. tr/de: AI-assisted (Anthropic Claude, claude-fable-5) following the published validated versions; not verified against the official documents. See SOURCES.md.",
     timeframe: "past week",
   },
 };

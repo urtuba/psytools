@@ -115,7 +115,10 @@ export const gad7: AssessmentDefinition = {
   meta: {
     reference:
       "Spitzer, R. L., Kroenke, K., Williams, J. B., & Löwe, B. (2006). A brief measure for assessing generalized anxiety disorder: the GAD-7. Archives of Internal Medicine, 166(10), 1092-1097.",
-    license: "Public domain",
+    license: "Free — no permission required to reproduce, translate, display or distribute (Pfizer educational grant)",
+    licenseFlag: "free",
+    translationProvenance:
+      "en: reproduced from the original. tr/de: AI-assisted (Anthropic Claude, claude-fable-5) following the validated versions; not verified against the official documents. See SOURCES.md.",
     timeframe: "past 2 weeks",
   },
 };
