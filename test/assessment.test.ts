@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   Assessment,
   PsytoolsError,
+  inventories,
   loadInventory,
   phq9,
   validateDefinition,
@@ -60,14 +61,14 @@ test("Assessment constructor throws on invalid definitions", () => {
 });
 
 test("predefined inventories are valid and localized", () => {
-  for (const id of ["phq9", "gad7", "dass21", "who5", "asrs6", "aq10"]) {
+  for (const id of Object.keys(inventories)) {
     const assessment = loadInventory(id);
     assert.deepEqual(assessment.locales, ["de", "en", "tr"]);
   }
 });
 
 test("every predefined inventory declares license and translation provenance", () => {
-  for (const id of ["phq9", "gad7", "dass21", "who5", "asrs6", "aq10"]) {
+  for (const id of Object.keys(inventories)) {
     const meta = loadInventory(id).definition.meta ?? {};
     assert.ok(
       meta["licenseFlag"] === "free" || meta["licenseFlag"] === "free-with-conditions",

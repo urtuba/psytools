@@ -7,8 +7,9 @@ import { dass21 } from "./dass21.ts";
 import { who5 } from "./who5.ts";
 import { asrs6 } from "./asrs6.ts";
 import { aq10 } from "./aq10.ts";
+import { audit } from "./audit.ts";
 
-export { phq9, gad7, dass21, who5, asrs6, aq10 };
+export { phq9, gad7, dass21, who5, asrs6, aq10, audit };
 export { twoWeekFrequencyOptions, twoWeekInstructions } from "./common.ts";
 
 /** All predefined inventory definitions shipped with psytools, by id. */
@@ -19,9 +20,10 @@ export const inventories: Readonly<Record<string, AssessmentDefinition>> = {
   who5,
   asrs6,
   aq10,
+  audit,
 };
 
-export type InventoryId = "phq9" | "gad7" | "dass21" | "who5" | "asrs6" | "aq10";
+export type InventoryId = "phq9" | "gad7" | "dass21" | "who5" | "asrs6" | "aq10" | "audit";
 
 /**
  * Instantiates a predefined inventory as an `Assessment`.

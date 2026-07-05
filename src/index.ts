@@ -40,6 +40,7 @@ export {
   who5,
   asrs6,
   aq10,
+  audit,
   inventories,
   loadInventory,
   twoWeekFrequencyOptions,

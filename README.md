@@ -87,6 +87,7 @@ const response = AssessmentResponse.parse(assessment, rowFromDb); // answers re-
 | `who5` | WHO-5 Well-Being Index | 5 | Sum × 4 → 0–100 (higher is better), 3 well-being bands | en, tr, de |
 | `asrs6` | Adult ADHD Self-Report Scale (ASRS-v1.1) screener | 6 | Count of screen-positive items (per-item thresholds), ≥4 positive | en, tr, de |
 | `aq10` | Autism Spectrum Quotient (AQ-10, adult) | 10 | 1 point per item in trait direction (agree/disagree), ≥6 refer | en, tr, de |
+| `audit` | Alcohol Use Disorders Identification Test (WHO) | 10 | Sum 0–40 with per-question point systems, 4 WHO risk zones | en, tr, de |
 
 ```ts
 import { loadInventory, inventories, dass21 } from "psytools";

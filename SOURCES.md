@@ -72,6 +72,19 @@ Validated instruments are only validated for their exact wording. Before clinica
 | tr | Validated Turkish WHO-5 (Eser et al., 2019; official translation exists) | Free | AI-assisted (Claude, `claude-fable-5`), following the validated version | No |
 | de | Official German WHO-5 (Psychiatric Research Unit distribution) | Free | AI-assisted (Claude, `claude-fable-5`), following the official version | No |
 
+## AUDIT — Alcohol Use Disorders Identification Test (`audit`)
+
+**Instrument license: Free.** Developed by the World Health Organization; the WHO's AUDIT manual permits reproduction and use of the questionnaire without permission.
+
+- **Citation:** Babor, T. F., Higgins-Biddle, J. C., Saunders, J. B., & Monteiro, M. G. (2001). *AUDIT: The Alcohol Use Disorders Identification Test — Guidelines for Use in Primary Care* (2nd ed.). Geneva: World Health Organization.
+- **Scoring:** Sum 0–40 with item-specific point systems (items 1–8 score 0–4, items 9–10 score 0/2/4); interpreted in the four risk zones of the WHO manual.
+
+| Language | Basis | Translation rights | Preparation | Verified |
+| --- | --- | --- | --- | --- |
+| en | Original instrument (WHO manual, Babor et al., 2001) | Free | Reproduced from the original | Yes |
+| tr | Validated Turkish AUDIT (Saatçioğlu et al., 2008) | Free | AI-assisted (Claude, `claude-fable-5`), following the validated version | No |
+| de | Validated German AUDIT (Dybek et al., 2006 / BZgA distribution) | Free | AI-assisted (Claude, `claude-fable-5`), following the validated version | No |
+
 ## ASRS v1.1 — Adult ADHD Self-Report Scale, 6-item screener (`asrs6`)
 
 **Instrument license: Free with conditions.** Copyright is held by the World Health Organization and the Workgroup on Adult ADHD (Harvard Medical School / NYU). The screener is distributed free of charge for clinical and research use. Embedding in commercial products is not explicitly covered by the public distribution terms — verify with the rights holders (Harvard NCS/ASRS distribution) before shipping commercially.

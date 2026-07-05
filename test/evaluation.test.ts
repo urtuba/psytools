@@ -165,6 +165,36 @@ test("ASRS-6: items 1-3 screen positive from Sometimes, 4-6 from Often; 4+ is po
   assert.equal(positive.band?.id, "positive");
 });
 
+test("AUDIT: per-question option scales are enforced and summed into WHO zones", () => {
+  const assessment = loadInventory("audit");
+
+  // Items 9-10 score 0/2/4 only — 1 is valid for item 3 but not item 9.
+  const response = assessment.createResponse();
+  response.answer("audit-3", 1);
+  assert.throws(
+    () => response.answer("audit-9", 1),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_value",
+  );
+  response.answer("audit-9", 2);
+
+  // Zone boundaries: max score 40, zones per the WHO manual.
+  const maxed = assessment.evaluate(
+    Object.fromEntries(assessment.questions.map((q) => [q.id, 4])),
+  );
+  if (maxed.kind !== "scale") return assert.fail();
+  assert.equal(maxed.score, 40);
+  assert.equal(maxed.max, 40);
+  assert.equal(maxed.band?.id, "zone-4");
+
+  const hazardous = assessment.evaluate({
+    "audit-1": 3, "audit-2": 1, "audit-3": 2, "audit-4": 0, "audit-5": 0,
+    "audit-6": 0, "audit-7": 1, "audit-8": 1, "audit-9": 0, "audit-10": 0,
+  });
+  if (hazardous.kind !== "scale") return assert.fail();
+  assert.equal(hazardous.score, 8);
+  assert.equal(hazardous.band?.id, "zone-2");
+});
+
 test("AQ-10: agree and disagree items both score in the trait direction", () => {
   const assessment = loadInventory("aq10");
   const agreeItems = ["aq10-1", "aq10-7", "aq10-8", "aq10-10"];
