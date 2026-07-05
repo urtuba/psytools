@@ -69,6 +69,7 @@ export const asrs6: AssessmentDefinition = {
   ],
   scoring: {
     kind: "count",
+    missing: { strategy: "require-complete" },
     items: [
       { questionId: "asrs6-1", minValue: 2 },
       { questionId: "asrs6-2", minValue: 2 },

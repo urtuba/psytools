@@ -408,7 +408,12 @@ test("missing-data policy: applies per subscale and to count scoring", () => {
 });
 
 test("evaluate refuses incomplete responses unless explicitly allowed", () => {
-  const assessment = new Assessment(inventories["phq9"]!);
+  // Policy-free clone: this test exercises the response-status gate, not
+  // the scoring-level missing-data policy the bundled PHQ-9 now ships with.
+  const definition = structuredClone(inventories["phq9"]!);
+  if (definition.scoring?.kind !== "sum") return assert.fail();
+  delete definition.scoring.missing;
+  const assessment = new Assessment(definition);
   const response = assessment.createResponse().answer("phq9-1", 2).answer("phq9-2", 2);
 
   assert.throws(
@@ -425,6 +430,33 @@ test("evaluate refuses incomplete responses unless explicitly allowed", () => {
   const raw = assessment.evaluate({ "phq9-1": 2, "phq9-2": 2 });
   if (raw.kind !== "scale") return assert.fail();
   assert.equal(raw.score, 4);
+});
+
+test("bundled inventories ship with missing-data policies", () => {
+  // PHQ-9 prorates from 7 answered items and refuses below that.
+  const phq9 = new Assessment(inventories["phq9"]!);
+  const seven = Object.fromEntries(Array.from({ length: 7 }, (_, i) => [`phq9-${i + 1}`, 1]));
+  const prorated = phq9.evaluate(seven);
+  if (prorated.kind !== "scale") return assert.fail();
+  assert.equal(prorated.score, 9);
+  assert.throws(
+    () => phq9.evaluate({ "phq9-1": 3 }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "incomplete_response",
+  );
+
+  // WHO-5 requires complete answers.
+  assert.throws(
+    () => new Assessment(inventories["who5"]!).evaluate({ "who5-1": 5 }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "incomplete_response",
+  );
+
+  // AUDIT deliberately keeps ignore: unanswered items contribute 0,
+  // matching its skip logic (a non-drinker skipping items 2-8 scores 0).
+  const audit = new Assessment(inventories["audit"]!);
+  const skipped = audit.evaluate({ "audit-1": 0, "audit-9": 0, "audit-10": 0 });
+  if (skipped.kind !== "scale") return assert.fail();
+  assert.equal(skipped.score, 0);
+  assert.equal(skipped.band?.id, "zone-1");
 });
 
 test("evaluate rejects out-of-scale values and unknown questions in raw maps", () => {

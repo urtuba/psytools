@@ -183,6 +183,8 @@ scoring: {
 
 `ignore` sums what is answered (partial totals understate severity — use deliberately); `prorate` scales the raw score up to the full item count (rounded) and refuses to score below `minAnswered`; `require-complete` throws unless every contributing non-optional item is answered. For subscale scoring the policy applies to each subscale independently.
 
+The bundled inventories ship with policies (PHQ-9/GAD-7/DASS-21/Mini-IPIP prorate with thresholds, WHO-5/ASRS/AQ-10 require-complete, AUDIT ignores to match its skip logic) — see [SOURCES.md](SOURCES.md#missing-data-policies) for the rationale and how to override.
+
 ## Custom evaluation
 
 Declarative scoring is optional. Pass an evaluator for anything beyond sums and subscales — it can return a single scale, multiple scales, a category, or arbitrary data:

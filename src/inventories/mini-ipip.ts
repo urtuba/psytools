@@ -189,6 +189,7 @@ export const miniIpip: AssessmentDefinition = {
   ],
   scoring: {
     kind: "subscales",
+    missing: { strategy: "prorate", minAnswered: 3 },
     subscales: [
       {
         id: "extraversion",

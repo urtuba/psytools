@@ -67,6 +67,7 @@ export const gad7: AssessmentDefinition = {
   ],
   scoring: {
     kind: "sum",
+    missing: { strategy: "prorate", minAnswered: 6 },
     bands: [
       {
         id: "minimal",

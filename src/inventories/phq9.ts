@@ -80,6 +80,7 @@ export const phq9: AssessmentDefinition = {
   ],
   scoring: {
     kind: "sum",
+    missing: { strategy: "prorate", minAnswered: 7 },
     bands: [
       {
         id: "minimal",

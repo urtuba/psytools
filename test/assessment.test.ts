@@ -128,7 +128,9 @@ test("stringify/parse round-trips a definition including scoring", () => {
   const restored = Assessment.parse(assessment.stringify());
   assert.deepEqual(restored.definition, phq9);
 
-  const result = restored.evaluate({ "phq9-1": 3, "phq9-2": 3 });
+  const result = restored.evaluate(
+    Object.fromEntries(restored.questions.map((q) => [q.id, 3])),
+  );
   assert.equal(result.kind, "scale");
 });
 

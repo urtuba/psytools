@@ -28,6 +28,19 @@ Official validated translations exist for most of these instruments, but they we
 
 Non-English texts live as one file per inventory per language under [`src/locales/<locale>/`](src/locales) — exactly the unit a native-speaker reviewer needs. Verification contributions are very welcome.
 
+## Missing-data policies
+
+Bundled inventories ship with declarative missing-data policies (`scoring.missing`). **The prorating thresholds are implementation choices reflecting common research practice — they are not part of the instruments' official scoring rules.** Override by cloning the definition if your protocol differs.
+
+| Inventory | Policy | Rationale |
+| --- | --- | --- |
+| `phq9` | prorate, ≥7 of 9 answered | Common research practice (≈75% completion) |
+| `gad7` | prorate, ≥6 of 7 answered | Common research practice |
+| `dass21` | prorate, ≥6 of 7 per subscale | DASS manual tolerates occasional missing items |
+| `mini-ipip` | prorate, ≥3 of 4 per trait | IPIP scoring is mean-based; prorating is equivalent |
+| `who5`, `asrs6`, `aq10` | require-complete | Short instruments; cutoffs/counts are undefined for partial data |
+| `audit` | ignore | Unanswered items score 0, matching the instrument's skip logic (e.g. non-drinkers skipping items 2–8) |
+
 ## PHQ-9 — Patient Health Questionnaire-9 (`phq9`)
 
 **License: Free.** Developed with an educational grant from Pfizer Inc. The copyright holders state that no permission is required to reproduce, translate, display, or distribute the PHQ screeners. Official repository: <https://www.phqscreeners.com>.

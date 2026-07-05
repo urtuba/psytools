@@ -86,6 +86,7 @@ export const who5: AssessmentDefinition = {
   ],
   scoring: {
     kind: "sum",
+    missing: { strategy: "require-complete" },
     multiplier: 4,
     bands: [
       {

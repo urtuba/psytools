@@ -170,6 +170,7 @@ export const audit: AssessmentDefinition = {
   ],
   scoring: {
     kind: "sum",
+    missing: { strategy: "ignore" },
     bands: [
       {
         id: "zone-1",

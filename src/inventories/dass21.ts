@@ -202,6 +202,7 @@ export const dass21: AssessmentDefinition = {
   ],
   scoring: {
     kind: "subscales",
+    missing: { strategy: "prorate", minAnswered: 6 },
     subscales: [
       {
         id: "depression",

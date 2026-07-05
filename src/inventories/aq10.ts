@@ -111,6 +111,7 @@ export const aq10: AssessmentDefinition = {
   ],
   scoring: {
     kind: "count",
+    missing: { strategy: "require-complete" },
     items: [
       { questionId: "aq10-1", minValue: 2 },
       { questionId: "aq10-2", minValue: 2 },
