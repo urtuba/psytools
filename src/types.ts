@@ -92,8 +92,30 @@ export interface SubscaleScoring {
   flags?: ScoreFlag[];
 }
 
+/** One item of a `count` scoring: when it counts as screen-positive. */
+export interface CountScoringItem {
+  questionId: string;
+  /**
+   * The item counts as positive when its answer value is >= this.
+   * `reverseScored` questions are inverted against their scale first.
+   */
+  minValue: number;
+}
+
+/**
+ * Counts how many items cross their per-item threshold (ASRS v1.1,
+ * AQ-10, ...). The score is the number of positive items.
+ */
+export interface CountScoring {
+  kind: "count";
+  items: CountScoringItem[];
+  /** Bands the positive-item count is matched against. */
+  bands?: ScoreBand[];
+  flags?: ScoreFlag[];
+}
+
 /** Declarative, serializable scoring rules built into psytools. */
-export type ScoringDefinition = SumScoring | SubscaleScoring;
+export type ScoringDefinition = SumScoring | SubscaleScoring | CountScoring;
 
 /**
  * The complete, serializable description of an assessment.

@@ -14,7 +14,7 @@ const schema = JSON.parse(
 test("assessment definition schema is valid JSON with the expected shape", () => {
   assert.equal(schema.title, "AssessmentDefinition");
   assert.deepEqual(schema.required, ["id", "title", "defaultLocale", "options", "questions"]);
-  for (const def of ["localizedText", "option", "question", "scoreBand", "scoreFlag", "sumScoring", "subscale", "subscaleScoring"]) {
+  for (const def of ["localizedText", "option", "question", "scoreBand", "scoreFlag", "sumScoring", "subscale", "subscaleScoring", "countScoringItem", "countScoring"]) {
     assert.ok(schema.$defs[def], `missing $defs.${def}`);
   }
 });

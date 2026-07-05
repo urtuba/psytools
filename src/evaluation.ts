@@ -42,6 +42,27 @@ export function evaluate(
   switch (scoring.kind) {
     case "sum":
       return evaluateSum(definition, answers, scoring);
+    case "count": {
+      let score = 0;
+      for (const item of scoring.items) {
+        const question = requireQuestion(definition, item.questionId);
+        const answered = answers[question.id];
+        if (answered === undefined) continue;
+        const values = (question.options ?? definition.options).map((o) => o.value);
+        const effective = question.reverseScored
+          ? Math.max(...values) + Math.min(...values) - answered
+          : answered;
+        if (effective >= item.minValue) score += 1;
+      }
+      return {
+        kind: "scale",
+        score,
+        min: 0,
+        max: scoring.items.length,
+        ...bandOf(score, scoring.bands),
+        flags: triggeredFlags(answers, scoring.flags),
+      };
+    }
     case "subscales": {
       const scales: MultiScaleResult["scales"] = scoring.subscales.map((subscale) => {
         const questions = subscale.questionIds.map((id) => requireQuestion(definition, id));

@@ -144,6 +144,45 @@ test("reverse-scored questions are inverted against their scale", () => {
   assert.equal(result.score, 3); // 3 + (3 - 3)
 });
 
+test("count scoring tallies items crossing per-item thresholds, honoring reverse", () => {
+  const assessment = new Assessment({
+    id: "cnt",
+    title: { en: "Count" },
+    defaultLocale: "en",
+    options: [
+      { value: 0, label: { en: "0" } },
+      { value: 1, label: { en: "1" } },
+      { value: 2, label: { en: "2" } },
+      { value: 3, label: { en: "3" } },
+    ],
+    questions: [
+      { id: "q1", text: { en: "Low threshold" } },
+      { id: "q2", text: { en: "High threshold" } },
+      { id: "q3", text: { en: "Reversed" }, reverseScored: true },
+    ],
+    scoring: {
+      kind: "count",
+      items: [
+        { questionId: "q1", minValue: 2 },
+        { questionId: "q2", minValue: 3 },
+        { questionId: "q3", minValue: 2 },
+      ],
+      bands: [
+        { id: "negative", min: 0, max: 1, label: { en: "Negative" } },
+        { id: "positive", min: 2, max: 3, label: { en: "Positive" } },
+      ],
+    },
+  });
+
+  // q1: 2 >= 2 counts; q2: 2 < 3 does not; q3: 0 reversed to 3 >= 2 counts.
+  const result = assessment.evaluate({ q1: 2, q2: 2, q3: 0 });
+  if (result.kind !== "scale") return assert.fail();
+  assert.equal(result.score, 2);
+  assert.equal(result.min, 0);
+  assert.equal(result.max, 3);
+  assert.equal(result.band?.id, "positive");
+});
+
 test("evaluate throws without scoring, custom evaluators take over", () => {
   const definition = {
     id: "unscored",

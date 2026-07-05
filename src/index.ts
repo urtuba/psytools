@@ -8,6 +8,8 @@ export type {
   SumScoring,
   SubscaleDefinition,
   SubscaleScoring,
+  CountScoringItem,
+  CountScoring,
   ScoringDefinition,
   AnswerMap,
   ResponseStatus,

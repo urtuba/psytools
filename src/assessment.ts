@@ -83,7 +83,17 @@ export function validateDefinition(input: unknown): ValidationResult {
           }
         }
       }
-      const flags = scoring.kind === "sum" || scoring.kind === "subscales" ? scoring.flags ?? [] : [];
+      if (scoring.kind === "count" && Array.isArray(scoring.items)) {
+        for (const item of scoring.items) {
+          if (!seen.has(item.questionId)) {
+            issues.push({ code: "unknown_question", message: `count scoring references unknown question "${item.questionId}"`, questionId: item.questionId });
+          }
+        }
+      }
+      const flags =
+        scoring.kind === "sum" || scoring.kind === "subscales" || scoring.kind === "count"
+          ? scoring.flags ?? []
+          : [];
       for (const flag of flags) {
         if (!seen.has(flag.questionId)) {
           issues.push({ code: "unknown_question", message: `flag "${flag.id}" references unknown question "${flag.questionId}"`, questionId: flag.questionId });

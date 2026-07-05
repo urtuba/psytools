@@ -26,7 +26,8 @@
     "scoring": {
       "oneOf": [
         { "$ref": "#/$defs/sumScoring" },
-        { "$ref": "#/$defs/subscaleScoring" }
+        { "$ref": "#/$defs/subscaleScoring" },
+        { "$ref": "#/$defs/countScoring" }
       ]
     },
     "meta": { "type": "object" }
@@ -110,6 +111,30 @@
         },
         "multiplier": { "type": "number" },
         "bands": { "type": "array", "items": { "$ref": "#/$defs/scoreBand" } }
+      }
+    },
+    "countScoringItem": {
+      "type": "object",
+      "required": ["questionId", "minValue"],
+      "additionalProperties": false,
+      "properties": {
+        "questionId": { "type": "string", "minLength": 1 },
+        "minValue": { "type": "number" }
+      }
+    },
+    "countScoring": {
+      "type": "object",
+      "required": ["kind", "items"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "count" },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/countScoringItem" }
+        },
+        "bands": { "type": "array", "items": { "$ref": "#/$defs/scoreBand" } },
+        "flags": { "type": "array", "items": { "$ref": "#/$defs/scoreFlag" } }
       }
     },
     "subscaleScoring": {
