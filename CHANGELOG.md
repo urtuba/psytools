@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.0](https://github.com/urtuba/psytools/compare/v0.4.0...v0.5.0) (2026-07-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** loadInventory is async and returns an English-only assessment unless locales are requested; named definition exports (phq9, gad7, ...) now contain English only.
+
+### Features
+
+* **core:** lazy locale packs — data minimization by default ([c75c1a4](https://github.com/urtuba/psytools/commit/c75c1a4dd5c0028f73541509338c681746ad9a40))
+* **core:** pickLocales utility and per-inventory subpath exports ([8fc1f6b](https://github.com/urtuba/psytools/commit/8fc1f6b4fe3ec63ef4cd90fb195111b46c4abbe0))
+
 ## [0.4.0](https://github.com/urtuba/psytools/compare/v0.3.2...v0.4.0) (2026-07-05)
 
 
