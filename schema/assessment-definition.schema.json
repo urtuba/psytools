@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/urtuba/psykit/main/schema/assessment-definition.schema.json",
+  "title": "AssessmentDefinition",
+  "description": "A psykit assessment: questions with an enumerated option scale, localized text, and optional declarative scoring. Lets non-JavaScript backends validate stored definitions.",
+  "type": "object",
+  "required": ["id", "title", "defaultLocale", "options", "questions"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "version": { "type": "string" },
+    "title": { "$ref": "#/$defs/localizedText" },
+    "description": { "$ref": "#/$defs/localizedText" },
+    "instructions": { "$ref": "#/$defs/localizedText" },
+    "defaultLocale": { "type": "string", "minLength": 1 },
+    "options": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/option" }
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/question" }
+    },
+    "scoring": {
+      "oneOf": [
+        { "$ref": "#/$defs/sumScoring" },
+        { "$ref": "#/$defs/subscaleScoring" }
+      ]
+    },
+    "meta": { "type": "object" }
+  },
+  "$defs": {
+    "localizedText": {
+      "type": "object",
+      "description": "Text keyed by BCP-47 language tag, e.g. { \"en\": \"Not at all\", \"tr\": \"Hiç\" }.",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string" }
+    },
+    "option": {
+      "type": "object",
+      "required": ["value", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "value": { "type": "number" },
+        "label": { "$ref": "#/$defs/localizedText" }
+      }
+    },
+    "question": {
+      "type": "object",
+      "required": ["id", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "text": { "$ref": "#/$defs/localizedText" },
+        "options": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/option" }
+        },
+        "reverseScored": { "type": "boolean" },
+        "optional": { "type": "boolean" }
+      }
+    },
+    "scoreBand": {
+      "type": "object",
+      "required": ["id", "min", "max", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "label": { "$ref": "#/$defs/localizedText" }
+      }
+    },
+    "scoreFlag": {
+      "type": "object",
+      "required": ["id", "questionId", "minValue", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "questionId": { "type": "string", "minLength": 1 },
+        "minValue": { "type": "number" },
+        "label": { "$ref": "#/$defs/localizedText" }
+      }
+    },
+    "sumScoring": {
+      "type": "object",
+      "required": ["kind"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "sum" },
+        "bands": { "type": "array", "items": { "$ref": "#/$defs/scoreBand" } },
+        "flags": { "type": "array", "items": { "$ref": "#/$defs/scoreFlag" } }
+      }
+    },
+    "subscale": {
+      "type": "object",
+      "required": ["id", "label", "questionIds"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "$ref": "#/$defs/localizedText" },
+        "questionIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "multiplier": { "type": "number" },
+        "bands": { "type": "array", "items": { "$ref": "#/$defs/scoreBand" } }
+      }
+    },
+    "subscaleScoring": {
+      "type": "object",
+      "required": ["kind", "subscales"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "subscales" },
+        "subscales": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/subscale" }
+        },
+        "flags": { "type": "array", "items": { "$ref": "#/$defs/scoreFlag" } }
+      }
+    }
+  }
+}

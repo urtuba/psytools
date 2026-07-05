@@ -16,7 +16,13 @@
     "likert"
   ],
   "license": "MIT",
-  "author": "Samed Kahyaoglu <samed@drumbeats.io>",
+  "author": "Samed Kahyaoglu <samed@luckys.dev>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urtuba/psykit.git"
+  },
+  "bugs": "https://github.com/urtuba/psykit/issues",
+  "homepage": "https://github.com/urtuba/psykit#readme",
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -36,7 +42,8 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "schema"
   ],
   "sideEffects": false,
   "engines": {

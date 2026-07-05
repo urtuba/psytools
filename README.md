@@ -28,10 +28,12 @@ const view = phq9.localize("tr");
 
 // 2. Collect answers — one by one or all at once.
 const response = phq9.createResponse({ respondentId: "client-42" });
+response.status;                         // "empty"
 response.answer("phq9-1", 2);           // one by one, validated immediately
+response.status;                         // "in-progress"
 response.answerAll([2, 1, 3, 1, 0, 1, 2, 0, 0]); // or all at once (question order)
-response.progress();                     // 1
-response.submit();                       // validates completeness, freezes, timestamps
+response.status;                         // "complete"
+response.submit();                       // validates, freezes, timestamps -> "submitted"
 
 // 3. Evaluate.
 const result = phq9.evaluate(response);
@@ -40,6 +42,11 @@ const result = phq9.evaluate(response);
 //   band: { id: "moderate", label: { en: "Moderate depression", tr: ..., de: ... } },
 //   flags: []   // phq9-9 > 0 would raise the "suicidality" flag here
 // }
+
+// Responses walk a simple state machine — empty -> in-progress -> complete
+// -> submitted — exposed as `response.status`. `evaluate()` refuses
+// responses that are not complete/submitted; score partial data explicitly:
+phq9.evaluate(inProgressResponse, undefined, { allowIncomplete: true });
 
 // 4. Persist — both sides are plain JSON.
 db.save(response.stringify());           // response -> DB
@@ -118,6 +125,8 @@ const assessment = new Assessment(definition); // throws PsykitError on malforme
 
 Questions may also carry their own `options` to override the default scale, and `validateDefinition(input)` checks user-created definitions without throwing (returns `{ valid, issues }`) — useful before persisting a therapist-authored test.
 
+Non-JavaScript backends can validate stored definitions against the published [JSON Schema](schema/assessment-definition.schema.json) (shipped in the npm package under `schema/`).
+
 ## Custom evaluation
 
 Declarative scoring is optional. Pass an evaluator for anything beyond sums and subscales — it can return a single scale, multiple scales, a category, or arbitrary data:
@@ -154,7 +163,7 @@ const history = rows
 | Export | Purpose |
 | --- | --- |
 | `Assessment` | Wraps a definition: validation, `localize()`, `createResponse()`, `evaluate()`, `stringify()`/`parse()` |
-| `AssessmentResponse` | `answer()`, `answerAll()`, `clearAnswer()`, `progress()`, `validate()`, `submit()`, `stringify()`/`parse()` |
+| `AssessmentResponse` | `answer()`, `answerAll()`, `clearAnswer()`, `status`, `progress()`, `validate()`, `submit()`, `stringify()`/`parse()` |
 | `evaluate(definition, answers, evaluator?)` | Standalone scoring (also available as `Assessment#evaluate`) |
 | `validateDefinition(input)` | Non-throwing structural validation of definitions |
 | `loadInventory(id)` / `inventories` / `phq9`, `gad7`, `dass21` | Predefined instruments |
