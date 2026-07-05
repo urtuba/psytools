@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.2](https://github.com/urtuba/psytools/compare/v0.3.1...v0.3.2) (2026-07-05)
+
+
+### Features
+
+* **inventories:** add AUDIT alcohol use screener (en/tr/de) ([0eb4e7e](https://github.com/urtuba/psytools/commit/0eb4e7ee27b2c5d918b08939f007011439a8db42))
+* **inventories:** add Mini-IPIP Big Five personality scale (en/tr/de) ([85ec59f](https://github.com/urtuba/psytools/commit/85ec59f097759ce46c6fdc001cfd220d8cec1a27))
+
+
+### Bug Fixes
+
+* **inventories:** carry license flags and translation provenance in meta ([20748d7](https://github.com/urtuba/psytools/commit/20748d7936b1a3716ab8618ac7749ec466db6937))
+* **inventories:** stop crediting unconsulted translation sources ([e5a7793](https://github.com/urtuba/psytools/commit/e5a7793817264dab778f0bfaf4b1c718d00a96f1))
+
 ## [0.3.1](https://github.com/urtuba/psytools/compare/v0.3.0...v0.3.1) (2026-07-05)
 
 
