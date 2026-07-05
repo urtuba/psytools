@@ -43,7 +43,8 @@
   "files": [
     "dist",
     "src",
-    "schema"
+    "schema",
+    "SOURCES.md"
   ],
   "sideEffects": false,
   "engines": {

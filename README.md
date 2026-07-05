@@ -197,7 +197,7 @@ npm run build   # ESM + CJS + type declarations into dist/
 
 - **Not a diagnostic tool.** Scores, severity bands, and flags implement the published scoring rules of screening instruments; they are not diagnoses and do not replace clinical judgment.
 - **Crisis-relevant answers.** PHQ-9 item 9 raises a `suicidality` flag — applications should surface this to a responsible clinician and provide crisis resources to respondents.
-- **Instrument licensing.** PHQ-9, GAD-7 (Pfizer grant, public domain) and DASS-21 (Lovibond & Lovibond) are free to use. Bundled translations follow published validated versions; verify wording against the official versions before clinical use.
+- **Instrument licensing & provenance.** All bundled instruments are free to use; [SOURCES.md](SOURCES.md) lists the original citation, usage terms, and translation notes for each. Bundled translations follow published validated versions — verify wording against the official versions before clinical use. Corrections and requests: <samed@luckys.dev>.
 
 ## License
 
