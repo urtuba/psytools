@@ -138,10 +138,22 @@ test("evaluate throws without scoring, custom evaluators take over", () => {
   assert.equal(standalone.category, "low");
 });
 
-test("partial answers evaluate on the answered items only", () => {
+test("evaluate refuses incomplete responses unless explicitly allowed", () => {
   const assessment = loadInventory("phq9");
-  const result = assessment.evaluate({ "phq9-1": 2, "phq9-2": 2 });
+  const response = assessment.createResponse().answer("phq9-1", 2).answer("phq9-2", 2);
+
+  assert.throws(
+    () => assessment.evaluate(response),
+    (error: unknown) => error instanceof PsykitError && error.code === "incomplete_response",
+  );
+
+  const result = assessment.evaluate(response, undefined, { allowIncomplete: true });
   if (result.kind !== "scale") return assert.fail();
   assert.equal(result.score, 4);
   assert.equal(result.max, 27);
+
+  // Raw answer maps are the low-level escape hatch and stay ungated.
+  const raw = assessment.evaluate({ "phq9-1": 2, "phq9-2": 2 });
+  if (raw.kind !== "scale") return assert.fail();
+  assert.equal(raw.score, 4);
 });

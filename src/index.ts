@@ -10,6 +10,7 @@ export type {
   SubscaleScoring,
   ScoringDefinition,
   AnswerMap,
+  ResponseStatus,
   ResponseData,
   ValidationIssue,
   ValidationResult,

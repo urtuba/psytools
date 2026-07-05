@@ -207,10 +207,31 @@ export class Assessment {
   /**
    * Evaluates a response (or raw answers) with the definition's declarative
    * scoring, or with `evaluator` when provided.
+   *
+   * When given an `AssessmentResponse`, its status must be `complete` or
+   * `submitted` — pass `allowIncomplete` to score partial responses anyway.
+   * Raw answer maps are scored as-is (low-level escape hatch).
+   *
+   * @throws PsykitError `incomplete_response` | `no_scoring`
    */
-  evaluate(response: AssessmentResponse | Record<string, number>, evaluator?: Evaluator): EvaluationResult {
-    const answers = response instanceof AssessmentResponse ? response.answers : response;
-    return evaluate(this.definition, answers, evaluator);
+  evaluate(
+    response: AssessmentResponse | Record<string, number>,
+    evaluator?: Evaluator,
+    options?: { allowIncomplete?: boolean },
+  ): EvaluationResult {
+    if (response instanceof AssessmentResponse) {
+      const scorable = response.status === "complete" || response.status === "submitted";
+      if (!scorable && !options?.allowIncomplete) {
+        const missing = response.unanswered().join(", ");
+        throw new PsykitError(
+          "incomplete_response",
+          `Cannot evaluate a response with status "${response.status}" (unanswered: ${missing}); ` +
+            "pass { allowIncomplete: true } to score it anyway",
+        );
+      }
+      return evaluate(this.definition, response.answers, evaluator);
+    }
+    return evaluate(this.definition, response, evaluator);
   }
 
   /** The plain serializable definition (used by `JSON.stringify`). */

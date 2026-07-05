@@ -1,6 +1,7 @@
 import type {
   AnswerMap,
   ResponseData,
+  ResponseStatus,
   ValidationIssue,
   ValidationResult,
 } from "./types.ts";
@@ -22,6 +23,7 @@ export class AssessmentResponse {
 
   private readonly values = new Map<string, number>();
   private submittedTime?: Date;
+  private state: ResponseStatus = "empty";
 
   constructor(
     assessment: Assessment,
@@ -50,6 +52,11 @@ export class AssessmentResponse {
     return this.submittedTime !== undefined;
   }
 
+  /** Current lifecycle state (see `ResponseStatus`). */
+  get status(): ResponseStatus {
+    return this.state;
+  }
+
   /**
    * Answers a single question. Re-answering replaces the previous value.
    * @throws PsykitError `already_submitted` | `unknown_question` | `invalid_value`
@@ -59,6 +66,7 @@ export class AssessmentResponse {
     const issue = this.checkAnswer(questionId, value);
     if (issue) throw new PsykitError(issue.code, issue.message);
     this.values.set(questionId, value);
+    this.refreshState();
     return this;
   }
 
@@ -89,6 +97,7 @@ export class AssessmentResponse {
     for (const [questionId, value] of entries) {
       this.values.set(questionId, value);
     }
+    this.refreshState();
     return this;
   }
 
@@ -96,6 +105,7 @@ export class AssessmentResponse {
   clearAnswer(questionId: string): this {
     this.assertMutable();
     this.values.delete(questionId);
+    this.refreshState();
     return this;
   }
 
@@ -153,6 +163,7 @@ export class AssessmentResponse {
       throw new PsykitError("invalid_response", `Cannot submit response: ${details}`);
     }
     this.submittedTime = options?.submittedAt ?? new Date();
+    this.state = "submitted";
     return this;
   }
 
@@ -161,6 +172,7 @@ export class AssessmentResponse {
     const data: ResponseData = {
       assessmentId: this.assessment.id,
       answers: this.answers,
+      status: this.state,
       startedAt: this.startedAt.toISOString(),
     };
     if (this.assessment.definition.version !== undefined) {
@@ -209,6 +221,7 @@ export class AssessmentResponse {
     response.answerAll(data.answers ?? {});
     if (data.submittedAt) {
       response.submittedTime = new Date(data.submittedAt);
+      response.state = "submitted";
     }
     return response;
   }
@@ -235,8 +248,16 @@ export class AssessmentResponse {
   }
 
   private assertMutable(): void {
-    if (this.submittedTime !== undefined) {
+    if (this.state === "submitted") {
       throw new PsykitError("already_submitted", "Response was already submitted and is immutable");
+    }
+  }
+
+  private refreshState(): void {
+    if (this.values.size === 0) {
+      this.state = "empty";
+    } else {
+      this.state = this.unanswered().length === 0 ? "complete" : "in-progress";
     }
   }
 }

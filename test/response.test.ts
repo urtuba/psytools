@@ -22,6 +22,26 @@ test("answers one question at a time and tracks progress", () => {
   assert.equal(response.answers["gad7-1"], undefined);
 });
 
+test("status walks the state machine: empty -> in-progress -> complete -> submitted", () => {
+  const response = gad7().createResponse();
+  assert.equal(response.status, "empty");
+
+  response.answer("gad7-1", 2);
+  assert.equal(response.status, "in-progress");
+
+  response.answerAll([0, 1, 2, 3, 0, 1, 2]);
+  assert.equal(response.status, "complete");
+
+  // Clearing an answer moves backwards.
+  response.clearAnswer("gad7-7");
+  assert.equal(response.status, "in-progress");
+  response.clearAnswer("gad7-7"); // clearing an unanswered question is a no-op
+  assert.equal(response.status, "in-progress");
+
+  response.answer("gad7-7", 2).submit();
+  assert.equal(response.status, "submitted");
+});
+
 test("answers all at once with a map or an ordered array", () => {
   const byMap = gad7().createResponse().answerAll({
     "gad7-1": 0, "gad7-2": 1, "gad7-3": 2, "gad7-4": 3,
@@ -110,6 +130,7 @@ test("serializes and restores a response, validating on the way in", () => {
     .submit();
 
   const restored = AssessmentResponse.parse(assessment, original.stringify());
+  assert.equal(restored.status, "submitted");
   assert.deepEqual(restored.answers, original.answers);
   assert.equal(restored.respondentId, "client-42");
   assert.deepEqual(restored.meta, { session: 3 });

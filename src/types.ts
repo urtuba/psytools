@@ -122,12 +122,24 @@ export interface AssessmentDefinition {
 /** Answers keyed by question id. */
 export type AnswerMap = Record<string, number>;
 
+/**
+ * Lifecycle of a response, tracked as a simple state machine:
+ *
+ * `empty` -> `in-progress` -> `complete` -> `submitted`
+ *
+ * Answering and clearing answers moves between the first three states in
+ * both directions; `submit()` moves to the terminal `submitted` state.
+ */
+export type ResponseStatus = "empty" | "in-progress" | "complete" | "submitted";
+
 /** Serialized form of an `AssessmentResponse`. */
 export interface ResponseData {
   assessmentId: string;
   /** Version of the assessment definition answered, if it declared one. */
   assessmentVersion?: string;
   answers: AnswerMap;
+  /** Informational lifecycle state; recomputed from answers on parse. */
+  status?: ResponseStatus;
   /** Opaque identifier of the respondent (client/case id). Optional. */
   respondentId?: string;
   /** ISO-8601 timestamps. */
