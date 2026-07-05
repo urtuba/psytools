@@ -78,6 +78,29 @@ test("DASS-21: subscale sums are doubled and banded independently", () => {
   assert.equal(byId["stress"]?.band?.id, "normal");
 });
 
+test("sum scoring applies an optional multiplier to score and range", () => {
+  const assessment = new Assessment({
+    id: "mult",
+    title: { en: "Multiplied" },
+    defaultLocale: "en",
+    options: [
+      { value: 0, label: { en: "0" } },
+      { value: 5, label: { en: "5" } },
+    ],
+    questions: [
+      { id: "q1", text: { en: "One" } },
+      { id: "q2", text: { en: "Two" } },
+    ],
+    scoring: { kind: "sum", multiplier: 4 },
+  });
+
+  const result = assessment.evaluate({ q1: 5, q2: 0 });
+  if (result.kind !== "scale") return assert.fail();
+  assert.equal(result.score, 20);
+  assert.equal(result.min, 0);
+  assert.equal(result.max, 40);
+});
+
 test("reverse-scored questions are inverted against their scale", () => {
   const assessment = new Assessment({
     id: "rev",

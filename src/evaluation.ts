@@ -9,6 +9,7 @@ import type {
   ScaleResult,
   ScoreBand,
   ScoreFlag,
+  SumScoring,
   TriggeredFlag,
 } from "./types.ts";
 import { PsytoolsError } from "./errors.ts";
@@ -40,7 +41,7 @@ export function evaluate(
   }
   switch (scoring.kind) {
     case "sum":
-      return evaluateSum(definition, answers, scoring.bands, scoring.flags);
+      return evaluateSum(definition, answers, scoring);
     case "subscales": {
       const scales: MultiScaleResult["scales"] = scoring.subscales.map((subscale) => {
         const questions = subscale.questionIds.map((id) => requireQuestion(definition, id));
@@ -93,17 +94,17 @@ function assertValidAnswers(definition: AssessmentDefinition, answers: AnswerMap
 function evaluateSum(
   definition: AssessmentDefinition,
   answers: AnswerMap,
-  bands?: ScoreBand[],
-  flags?: ScoreFlag[],
+  scoring: SumScoring,
 ): ScaleResult {
-  const { score, min, max } = sumQuestions(definition, definition.questions, answers, 1);
+  const multiplier = scoring.multiplier ?? 1;
+  const { score, min, max } = sumQuestions(definition, definition.questions, answers, multiplier);
   return {
     kind: "scale",
     score,
     min,
     max,
-    ...bandOf(score, bands),
-    flags: triggeredFlags(answers, flags),
+    ...bandOf(score, scoring.bands),
+    flags: triggeredFlags(answers, scoring.flags),
   };
 }
 

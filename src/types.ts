@@ -66,7 +66,9 @@ export interface ScoreFlag {
 /** Sums all answers into a single total score (PHQ-9, GAD-7, ...). */
 export interface SumScoring {
   kind: "sum";
-  /** Severity bands the total is matched against. */
+  /** Multiplier applied to the raw sum (WHO-5 reports raw x 4 as 0-100). */
+  multiplier?: number;
+  /** Severity bands the (multiplied) total is matched against. */
   bands?: ScoreBand[];
   flags?: ScoreFlag[];
 }

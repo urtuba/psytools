@@ -91,6 +91,7 @@
       "additionalProperties": false,
       "properties": {
         "kind": { "const": "sum" },
+        "multiplier": { "type": "number" },
         "bands": { "type": "array", "items": { "$ref": "#/$defs/scoreBand" } },
         "flags": { "type": "array", "items": { "$ref": "#/$defs/scoreFlag" } }
       }
