@@ -152,8 +152,26 @@ test("evaluate refuses incomplete responses unless explicitly allowed", () => {
   assert.equal(result.score, 4);
   assert.equal(result.max, 27);
 
-  // Raw answer maps are the low-level escape hatch and stay ungated.
+  // Raw answer maps skip the completeness check only.
   const raw = assessment.evaluate({ "phq9-1": 2, "phq9-2": 2 });
   if (raw.kind !== "scale") return assert.fail();
   assert.equal(raw.score, 4);
+});
+
+test("evaluate rejects out-of-scale values and unknown questions in raw maps", () => {
+  const assessment = loadInventory("phq9");
+
+  assert.throws(
+    () => assessment.evaluate({ "phq9-1": 20 }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_value",
+  );
+  assert.throws(
+    () => evaluate(assessment.definition, { "gad7-1": 1 }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "unknown_question",
+  );
+  // Custom evaluators also only ever see validated answers.
+  assert.throws(
+    () => assessment.evaluate({ "phq9-1": -1 }, () => ({ kind: "custom", data: null })),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_value",
+  );
 });

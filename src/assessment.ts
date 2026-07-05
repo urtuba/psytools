@@ -210,9 +210,10 @@ export class Assessment {
    *
    * When given an `AssessmentResponse`, its status must be `complete` or
    * `submitted` — pass `allowIncomplete` to score partial responses anyway.
-   * Raw answer maps are scored as-is (low-level escape hatch).
+   * Raw answer maps skip the completeness check, but their values are
+   * still validated against the option scales.
    *
-   * @throws PsytoolsError `incomplete_response` | `no_scoring`
+   * @throws PsytoolsError `incomplete_response` | `unknown_question` | `invalid_value` | `no_scoring`
    */
   evaluate(
     response: AssessmentResponse | Record<string, number>,

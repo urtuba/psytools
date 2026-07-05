@@ -16,16 +16,19 @@ import { PsytoolsError } from "./errors.ts";
 /**
  * Evaluates answers against an assessment definition.
  *
- * Uses `evaluator` when given; otherwise applies the definition's
- * declarative `scoring` (`sum` or `subscales`).
+ * Every answer is first validated against the assessment: the question must
+ * exist and the value must belong to its option scale. Then `evaluator` is
+ * used when given; otherwise the definition's declarative `scoring`
+ * (`sum` or `subscales`) applies.
  *
- * @throws PsytoolsError `no_scoring` when neither is available.
+ * @throws PsytoolsError `unknown_question` | `invalid_value` | `no_scoring`
  */
 export function evaluate(
   definition: AssessmentDefinition,
   answers: AnswerMap,
   evaluator?: Evaluator,
 ): EvaluationResult {
+  assertValidAnswers(definition, answers);
   if (evaluator) return evaluator(definition, answers);
 
   const scoring = definition.scoring;
@@ -63,6 +66,27 @@ export function evaluate(
         "no_scoring",
         `Unsupported scoring kind "${(scoring as { kind: string }).kind}"`,
       );
+  }
+}
+
+function assertValidAnswers(definition: AssessmentDefinition, answers: AnswerMap): void {
+  const questions = new Map(definition.questions.map((q) => [q.id, q]));
+  for (const [questionId, value] of Object.entries(answers)) {
+    const question = questions.get(questionId);
+    if (!question) {
+      throw new PsytoolsError(
+        "unknown_question",
+        `Answers reference unknown question "${questionId}" in assessment "${definition.id}"`,
+      );
+    }
+    const options = question.options ?? definition.options;
+    if (!options.some((option) => option.value === value)) {
+      const allowed = options.map((option) => option.value).join(", ");
+      throw new PsytoolsError(
+        "invalid_value",
+        `Value ${value} is not a valid option for question "${questionId}" (allowed: ${allowed})`,
+      );
+    }
   }
 }
 
