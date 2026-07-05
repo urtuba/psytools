@@ -1,0 +1,156 @@
+import type { AssessmentDefinition } from "../types.ts";
+import { twoWeekFrequencyOptions, twoWeekInstructions } from "./common.ts";
+
+/**
+ * PHQ-9 — Patient Health Questionnaire-9 (depression screening).
+ *
+ * 9 items, 0–3 frequency scale, total score 0–27. Item 9 raises a
+ * `suicidality` flag when answered above 0. The PHQ-9 is in the public
+ * domain (Kroenke, Spitzer & Williams, 2001; developed with a grant from
+ * Pfizer Inc.). Translations follow published validated versions — verify
+ * against the official wording before clinical use.
+ */
+export const phq9: AssessmentDefinition = {
+  id: "phq9",
+  version: "1.0.0",
+  title: {
+    en: "Patient Health Questionnaire (PHQ-9)",
+    tr: "Hasta Sağlığı Anketi (PHQ-9)",
+    de: "Gesundheitsfragebogen für Patienten (PHQ-9)",
+  },
+  description: {
+    en: "A 9-item self-report questionnaire for screening and measuring the severity of depression.",
+    tr: "Depresyonu taramak ve şiddetini ölçmek için kullanılan 9 maddelik bir öz bildirim ölçeği.",
+    de: "Ein Selbstbeurteilungsfragebogen mit 9 Items zum Screening und zur Schweregradmessung von Depression.",
+  },
+  instructions: twoWeekInstructions,
+  defaultLocale: "en",
+  options: twoWeekFrequencyOptions,
+  questions: [
+    {
+      id: "phq9-1",
+      text: {
+        en: "Little interest or pleasure in doing things",
+        tr: "İşleri yapmaya karşı çok az ilgi ya da zevk duyma",
+        de: "Wenig Interesse oder Freude an Ihren Tätigkeiten",
+      },
+    },
+    {
+      id: "phq9-2",
+      text: {
+        en: "Feeling down, depressed, or hopeless",
+        tr: "Kendini kederli, çökkün ya da umutsuz hissetme",
+        de: "Niedergeschlagenheit, Schwermut oder Hoffnungslosigkeit",
+      },
+    },
+    {
+      id: "phq9-3",
+      text: {
+        en: "Trouble falling or staying asleep, or sleeping too much",
+        tr: "Uykuya dalmada ya da uykuyu sürdürmede güçlük ya da çok fazla uyuma",
+        de: "Schwierigkeiten ein- oder durchzuschlafen oder vermehrter Schlaf",
+      },
+    },
+    {
+      id: "phq9-4",
+      text: {
+        en: "Feeling tired or having little energy",
+        tr: "Kendini yorgun hissetme ya da çok az enerjiye sahip olma",
+        de: "Müdigkeit oder Gefühl, keine Energie zu haben",
+      },
+    },
+    {
+      id: "phq9-5",
+      text: {
+        en: "Poor appetite or overeating",
+        tr: "İştahsızlık ya da aşırı yeme",
+        de: "Verminderter Appetit oder übermäßiges Bedürfnis zu essen",
+      },
+    },
+    {
+      id: "phq9-6",
+      text: {
+        en: "Feeling bad about yourself — or that you are a failure or have let yourself or your family down",
+        tr: "Kendiniz hakkında kötü hissetme — kendinizi başarısız biri olarak görme ya da kendinizi veya ailenizi hayal kırıklığına uğrattığınızı düşünme",
+        de: "Schlechte Meinung von sich selbst; Gefühl, ein Versager zu sein oder die Familie enttäuscht zu haben",
+      },
+    },
+    {
+      id: "phq9-7",
+      text: {
+        en: "Trouble concentrating on things, such as reading the newspaper or watching television",
+        tr: "Gazete okumak ya da televizyon seyretmek gibi işlere konsantre olmada güçlük",
+        de: "Schwierigkeiten, sich auf etwas zu konzentrieren, z. B. beim Zeitunglesen oder Fernsehen",
+      },
+    },
+    {
+      id: "phq9-8",
+      text: {
+        en: "Moving or speaking so slowly that other people could have noticed? Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual",
+        tr: "Diğer insanların fark edebileceği kadar yavaş hareket etme ya da yavaş konuşma? Ya da tam tersi — her zamankinden çok daha fazla hareket edecek kadar kıpır kıpır ya da huzursuz olma",
+        de: "Waren Ihre Bewegungen oder Ihre Sprache so verlangsamt, dass es auch anderen auffallen würde? Oder waren Sie im Gegenteil „zappelig“ oder ruhelos und hatten dadurch einen stärkeren Bewegungsdrang als sonst?",
+      },
+    },
+    {
+      id: "phq9-9",
+      text: {
+        en: "Thoughts that you would be better off dead or of hurting yourself in some way",
+        tr: "Ölmüş olmanın ya da kendinize bir şekilde zarar vermenin daha iyi olacağına dair düşünceler",
+        de: "Gedanken, dass Sie lieber tot wären oder sich Leid zufügen möchten",
+      },
+    },
+  ],
+  scoring: {
+    kind: "sum",
+    bands: [
+      {
+        id: "minimal",
+        min: 0,
+        max: 4,
+        label: { en: "Minimal depression", tr: "Minimal depresyon", de: "Minimale Depression" },
+      },
+      {
+        id: "mild",
+        min: 5,
+        max: 9,
+        label: { en: "Mild depression", tr: "Hafif depresyon", de: "Leichte Depression" },
+      },
+      {
+        id: "moderate",
+        min: 10,
+        max: 14,
+        label: { en: "Moderate depression", tr: "Orta düzeyde depresyon", de: "Mittelgradige Depression" },
+      },
+      {
+        id: "moderately-severe",
+        min: 15,
+        max: 19,
+        label: { en: "Moderately severe depression", tr: "Orta-şiddetli düzeyde depresyon", de: "Mittelschwere Depression" },
+      },
+      {
+        id: "severe",
+        min: 20,
+        max: 27,
+        label: { en: "Severe depression", tr: "Şiddetli depresyon", de: "Schwere Depression" },
+      },
+    ],
+    flags: [
+      {
+        id: "suicidality",
+        questionId: "phq9-9",
+        minValue: 1,
+        label: {
+          en: "Self-harm or suicidal ideation reported (item 9) — requires clinical attention",
+          tr: "Kendine zarar verme ya da intihar düşüncesi bildirildi (9. madde) — klinik değerlendirme gerektirir",
+          de: "Selbstverletzungs- oder Suizidgedanken angegeben (Item 9) — erfordert klinische Abklärung",
+        },
+      },
+    ],
+  },
+  meta: {
+    reference:
+      "Kroenke, K., Spitzer, R. L., & Williams, J. B. (2001). The PHQ-9: validity of a brief depression severity measure. Journal of General Internal Medicine, 16(9), 606-613.",
+    license: "Public domain",
+    timeframe: "past 2 weeks",
+  },
+};
