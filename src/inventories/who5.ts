@@ -146,7 +146,7 @@ export const who5: AssessmentDefinition = {
     license: "Free — may be used without permission (WHO Regional Office for Europe / Psychiatric Research Unit, Hillerød)",
     licenseFlag: "free",
     translationProvenance:
-      "en: reproduced from the original. tr/de: AI-assisted (Anthropic Claude, claude-fable-5) following the official/validated versions; not verified against the official documents. See SOURCES.md.",
+      "en: reproduced from the original. tr/de: AI translation (Anthropic Claude, claude-fable-5) from the original English; official translations were not consulted and the texts are unverified. See SOURCES.md.",
     timeframe: "past 2 weeks",
     note: "Positively worded: higher scores mean better well-being.",
   },

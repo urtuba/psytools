@@ -288,7 +288,7 @@ export const dass21: AssessmentDefinition = {
     license: "Free — public domain per the official DASS site, including translations",
     licenseFlag: "free",
     translationProvenance:
-      "en: reproduced from the original. tr/de: AI-assisted (Anthropic Claude, claude-fable-5) following the published validated versions; not verified against the official documents. See SOURCES.md.",
+      "en: reproduced from the original. tr/de: AI translation (Anthropic Claude, claude-fable-5) from the original English; official translations were not consulted and the texts are unverified. See SOURCES.md.",
     timeframe: "past week",
   },
 };

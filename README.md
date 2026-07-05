@@ -203,7 +203,7 @@ npm run build   # ESM + CJS + type declarations into dist/
 - **Not a diagnostic tool.** Scores, severity bands, and flags implement the published scoring rules of screening instruments; they are not diagnoses and do not replace clinical judgment.
 - **Crisis-relevant answers.** PHQ-9 item 9 raises a `suicidality` flag — applications should surface this to a responsible clinician and provide crisis resources to respondents.
 - **Instrument licensing.** [SOURCES.md](SOURCES.md) flags every bundled instrument as **Free** (PHQ-9, GAD-7, DASS-21, WHO-5 — usable without permission, including commercially) or **Free with conditions** (ASRS v1.1, AQ-10 — free for clinical/research use; verify with the rights holder before embedding in commercial products). Each inventory's `meta.licenseFlag` carries the same flag programmatically.
-- **Translation provenance.** English texts are reproduced from the original instruments. Turkish and German texts were prepared with AI assistance (Anthropic Claude, model `claude-fable-5`) following the published validated translations, and have **not** been verified word-for-word against the official documents — per-language source tables are in [SOURCES.md](SOURCES.md). Verify wording against the official version before clinical use. Corrections: <samed@luckys.dev>.
+- **Translation provenance.** English texts are reproduced from the original instruments. Turkish and German texts are AI translations (Anthropic Claude, model `claude-fable-5`) of the original English — official translations were **not** consulted and the texts are unverified; see [SOURCES.md](SOURCES.md). Obtain and compare the official version for your language before clinical use. Corrections: <samed@luckys.dev>.
 
 ## License
 

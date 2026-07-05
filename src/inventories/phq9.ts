@@ -153,7 +153,7 @@ export const phq9: AssessmentDefinition = {
     license: "Free — no permission required to reproduce, translate, display or distribute (Pfizer educational grant)",
     licenseFlag: "free",
     translationProvenance:
-      "en: reproduced from the original. tr/de: AI-assisted (Anthropic Claude, claude-fable-5) following the validated versions; not verified against the official documents. See SOURCES.md.",
+      "en: reproduced from the original. tr/de: AI translation (Anthropic Claude, claude-fable-5) from the original English; official translations were not consulted and the texts are unverified. See SOURCES.md.",
     timeframe: "past 2 weeks",
   },
 };

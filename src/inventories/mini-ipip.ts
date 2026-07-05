@@ -268,7 +268,7 @@ export const miniIpip: AssessmentDefinition = {
       "Free — public domain (International Personality Item Pool, ipip.ori.org), created explicitly to be free of copyright restrictions",
     licenseFlag: "free",
     translationProvenance:
-      "en: reproduced from the original. tr/de: PROVISIONAL — AI-assisted (Anthropic Claude, claude-fable-5); not copied from a specific validated publication and unverified. See SOURCES.md.",
+      "en: reproduced from the original. tr/de: AI translation (Anthropic Claude, claude-fable-5) from the original English; official translations were not consulted and the texts are unverified. See SOURCES.md.",
     note: "Descriptive personality traits, not a clinical screen — no cutoff bands are defined.",
   },
 };

@@ -179,7 +179,7 @@ export const aq10: AssessmentDefinition = {
       "Free with conditions — (c) Autism Research Centre, University of Cambridge; distributed free of charge, NICE-recommended for clinical screening. Verify licensing with ARC before embedding in commercial products.",
     licenseFlag: "free-with-conditions",
     translationProvenance:
-      "en: reproduced from the original. tr/de: PROVISIONAL — AI-assisted (Anthropic Claude, claude-fable-5), condensed from AQ-50 adaptations; no published AQ-10 translation was followed and the texts are unverified. See SOURCES.md.",
+      "en: reproduced from the original. tr/de: AI translation (Anthropic Claude, claude-fable-5) from the original English; official translations were not consulted and the texts are unverified. See SOURCES.md.",
     note: "Each item scores 1 point in the trait direction; disagree-scored items are modeled as reverseScored.",
   },
 };
