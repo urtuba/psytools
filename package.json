@@ -1,5 +1,5 @@
 {
-  "name": "psykit",
+  "name": "psytools",
   "version": "0.2.0",
   "description": "Zero-dependency toolkit for psychological assessments: data models, response validation, scoring, and predefined inventories (PHQ-9, GAD-7, DASS-21) in multiple languages.",
   "keywords": [
@@ -19,10 +19,10 @@
   "author": "Samed Kahyaoglu <samed@luckys.dev>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/urtuba/psykit.git"
+    "url": "git+https://github.com/urtuba/psytools.git"
   },
-  "bugs": "https://github.com/urtuba/psykit/issues",
-  "homepage": "https://github.com/urtuba/psykit#readme",
+  "bugs": "https://github.com/urtuba/psytools/issues",
+  "homepage": "https://github.com/urtuba/psytools#readme",
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",

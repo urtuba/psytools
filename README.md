@@ -1,4 +1,4 @@
-# psykit
+# psytools
 
 Zero-dependency TypeScript toolkit for psychological assessments: a serializable data model, response collection with validation, declarative scoring, and predefined inventories (PHQ-9, GAD-7, DASS-21) in English, Turkish, and German.
 
@@ -12,13 +12,13 @@ Built for therapy apps and research tools where therapists or researchers use st
 ## Install
 
 ```sh
-npm install psykit
+npm install psytools
 ```
 
 ## Quick start
 
 ```ts
-import { loadInventory } from "psykit";
+import { loadInventory } from "psytools";
 
 const phq9 = loadInventory("phq9");
 
@@ -56,7 +56,7 @@ db.save(phq9.stringify());               // definition -> DB
 Restore later and continue where you left off:
 
 ```ts
-import { Assessment, AssessmentResponse } from "psykit";
+import { Assessment, AssessmentResponse } from "psytools";
 
 const assessment = Assessment.parse(jsonFromDb);            // validated on parse
 const response = AssessmentResponse.parse(assessment, rowFromDb); // answers re-validated
@@ -71,7 +71,7 @@ const response = AssessmentResponse.parse(assessment, rowFromDb); // answers re-
 | `dass21` | Depression Anxiety Stress Scales (short form) | 21 | 3 subscales × 7 items, sums doubled, banded per subscale | en, tr, de |
 
 ```ts
-import { loadInventory, inventories, dass21 } from "psykit";
+import { loadInventory, inventories, dass21 } from "psytools";
 
 loadInventory("dass21");   // ready-to-use Assessment instance
 inventories;               // { phq9, gad7, dass21 } raw definitions
@@ -93,7 +93,7 @@ const result = assessment.evaluate(response);
 An assessment is one plain object — questions, an enumerated option scale, and optional declarative scoring:
 
 ```ts
-import { Assessment, type AssessmentDefinition } from "psykit";
+import { Assessment, type AssessmentDefinition } from "psytools";
 
 const definition: AssessmentDefinition = {
   id: "my-clinic/sleep-check",
@@ -120,7 +120,7 @@ const definition: AssessmentDefinition = {
   },
 };
 
-const assessment = new Assessment(definition); // throws PsykitError on malformed definitions
+const assessment = new Assessment(definition); // throws PsytoolsError on malformed definitions
 ```
 
 Questions may also carry their own `options` to override the default scale, and `validateDefinition(input)` checks user-created definitions without throwing (returns `{ valid, issues }`) — useful before persisting a therapist-authored test.
@@ -132,7 +132,7 @@ Non-JavaScript backends can validate stored definitions against the published [J
 Declarative scoring is optional. Pass an evaluator for anything beyond sums and subscales — it can return a single scale, multiple scales, a category, or arbitrary data:
 
 ```ts
-import type { Evaluator } from "psykit";
+import type { Evaluator } from "psytools";
 
 const attachmentStyle: Evaluator = (definition, answers) => {
   const avoidance = answers["a1"]! + answers["a2"]!;
@@ -168,7 +168,7 @@ const history = rows
 | `validateDefinition(input)` | Non-throwing structural validation of definitions |
 | `loadInventory(id)` / `inventories` / `phq9`, `gad7`, `dass21` | Predefined instruments |
 | `localize(text, locale, fallback?)` / `collectLocales(texts)` | Locale helpers |
-| `PsykitError` | All errors carry a stable `code` (e.g. `invalid_value`, `already_submitted`) |
+| `PsytoolsError` | All errors carry a stable `code` (e.g. `invalid_value`, `already_submitted`) |
 
 ## Development
 

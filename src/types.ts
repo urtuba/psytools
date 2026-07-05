@@ -1,5 +1,5 @@
 /**
- * Core data model for psykit.
+ * Core data model for psytools.
  *
  * Everything here is plain, JSON-serializable data. Scoring rules are
  * declarative (not functions) so that a full assessment definition survives
@@ -90,7 +90,7 @@ export interface SubscaleScoring {
   flags?: ScoreFlag[];
 }
 
-/** Declarative, serializable scoring rules built into psykit. */
+/** Declarative, serializable scoring rules built into psytools. */
 export type ScoringDefinition = SumScoring | SubscaleScoring;
 
 /**

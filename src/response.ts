@@ -6,7 +6,7 @@ import type {
   ValidationResult,
 } from "./types.ts";
 import type { Assessment } from "./assessment.ts";
-import { PsykitError } from "./errors.ts";
+import { PsytoolsError } from "./errors.ts";
 
 /**
  * A respondent's answers to one assessment.
@@ -59,12 +59,12 @@ export class AssessmentResponse {
 
   /**
    * Answers a single question. Re-answering replaces the previous value.
-   * @throws PsykitError `already_submitted` | `unknown_question` | `invalid_value`
+   * @throws PsytoolsError `already_submitted` | `unknown_question` | `invalid_value`
    */
   answer(questionId: string, value: number): this {
     this.assertMutable();
     const issue = this.checkAnswer(questionId, value);
-    if (issue) throw new PsykitError(issue.code, issue.message);
+    if (issue) throw new PsytoolsError(issue.code, issue.message);
     this.values.set(questionId, value);
     this.refreshState();
     return this;
@@ -80,7 +80,7 @@ export class AssessmentResponse {
       ? answers.map((value, i) => {
           const question = this.assessment.questions[i];
           if (!question) {
-            throw new PsykitError(
+            throw new PsytoolsError(
               "invalid_value",
               `Got ${answers.length} answers but assessment "${this.assessment.id}" has ${this.assessment.questions.length} questions`,
             );
@@ -92,7 +92,7 @@ export class AssessmentResponse {
     // Validate everything first so a failure does not apply partially.
     for (const [questionId, value] of entries) {
       const issue = this.checkAnswer(questionId, value);
-      if (issue) throw new PsykitError(issue.code, issue.message);
+      if (issue) throw new PsytoolsError(issue.code, issue.message);
     }
     for (const [questionId, value] of entries) {
       this.values.set(questionId, value);
@@ -153,14 +153,14 @@ export class AssessmentResponse {
    * Validates and finalizes the response. After submission the response is
    * immutable. Pass `allowIncomplete` to submit with unanswered optional-use
    * cases (answered values are still validated).
-   * @throws PsykitError `already_submitted` | `invalid_response`
+   * @throws PsytoolsError `already_submitted` | `invalid_response`
    */
   submit(options?: { allowIncomplete?: boolean; submittedAt?: Date }): this {
     this.assertMutable();
     const result = this.validate({ partial: options?.allowIncomplete });
     if (!result.valid) {
       const details = result.issues.map((issue) => issue.message).join("; ");
-      throw new PsykitError("invalid_response", `Cannot submit response: ${details}`);
+      throw new PsytoolsError("invalid_response", `Cannot submit response: ${details}`);
     }
     this.submittedTime = options?.submittedAt ?? new Date();
     this.state = "submitted";
@@ -192,7 +192,7 @@ export class AssessmentResponse {
   /**
    * Restores a response from serialized data, validating every answer
    * against the assessment.
-   * @throws PsykitError `invalid_json` | `assessment_mismatch` | `unknown_question` | `invalid_value`
+   * @throws PsytoolsError `invalid_json` | `assessment_mismatch` | `unknown_question` | `invalid_value`
    */
   static parse(assessment: Assessment, input: string | ResponseData): AssessmentResponse {
     let data: ResponseData;
@@ -200,14 +200,14 @@ export class AssessmentResponse {
       try {
         data = JSON.parse(input) as ResponseData;
       } catch (error) {
-        throw new PsykitError("invalid_json", `Not valid JSON: ${(error as Error).message}`);
+        throw new PsytoolsError("invalid_json", `Not valid JSON: ${(error as Error).message}`);
       }
     } else {
       data = input;
     }
 
     if (data.assessmentId !== assessment.id) {
-      throw new PsykitError(
+      throw new PsytoolsError(
         "assessment_mismatch",
         `Response belongs to assessment "${data.assessmentId}", not "${assessment.id}"`,
       );
@@ -249,7 +249,7 @@ export class AssessmentResponse {
 
   private assertMutable(): void {
     if (this.state === "submitted") {
-      throw new PsykitError("already_submitted", "Response was already submitted and is immutable");
+      throw new PsytoolsError("already_submitted", "Response was already submitted and is immutable");
     }
   }
 

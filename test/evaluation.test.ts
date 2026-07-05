@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   Assessment,
-  PsykitError,
+  PsytoolsError,
   evaluate,
   loadInventory,
   type Evaluator,
@@ -119,7 +119,7 @@ test("evaluate throws without scoring, custom evaluators take over", () => {
 
   assert.throws(
     () => assessment.evaluate({ q1: 1 }),
-    (error: unknown) => error instanceof PsykitError && error.code === "no_scoring",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "no_scoring",
   );
 
   const categorize: Evaluator = (_definition, answers) => ({
@@ -144,7 +144,7 @@ test("evaluate refuses incomplete responses unless explicitly allowed", () => {
 
   assert.throws(
     () => assessment.evaluate(response),
-    (error: unknown) => error instanceof PsykitError && error.code === "incomplete_response",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "incomplete_response",
   );
 
   const result = assessment.evaluate(response, undefined, { allowIncomplete: true });

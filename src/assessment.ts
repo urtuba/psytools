@@ -8,7 +8,7 @@ import type {
   ValidationIssue,
   ValidationResult,
 } from "./types.ts";
-import { PsykitError } from "./errors.ts";
+import { PsytoolsError } from "./errors.ts";
 import { collectLocales, localize } from "./i18n.ts";
 import { AssessmentResponse } from "./response.ts";
 import { evaluate } from "./evaluation.ts";
@@ -123,12 +123,12 @@ export class Assessment {
   readonly definition: AssessmentDefinition;
   private readonly questionIndex: Map<string, AssessmentQuestion>;
 
-  /** @throws PsykitError `invalid_definition` when the definition is malformed. */
+  /** @throws PsytoolsError `invalid_definition` when the definition is malformed. */
   constructor(definition: AssessmentDefinition) {
     const result = validateDefinition(definition);
     if (!result.valid) {
       const details = result.issues.map((issue) => issue.message).join("; ");
-      throw new PsykitError("invalid_definition", `Invalid assessment definition: ${details}`);
+      throw new PsytoolsError("invalid_definition", `Invalid assessment definition: ${details}`);
     }
     this.definition = definition;
     this.questionIndex = new Map(definition.questions.map((q) => [q.id, q]));
@@ -160,7 +160,7 @@ export class Assessment {
   optionsFor(questionId: string): readonly AssessmentOption[] {
     const question = this.questionIndex.get(questionId);
     if (!question) {
-      throw new PsykitError("unknown_question", `Unknown question "${questionId}" in assessment "${this.id}"`);
+      throw new PsytoolsError("unknown_question", `Unknown question "${questionId}" in assessment "${this.id}"`);
     }
     return question.options ?? this.definition.options;
   }
@@ -212,7 +212,7 @@ export class Assessment {
    * `submitted` — pass `allowIncomplete` to score partial responses anyway.
    * Raw answer maps are scored as-is (low-level escape hatch).
    *
-   * @throws PsykitError `incomplete_response` | `no_scoring`
+   * @throws PsytoolsError `incomplete_response` | `no_scoring`
    */
   evaluate(
     response: AssessmentResponse | Record<string, number>,
@@ -223,7 +223,7 @@ export class Assessment {
       const scorable = response.status === "complete" || response.status === "submitted";
       if (!scorable && !options?.allowIncomplete) {
         const missing = response.unanswered().join(", ");
-        throw new PsykitError(
+        throw new PsytoolsError(
           "incomplete_response",
           `Cannot evaluate a response with status "${response.status}" (unanswered: ${missing}); ` +
             "pass { allowIncomplete: true } to score it anyway",
@@ -246,7 +246,7 @@ export class Assessment {
 
   /**
    * Parses and validates a definition from a JSON string or plain object.
-   * @throws PsykitError `invalid_json` | `invalid_definition`
+   * @throws PsytoolsError `invalid_json` | `invalid_definition`
    */
   static parse(input: string | object): Assessment {
     let raw: unknown = input;
@@ -254,7 +254,7 @@ export class Assessment {
       try {
         raw = JSON.parse(input);
       } catch (error) {
-        throw new PsykitError("invalid_json", `Not valid JSON: ${(error as Error).message}`);
+        throw new PsytoolsError("invalid_json", `Not valid JSON: ${(error as Error).message}`);
       }
     }
     return new Assessment(raw as AssessmentDefinition);

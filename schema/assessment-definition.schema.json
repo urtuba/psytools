@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/urtuba/psykit/main/schema/assessment-definition.schema.json",
+  "$id": "https://raw.githubusercontent.com/urtuba/psytools/main/schema/assessment-definition.schema.json",
   "title": "AssessmentDefinition",
-  "description": "A psykit assessment: questions with an enumerated option scale, localized text, and optional declarative scoring. Lets non-JavaScript backends validate stored definitions.",
+  "description": "A psytools assessment: questions with an enumerated option scale, localized text, and optional declarative scoring. Lets non-JavaScript backends validate stored definitions.",
   "type": "object",
   "required": ["id", "title", "defaultLocale", "options", "questions"],
   "additionalProperties": false,

@@ -1,10 +1,10 @@
-/** Error thrown by psykit, carrying a stable machine-readable code. */
-export class PsykitError extends Error {
+/** Error thrown by psytools, carrying a stable machine-readable code. */
+export class PsytoolsError extends Error {
   readonly code: string;
 
   constructor(code: string, message: string) {
     super(message);
-    this.name = "PsykitError";
+    this.name = "PsytoolsError";
     this.code = code;
   }
 }

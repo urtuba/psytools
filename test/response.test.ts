@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { Assessment, AssessmentResponse, PsykitError, loadInventory } from "../src/index.ts";
+import { Assessment, AssessmentResponse, PsytoolsError, loadInventory } from "../src/index.ts";
 
 const gad7 = () => loadInventory("gad7");
 
@@ -54,7 +54,7 @@ test("answers all at once with a map or an ordered array", () => {
 
   assert.throws(
     () => gad7().createResponse().answerAll([0, 1, 2, 3, 0, 1, 2, 3]),
-    (error: unknown) => error instanceof PsykitError && error.code === "invalid_value",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_value",
   );
 });
 
@@ -63,15 +63,15 @@ test("rejects unknown questions and out-of-scale values", () => {
 
   assert.throws(
     () => response.answer("phq9-1", 1),
-    (error: unknown) => error instanceof PsykitError && error.code === "unknown_question",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "unknown_question",
   );
   assert.throws(
     () => response.answer("gad7-1", 4),
-    (error: unknown) => error instanceof PsykitError && error.code === "invalid_value",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_value",
   );
 
   // A failed answerAll applies nothing.
-  assert.throws(() => response.answerAll({ "gad7-1": 1, "gad7-2": 99 }), PsykitError);
+  assert.throws(() => response.answerAll({ "gad7-1": 1, "gad7-2": 99 }), PsytoolsError);
   assert.equal(response.progress(), 0);
 });
 
@@ -87,7 +87,7 @@ test("validate reports missing answers, submit enforces completeness", () => {
 
   assert.throws(
     () => response.submit(),
-    (error: unknown) => error instanceof PsykitError && error.code === "invalid_response",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_response",
   );
 
   // Explicitly allowed incomplete submission works.
@@ -107,7 +107,7 @@ test("submitted responses are immutable", () => {
   ]) {
     assert.throws(
       attempt,
-      (error: unknown) => error instanceof PsykitError && error.code === "already_submitted",
+      (error: unknown) => error instanceof PsytoolsError && error.code === "already_submitted",
     );
   }
 });
@@ -143,7 +143,7 @@ test("parse rejects responses for a different assessment or with bad data", () =
   const assessment = gad7();
   assert.throws(
     () => AssessmentResponse.parse(assessment, { assessmentId: "phq9", answers: {}, startedAt: "2026-01-01T00:00:00.000Z" }),
-    (error: unknown) => error instanceof PsykitError && error.code === "assessment_mismatch",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "assessment_mismatch",
   );
   assert.throws(
     () =>
@@ -152,10 +152,10 @@ test("parse rejects responses for a different assessment or with bad data", () =
         answers: { "gad7-1": 42 },
         startedAt: "2026-01-01T00:00:00.000Z",
       }),
-    (error: unknown) => error instanceof PsykitError && error.code === "invalid_value",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_value",
   );
   assert.throws(
     () => AssessmentResponse.parse(assessment, "{nope"),
-    (error: unknown) => error instanceof PsykitError && error.code === "invalid_json",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_json",
   );
 });

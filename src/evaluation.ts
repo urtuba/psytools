@@ -11,7 +11,7 @@ import type {
   ScoreFlag,
   TriggeredFlag,
 } from "./types.ts";
-import { PsykitError } from "./errors.ts";
+import { PsytoolsError } from "./errors.ts";
 
 /**
  * Evaluates answers against an assessment definition.
@@ -19,7 +19,7 @@ import { PsykitError } from "./errors.ts";
  * Uses `evaluator` when given; otherwise applies the definition's
  * declarative `scoring` (`sum` or `subscales`).
  *
- * @throws PsykitError `no_scoring` when neither is available.
+ * @throws PsytoolsError `no_scoring` when neither is available.
  */
 export function evaluate(
   definition: AssessmentDefinition,
@@ -30,7 +30,7 @@ export function evaluate(
 
   const scoring = definition.scoring;
   if (!scoring) {
-    throw new PsykitError(
+    throw new PsytoolsError(
       "no_scoring",
       `Assessment "${definition.id}" has no scoring definition; pass a custom evaluator`,
     );
@@ -59,7 +59,7 @@ export function evaluate(
       };
     }
     default:
-      throw new PsykitError(
+      throw new PsytoolsError(
         "no_scoring",
         `Unsupported scoring kind "${(scoring as { kind: string }).kind}"`,
       );
@@ -131,7 +131,7 @@ function triggeredFlags(answers: AnswerMap, flags?: ScoreFlag[]): TriggeredFlag[
 function requireQuestion(definition: AssessmentDefinition, questionId: string): AssessmentQuestion {
   const question = definition.questions.find((q) => q.id === questionId);
   if (!question) {
-    throw new PsykitError(
+    throw new PsytoolsError(
       "unknown_question",
       `Scoring references unknown question "${questionId}" in assessment "${definition.id}"`,
     );

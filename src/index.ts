@@ -26,7 +26,7 @@ export type {
   LocalizedAssessmentView,
 } from "./types.ts";
 
-export { PsykitError } from "./errors.ts";
+export { PsytoolsError } from "./errors.ts";
 export { localize, collectLocales } from "./i18n.ts";
 export { Assessment, validateDefinition } from "./assessment.ts";
 export { AssessmentResponse } from "./response.ts";

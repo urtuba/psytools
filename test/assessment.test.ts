@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   Assessment,
-  PsykitError,
+  PsytoolsError,
   loadInventory,
   phq9,
   validateDefinition,
@@ -55,7 +55,7 @@ test("validateDefinition rejects scoring that references unknown questions", () 
 test("Assessment constructor throws on invalid definitions", () => {
   assert.throws(
     () => new Assessment({} as never),
-    (error: unknown) => error instanceof PsykitError && error.code === "invalid_definition",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_definition",
   );
 });
 
@@ -69,7 +69,7 @@ test("predefined inventories are valid and localized", () => {
 test("loadInventory throws on unknown ids", () => {
   assert.throws(
     () => loadInventory("mmpi"),
-    (error: unknown) => error instanceof PsykitError && error.code === "unknown_inventory",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "unknown_inventory",
   );
 });
 
@@ -104,7 +104,7 @@ test("stringify/parse round-trips a definition including scoring", () => {
 test("Assessment.parse rejects invalid JSON", () => {
   assert.throws(
     () => Assessment.parse("{nope"),
-    (error: unknown) => error instanceof PsykitError && error.code === "invalid_json",
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_json",
   );
 });
 
@@ -132,5 +132,5 @@ test("optionsFor returns question-specific options over the default scale", () =
 
   assert.deepEqual(assessment.optionsFor("q1").map((option) => option.value), [0, 1]);
   assert.deepEqual(assessment.optionsFor("q2").map((option) => option.value), [0, 5]);
-  assert.throws(() => assessment.optionsFor("q3"), PsykitError);
+  assert.throws(() => assessment.optionsFor("q3"), PsytoolsError);
 });
