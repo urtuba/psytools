@@ -38,6 +38,13 @@ The inventories bundled with psytools implement published, freely usable instrum
 - **Translations:** Turkish text follows the validated Turkish adaptation (Doğan et al., 2009); German text follows the WHO's German ASRS-v1.1 distribution.
 - **Scoring:** Count of screen-positive items — items 1–3 from "Sometimes", items 4–6 from "Often"; 4 or more positives indicate symptoms highly consistent with adult ADHD, per the ASRS-v1.1 screener key.
 
+## AQ-10 — Autism Spectrum Quotient, 10-item adult version (`aq10`)
+
+- **Original:** Allison, C., Auyeung, B., & Baron-Cohen, S. (2012). Toward brief "Red Flags" for autism screening: The Short Autism Spectrum Quotient and the Short Quantitative Checklist in 1,000 cases and 3,000 controls. *Journal of the American Academy of Child & Adolescent Psychiatry, 51*(2), 202–212. Distributed by the Autism Research Centre, University of Cambridge; recommended by NICE (CG142) for adult screening.
+- **Rights:** Free to use for clinical and research purposes.
+- **Translations:** Turkish text follows the Turkish adaptation of the Autism Spectrum Quotient (Köse et al.); German text follows the published German AQ translations. Both were condensed to the AQ-10 item set — treat them as provisional and verify before clinical use.
+- **Scoring:** 1 point per item answered in the trait direction (agree on items 1, 7, 8, 10; disagree on items 2–6 and 9); a total of 6 or more suggests referral for specialist assessment, per Allison et al. (2012).
+
 ## DASS-21 — Depression Anxiety Stress Scales, short form (`dass21`)
 
 - **Original:** Lovibond, S. H., & Lovibond, P. F. (1995). *Manual for the Depression Anxiety Stress Scales* (2nd ed.). Sydney: Psychology Foundation of Australia.

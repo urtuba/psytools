@@ -86,6 +86,7 @@ const response = AssessmentResponse.parse(assessment, rowFromDb); // answers re-
 | `dass21` | Depression Anxiety Stress Scales (short form) | 21 | 3 subscales × 7 items, sums doubled, banded per subscale | en, tr, de |
 | `who5` | WHO-5 Well-Being Index | 5 | Sum × 4 → 0–100 (higher is better), 3 well-being bands | en, tr, de |
 | `asrs6` | Adult ADHD Self-Report Scale (ASRS-v1.1) screener | 6 | Count of screen-positive items (per-item thresholds), ≥4 positive | en, tr, de |
+| `aq10` | Autism Spectrum Quotient (AQ-10, adult) | 10 | 1 point per item in trait direction (agree/disagree), ≥6 refer | en, tr, de |
 
 ```ts
 import { loadInventory, inventories, dass21 } from "psytools";

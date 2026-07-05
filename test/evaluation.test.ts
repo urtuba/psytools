@@ -165,6 +165,37 @@ test("ASRS-6: items 1-3 screen positive from Sometimes, 4-6 from Often; 4+ is po
   assert.equal(positive.band?.id, "positive");
 });
 
+test("AQ-10: agree and disagree items both score in the trait direction", () => {
+  const assessment = loadInventory("aq10");
+  const agreeItems = ["aq10-1", "aq10-7", "aq10-8", "aq10-10"];
+  const disagreeItems = ["aq10-2", "aq10-3", "aq10-4", "aq10-5", "aq10-6", "aq10-9"];
+
+  // Full trait direction: agree (3) on agree-scored, disagree (0) on the rest.
+  const maxTrait = assessment.evaluate({
+    ...Object.fromEntries(agreeItems.map((id) => [id, 3])),
+    ...Object.fromEntries(disagreeItems.map((id) => [id, 0])),
+  });
+  if (maxTrait.kind !== "scale") return assert.fail();
+  assert.equal(maxTrait.score, 10);
+  assert.equal(maxTrait.band?.id, "above-threshold");
+
+  // "Definitely agree" everywhere only scores the 4 agree-keyed items.
+  const allAgree = assessment.evaluate(
+    Object.fromEntries([...agreeItems, ...disagreeItems].map((id) => [id, 3])),
+  );
+  if (allAgree.kind !== "scale") return assert.fail();
+  assert.equal(allAgree.score, 4);
+  assert.equal(allAgree.band?.id, "below-threshold");
+
+  // "Slightly" answers count the same as "definitely" (binary scoring).
+  const slightTrait = assessment.evaluate({
+    ...Object.fromEntries(agreeItems.map((id) => [id, 2])),
+    ...Object.fromEntries(disagreeItems.map((id) => [id, 1])),
+  });
+  if (slightTrait.kind !== "scale") return assert.fail();
+  assert.equal(slightTrait.score, 10);
+});
+
 test("count scoring tallies items crossing per-item thresholds, honoring reverse", () => {
   const assessment = new Assessment({
     id: "cnt",
