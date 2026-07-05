@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.1](https://github.com/urtuba/psytools/compare/v0.3.0...v0.3.1) (2026-07-05)
+
+
+### Features
+
+* **core:** add count scoring kind for threshold-based screeners ([7b7e97a](https://github.com/urtuba/psytools/commit/7b7e97a2014e92d084cd7805014751e2480a3e05))
+* **core:** support multiplier in sum scoring ([ba634dd](https://github.com/urtuba/psytools/commit/ba634dd4fb03670630b97f250b2df4a5671b9ccf))
+* **inventories:** add AQ-10 autism spectrum screener (en/tr/de) ([28bfbce](https://github.com/urtuba/psytools/commit/28bfbce4b5e47b59428de479df61fe28d288fce1))
+* **inventories:** add ASRS v1.1 adult ADHD screener (en/tr/de) ([971afd1](https://github.com/urtuba/psytools/commit/971afd1637c9cbaf0eb3097a3f45540b9ae983f4))
+* **inventories:** add WHO-5 Well-Being Index (en/tr/de) ([89c2ccf](https://github.com/urtuba/psytools/commit/89c2ccf08966006968bfd5c3842facbbaddb9ac4))
+
+
+### Bug Fixes
+
+* **core:** validate answer values and question ids in evaluate ([3c3f638](https://github.com/urtuba/psytools/commit/3c3f638065d9a61fdcfc8e38791e34cb1cd280ab))
+
 ## [0.3.0](https://github.com/urtuba/psytools/compare/v0.2.0...v0.3.0) (2026-07-05)
 
 
