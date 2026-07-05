@@ -144,6 +144,27 @@ test("reverse-scored questions are inverted against their scale", () => {
   assert.equal(result.score, 3); // 3 + (3 - 3)
 });
 
+test("ASRS-6: items 1-3 screen positive from Sometimes, 4-6 from Often; 4+ is positive", () => {
+  const assessment = loadInventory("asrs6");
+
+  // Items 1-3 at Sometimes (2) count; item 4 at Sometimes does not.
+  const negative = assessment.evaluate({
+    "asrs6-1": 2, "asrs6-2": 2, "asrs6-3": 2, "asrs6-4": 2, "asrs6-5": 0, "asrs6-6": 0,
+  });
+  if (negative.kind !== "scale") return assert.fail();
+  assert.equal(negative.score, 3);
+  assert.equal(negative.max, 6);
+  assert.equal(negative.band?.id, "negative");
+
+  // Item 4 at Often (3) tips the count to 4 -> positive screen.
+  const positive = assessment.evaluate({
+    "asrs6-1": 2, "asrs6-2": 2, "asrs6-3": 2, "asrs6-4": 3, "asrs6-5": 0, "asrs6-6": 0,
+  });
+  if (positive.kind !== "scale") return assert.fail();
+  assert.equal(positive.score, 4);
+  assert.equal(positive.band?.id, "positive");
+});
+
 test("count scoring tallies items crossing per-item thresholds, honoring reverse", () => {
   const assessment = new Assessment({
     id: "cnt",

@@ -31,6 +31,13 @@ The inventories bundled with psytools implement published, freely usable instrum
 - **Translations:** Turkish text follows the validated Turkish version (Eser et al., 2019); German text follows the official German version distributed by the Psychiatric Research Unit.
 - **Scoring:** Raw sum (0–25) multiplied by 4 and reported as 0–100; higher is better. Cutoffs (≤50 reduced well-being, ≤28 likely depression) per Topp et al. (2015).
 
+## ASRS v1.1 — Adult ADHD Self-Report Scale, 6-item screener (`asrs6`)
+
+- **Original:** Kessler, R. C., Adler, L., Ames, M., Demler, O., Faraone, S., Hiripi, E., et al. (2005). The World Health Organization Adult ADHD Self-Report Scale (ASRS): A short screening scale for use in the general population. *Psychological Medicine, 35*(2), 245–256. Developed by the WHO and the Workgroup on Adult ADHD.
+- **Rights:** Free to reproduce, distribute, and score.
+- **Translations:** Turkish text follows the validated Turkish adaptation (Doğan et al., 2009); German text follows the WHO's German ASRS-v1.1 distribution.
+- **Scoring:** Count of screen-positive items — items 1–3 from "Sometimes", items 4–6 from "Often"; 4 or more positives indicate symptoms highly consistent with adult ADHD, per the ASRS-v1.1 screener key.
+
 ## DASS-21 — Depression Anxiety Stress Scales, short form (`dass21`)
 
 - **Original:** Lovibond, S. H., & Lovibond, P. F. (1995). *Manual for the Depression Anxiety Stress Scales* (2nd ed.). Sydney: Psychology Foundation of Australia.

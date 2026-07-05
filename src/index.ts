@@ -38,6 +38,7 @@ export {
   gad7,
   dass21,
   who5,
+  asrs6,
   inventories,
   loadInventory,
   twoWeekFrequencyOptions,
