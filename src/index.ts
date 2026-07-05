@@ -15,6 +15,7 @@ export type {
   ScoringDefinition,
   ValidationIssueCode,
   AnswerMap,
+  InventoryLocalePack,
   ResponseStatus,
   ResponseData,
   ValidationIssue,
@@ -33,7 +34,9 @@ export type {
 
 export { PsytoolsError } from "./errors.ts";
 export type { PsytoolsErrorCode } from "./errors.ts";
-export { localizeText, collectLocales, pickLocales } from "./i18n.ts";
+export { localizeText, collectLocales, pickLocales, applyLocale } from "./i18n.ts";
+export { localePacks, availableLocales } from "./locales/index.ts";
+export type { LocalePackLoader } from "./locales/index.ts";
 export { Assessment, validateDefinition } from "./assessment.ts";
 export { AssessmentResponse } from "./response.ts";
 export { evaluate } from "./evaluation.ts";

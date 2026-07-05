@@ -4,12 +4,12 @@ import {
   Assessment,
   PsytoolsError,
   evaluate,
-  loadInventory,
+  inventories,
   type Evaluator,
 } from "../src/index.ts";
 
 test("PHQ-9: sums, bands, and the item-9 suicidality flag", () => {
-  const assessment = loadInventory("phq9");
+  const assessment = new Assessment(inventories["phq9"]!);
 
   const mild = assessment.createResponse().answerAll(Array(9).fill(1)).submit();
   const result = assessment.evaluate(mild);
@@ -34,7 +34,7 @@ test("PHQ-9: sums, bands, and the item-9 suicidality flag", () => {
 });
 
 test("GAD-7: severity bands match published cutoffs", () => {
-  const assessment = loadInventory("gad7");
+  const assessment = new Assessment(inventories["gad7"]!);
   const expectations: Array<[number, string]> = [
     [0, "minimal"], [4, "minimal"], [5, "mild"], [9, "mild"],
     [10, "moderate"], [14, "moderate"], [15, "severe"], [21, "severe"],
@@ -57,7 +57,7 @@ test("GAD-7: severity bands match published cutoffs", () => {
 });
 
 test("DASS-21: subscale sums are doubled and banded independently", () => {
-  const assessment = loadInventory("dass21");
+  const assessment = new Assessment(inventories["dass21"]!);
   const response = assessment.createResponse().answerAll(Array(21).fill(1)).submit();
 
   const result = assessment.evaluate(response);
@@ -102,7 +102,7 @@ test("sum scoring applies an optional multiplier to score and range", () => {
 });
 
 test("WHO-5: raw sum is reported as a 0-100 percentage with well-being bands", () => {
-  const assessment = loadInventory("who5");
+  const assessment = new Assessment(inventories["who5"]!);
 
   const good = assessment.evaluate({ "who5-1": 3, "who5-2": 3, "who5-3": 3, "who5-4": 3, "who5-5": 3 });
   if (good.kind !== "scale") return assert.fail();
@@ -145,7 +145,7 @@ test("reverse-scored questions are inverted against their scale", () => {
 });
 
 test("ASRS-6: items 1-3 screen positive from Sometimes, 4-6 from Often; 4+ is positive", () => {
-  const assessment = loadInventory("asrs6");
+  const assessment = new Assessment(inventories["asrs6"]!);
 
   // Items 1-3 at Sometimes (2) count; item 4 at Sometimes does not.
   const negative = assessment.evaluate({
@@ -166,7 +166,7 @@ test("ASRS-6: items 1-3 screen positive from Sometimes, 4-6 from Often; 4+ is po
 });
 
 test("Mini-IPIP: five trait subscales with reverse-keyed items on a 1-5 scale", () => {
-  const assessment = loadInventory("mini-ipip");
+  const assessment = new Assessment(inventories["mini-ipip"]!);
 
   // Answer "Very accurate" (5) to everything: positively keyed items score
   // 5, reverse-keyed items score 6 - 5 = 1.
@@ -196,7 +196,7 @@ test("Mini-IPIP: five trait subscales with reverse-keyed items on a 1-5 scale", 
 });
 
 test("AUDIT: per-question option scales are enforced and summed into WHO zones", () => {
-  const assessment = loadInventory("audit");
+  const assessment = new Assessment(inventories["audit"]!);
 
   // Items 9-10 score 0/2/4 only — 1 is valid for item 3 but not item 9.
   const response = assessment.createResponse();
@@ -226,7 +226,7 @@ test("AUDIT: per-question option scales are enforced and summed into WHO zones",
 });
 
 test("AQ-10: agree and disagree items both score in the trait direction", () => {
-  const assessment = loadInventory("aq10");
+  const assessment = new Assessment(inventories["aq10"]!);
   const agreeItems = ["aq10-1", "aq10-7", "aq10-8", "aq10-10"];
   const disagreeItems = ["aq10-2", "aq10-3", "aq10-4", "aq10-5", "aq10-6", "aq10-9"];
 
@@ -333,7 +333,7 @@ test("evaluate throws without scoring, custom evaluators take over", () => {
 });
 
 test("missing-data policy: prorate scales partial sums, minAnswered guards", () => {
-  const definition = structuredClone(loadInventory("phq9").definition);
+  const definition = structuredClone(new Assessment(inventories["phq9"]!).definition);
   if (definition.scoring?.kind !== "sum") return assert.fail();
   definition.scoring.missing = { strategy: "prorate", minAnswered: 7 };
   const assessment = new Assessment(definition);
@@ -359,7 +359,7 @@ test("missing-data policy: prorate scales partial sums, minAnswered guards", () 
 });
 
 test("missing-data policy: require-complete closes the raw-map loophole", () => {
-  const definition = structuredClone(loadInventory("gad7").definition);
+  const definition = structuredClone(new Assessment(inventories["gad7"]!).definition);
   if (definition.scoring?.kind !== "sum") return assert.fail();
   definition.scoring.missing = { strategy: "require-complete" };
   const assessment = new Assessment(definition);
@@ -376,7 +376,7 @@ test("missing-data policy: require-complete closes the raw-map loophole", () => 
 });
 
 test("missing-data policy: applies per subscale and to count scoring", () => {
-  const dass = structuredClone(loadInventory("dass21").definition);
+  const dass = structuredClone(new Assessment(inventories["dass21"]!).definition);
   if (dass.scoring?.kind !== "subscales") return assert.fail();
   dass.scoring.missing = { strategy: "prorate", minAnswered: 4 };
   const assessment = new Assessment(dass);
@@ -398,7 +398,7 @@ test("missing-data policy: applies per subscale and to count scoring", () => {
   assert.equal(depression?.band?.id, "extremely-severe");
 
   // Count scoring with require-complete.
-  const asrs = structuredClone(loadInventory("asrs6").definition);
+  const asrs = structuredClone(new Assessment(inventories["asrs6"]!).definition);
   if (asrs.scoring?.kind !== "count") return assert.fail();
   asrs.scoring.missing = { strategy: "require-complete" };
   assert.throws(
@@ -408,7 +408,7 @@ test("missing-data policy: applies per subscale and to count scoring", () => {
 });
 
 test("evaluate refuses incomplete responses unless explicitly allowed", () => {
-  const assessment = loadInventory("phq9");
+  const assessment = new Assessment(inventories["phq9"]!);
   const response = assessment.createResponse().answer("phq9-1", 2).answer("phq9-2", 2);
 
   assert.throws(
@@ -428,7 +428,7 @@ test("evaluate refuses incomplete responses unless explicitly allowed", () => {
 });
 
 test("evaluate rejects out-of-scale values and unknown questions in raw maps", () => {
-  const assessment = loadInventory("phq9");
+  const assessment = new Assessment(inventories["phq9"]!);
 
   assert.throws(
     () => assessment.evaluate({ "phq9-1": 20 }),

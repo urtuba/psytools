@@ -5,7 +5,7 @@ Give your app a validated psychological questionnaire — rendered, collected, a
 ```ts
 import { loadInventory } from "psytools";
 
-const phq9 = loadInventory("phq9");                    // Patient Health Questionnaire-9
+const phq9 = await loadInventory("phq9");              // Patient Health Questionnaire-9
 phq9.localize("en");                                   // render-ready questions & options for your UI
 
 const response = phq9.createResponse();
@@ -23,6 +23,7 @@ That's a complete depression screening: standardized items, answer validation, p
 - **Your tests too** — therapists and researchers can define their own instruments as one plain JSON object; psytools validates, localizes, and scores them the same way.
 - **Everything is plain JSON** — assessments and responses `stringify()`/`parse()` losslessly, so definitions live in your database and travel between backend and frontend. Scoring rules are data, not code, and survive the round trip.
 - **Safe by default** — every answer is validated against the option scale, incomplete responses can't be scored accidentally, and submitted responses are immutable.
+- **Data minimization by default** — base definitions carry English only; other languages ship as per-inventory locale packs that are lazily imported (and only then enter memory or your bundle) when you request them.
 - **Runs anywhere** — zero runtime dependencies; Node (>= 18), browsers, and edge runtimes; ESM + CommonJS with full TypeScript declarations.
 
 ## Install
@@ -36,7 +37,8 @@ npm install psytools
 ```ts
 import { loadInventory } from "psytools";
 
-const phq9 = loadInventory("phq9");
+// Locales are lazy: only the requested packs are loaded.
+const phq9 = await loadInventory("phq9", { locales: ["tr"] });
 
 // 1. Render — get a flat, single-locale view for your UI.
 const view = phq9.localize("tr");
@@ -147,20 +149,25 @@ Questions may also carry their own `options` to override the default scale, and 
 
 Non-JavaScript backends can validate stored definitions against the published [JSON Schema](schema/assessment-definition.schema.json) (shipped in the npm package under `schema/`).
 
-### Loading only what you need
+### Data minimization
 
-The whole library — engine, all inventories, all five languages — is ~35 kB gzipped, so most apps can just import it. When bundle or payload size matters:
+Minimization is the default, at every layer:
 
-```ts
-// Bundle a single inventory (~5 kB gzipped) instead of the registry:
-import { phq9 } from "psytools/inventories/phq9";
+- **Memory / runtime**: base definitions are English-only. `loadInventory(id, { locales })` dynamically imports just the requested locale packs and merges them — nothing else is ever loaded. `availableLocales(id)` lists what exists.
+- **Bundles**: import a single inventory via `psytools/inventories/<id>` (~2 kB gzipped) and, for static bundling, a specific pack via `psytools/locales/<locale>/<id>`, merged with `applyLocale`:
 
-// Don't ship unused languages to the client — slim the definition server-side:
-import { pickLocales } from "psytools";
-res.json(pickLocales(phq9, [userLocale])); // keeps userLocale + defaultLocale only
-```
+  ```ts
+  import { phq9 } from "psytools/inventories/phq9";        // en base
+  import tr from "psytools/locales/tr/phq9";               // one language pack
+  import { Assessment, applyLocale } from "psytools";
 
-Named imports also tree-shake (`sideEffects: false`): importing `phq9` from the package root lets bundlers drop the other inventories, as long as you avoid the `inventories` registry and `loadInventory`. Locales are deliberately embedded in definitions rather than lazy-loaded — a definition stays one self-contained JSON object that survives database round-trips.
+  const assessment = new Assessment(applyLocale(phq9, tr));
+  ```
+
+  Named root imports also tree-shake (`sideEffects: false`).
+- **Payloads**: a loaded definition contains exactly the locales you asked for, so `res.json(assessment.definition)` is already minimal. To slim an existing multi-locale definition (e.g. a stored custom test), use `pickLocales(definition, [userLocale])`.
+
+Merged definitions remain one self-contained JSON object — locale loading never breaks the `stringify → DB → parse` round trip.
 
 ### Missing answers
 
@@ -215,8 +222,9 @@ const history = rows
 | `AssessmentResponse` | `answer()`, `answerAll()`, `clearAnswer()`, `status`, `progress()`, `validate()`, `submit()`, `stringify()`/`parse()` |
 | `evaluate(definition, answers, { evaluator? })` | Standalone scoring (also available as `Assessment#evaluate`) |
 | `validateDefinition(input)` | Non-throwing structural validation of definitions |
-| `loadInventory(id)` / `inventories` | Predefined instruments (definitions also exported by name) |
-| `localizeText(text, locale, fallback?)` / `collectLocales(texts)` | Locale helpers |
+| `loadInventory(id, { locales? })` / `inventories` | Predefined instruments (async; English-only base definitions also exported by name) |
+| `applyLocale(definition, pack)` / `availableLocales(id)` / `localePacks` | Lazy per-inventory locale packs |
+| `localizeText(text, locale, fallback?)` / `collectLocales(texts)` / `pickLocales(definition, locales)` | Locale helpers |
 | `PsytoolsError` | All errors carry a `code` typed as `PsytoolsErrorCode` (e.g. `invalid_value`, `already_submitted`) |
 
 ## Development

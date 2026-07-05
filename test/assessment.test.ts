@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   Assessment,
   PsytoolsError,
+  availableLocales,
   inventories,
   loadInventory,
   phq9,
@@ -60,16 +61,24 @@ test("Assessment constructor throws on invalid definitions", () => {
   );
 });
 
-test("predefined inventories are valid and localized", () => {
+test("base inventories are English-only; locale packs load on request", async () => {
   for (const id of Object.keys(inventories)) {
-    const assessment = loadInventory(id);
-    assert.deepEqual(assessment.locales, ["de", "en", "es", "tr", "zh"]);
+    // Data minimization by default: the eagerly-imported base carries en only.
+    assert.deepEqual(new Assessment(inventories[id]!).locales, ["en"], id);
+    assert.deepEqual(availableLocales(id), ["de", "en", "es", "tr", "zh"], id);
+
+    // Requesting locales lazily merges the packs into a complete definition.
+    const full = await loadInventory(id, { locales: availableLocales(id) });
+    assert.deepEqual(full.locales, ["de", "en", "es", "tr", "zh"], id);
+
+    const single = await loadInventory(id, { locales: ["tr"] });
+    assert.deepEqual(single.locales, ["en", "tr"], id);
   }
 });
 
 test("every predefined inventory declares license and translation provenance", () => {
   for (const id of Object.keys(inventories)) {
-    const meta = loadInventory(id).definition.meta ?? {};
+    const meta = inventories[id]!.meta ?? {};
     assert.ok(
       meta["licenseFlag"] === "free" || meta["licenseFlag"] === "free-with-conditions",
       `${id}: meta.licenseFlag must be a known flag`,
@@ -83,15 +92,19 @@ test("every predefined inventory declares license and translation provenance", (
   }
 });
 
-test("loadInventory throws on unknown ids", () => {
-  assert.throws(
+test("loadInventory rejects unknown ids and unknown locales", async () => {
+  await assert.rejects(
     () => loadInventory("mmpi"),
     (error: unknown) => error instanceof PsytoolsError && error.code === "unknown_inventory",
   );
+  await assert.rejects(
+    () => loadInventory("phq9", { locales: ["fr"] }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "unknown_locale",
+  );
 });
 
-test("localize produces a flat render-ready view", () => {
-  const assessment = new Assessment(phq9);
+test("localize produces a flat render-ready view", async () => {
+  const assessment = await loadInventory("phq9", { locales: ["tr"] });
   const view = assessment.localize("tr");
 
   assert.equal(view.locale, "tr");
@@ -103,9 +116,10 @@ test("localize produces a flat render-ready view", () => {
   assert.ok(view.instructions?.includes("Son 2 hafta"));
 });
 
-test("localize falls back: regional tag -> base language -> default locale", () => {
-  const assessment = new Assessment(phq9);
+test("localize falls back: regional tag -> base language -> default locale", async () => {
+  const assessment = await loadInventory("phq9", { locales: ["de"] });
   assert.equal(assessment.localize("de-AT").title, assessment.localize("de").title);
+  assert.notEqual(assessment.localize("de").title, assessment.localize("en").title);
   assert.equal(assessment.localize("fr").title, assessment.localize("en").title);
 });
 

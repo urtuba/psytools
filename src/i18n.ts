@@ -1,11 +1,13 @@
 import type {
   AssessmentDefinition,
   AssessmentOption,
+  InventoryLocalePack,
   LocalizedText,
   ScoreBand,
   ScoreFlag,
   ScoringDefinition,
 } from "./types.ts";
+import { PsytoolsError } from "./errors.ts";
 
 /**
  * Resolves a `LocalizedText` to a string for the given locale.
@@ -32,6 +34,107 @@ export function localizeText(
 
   const first = Object.values(text)[0];
   return first ?? "";
+}
+
+/**
+ * Merges a locale pack into a definition, returning a new definition that
+ * additionally carries the pack's language in every localized text. The
+ * original definition and the pack are not modified.
+ *
+ * Packs may be partial (untranslated entries keep their existing locales),
+ * but entries referencing unknown question/band/flag/subscale ids or
+ * mismatched option counts throw `invalid_argument`.
+ */
+export function applyLocale(
+  definition: AssessmentDefinition,
+  pack: InventoryLocalePack,
+): AssessmentDefinition {
+  if (pack.id !== definition.id) {
+    throw new PsytoolsError(
+      "invalid_argument",
+      `Locale pack "${pack.id}" (${pack.locale}) does not belong to assessment "${definition.id}"`,
+    );
+  }
+  const set = (text: LocalizedText, value: string | undefined): LocalizedText =>
+    value === undefined ? text : { ...text, [pack.locale]: value };
+  const setOptions = (
+    options: AssessmentOption[],
+    labels: string[] | undefined,
+    where: string,
+  ): AssessmentOption[] => {
+    if (!labels) return options;
+    if (labels.length !== options.length) {
+      throw new PsytoolsError(
+        "invalid_argument",
+        `Locale pack "${pack.id}/${pack.locale}": ${where} has ${labels.length} labels for ${options.length} options`,
+      );
+    }
+    return options.map((option, i) => ({ ...option, label: set(option.label, labels[i]) }));
+  };
+  const setBands = (
+    bands: ScoreBand[] | undefined,
+    packBands: Record<string, string> | undefined,
+  ): ScoreBand[] | undefined =>
+    bands?.map((band) => ({ ...band, label: set(band.label, packBands?.[band.id]) }));
+  const setFlags = (
+    flags: ScoreFlag[] | undefined,
+    packFlags: Record<string, string> | undefined,
+  ): ScoreFlag[] | undefined =>
+    flags?.map((flag) => ({ ...flag, label: set(flag.label, packFlags?.[flag.id]) }));
+
+  for (const questionId of Object.keys(pack.questions)) {
+    if (!definition.questions.some((q) => q.id === questionId)) {
+      throw new PsytoolsError(
+        "invalid_argument",
+        `Locale pack "${pack.id}/${pack.locale}" references unknown question "${questionId}"`,
+      );
+    }
+  }
+
+  let scoring: ScoringDefinition | undefined;
+  if (definition.scoring) {
+    const s = definition.scoring;
+    if (s.kind === "subscales") {
+      scoring = {
+        ...s,
+        subscales: s.subscales.map((subscale) => {
+          const entry = pack.subscales?.[subscale.id];
+          return {
+            ...subscale,
+            label: set(subscale.label, entry?.label),
+            ...(subscale.bands ? { bands: setBands(subscale.bands, entry?.bands) } : {}),
+          };
+        }),
+        ...(s.flags ? { flags: setFlags(s.flags, pack.flags) } : {}),
+      };
+    } else {
+      scoring = {
+        ...s,
+        ...(s.bands ? { bands: setBands(s.bands, pack.bands) } : {}),
+        ...(s.flags ? { flags: setFlags(s.flags, pack.flags) } : {}),
+      };
+    }
+  }
+
+  return {
+    ...definition,
+    title: set(definition.title, pack.title),
+    ...(definition.description ? { description: set(definition.description, pack.description) } : {}),
+    ...(definition.instructions ? { instructions: set(definition.instructions, pack.instructions) } : {}),
+    options: setOptions(definition.options, pack.options, "options"),
+    questions: definition.questions.map((question) => {
+      const entry = pack.questions[question.id];
+      if (!entry) return question;
+      return {
+        ...question,
+        text: set(question.text, entry.text),
+        ...(question.options
+          ? { options: setOptions(question.options, entry.options, `question "${question.id}"`) }
+          : {}),
+      };
+    }),
+    ...(scoring ? { scoring } : {}),
+  };
 }
 
 /**

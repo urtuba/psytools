@@ -172,6 +172,31 @@ export interface AssessmentDefinition {
   meta?: Record<string, unknown>;
 }
 
+/**
+ * One language for one inventory, shipped as a separate lazily-loadable
+ * module so that only requested locales are bundled and held in memory.
+ * Merge into a base definition with `applyLocale`.
+ */
+export interface InventoryLocalePack {
+  /** Id of the inventory this pack translates. */
+  id: string;
+  /** BCP-47 language tag of the pack, e.g. `"tr"`. */
+  locale: string;
+  title: string;
+  description?: string;
+  instructions?: string;
+  /** Labels of the assessment-level option scale, by option index. */
+  options: string[];
+  /** Per-question texts (and option labels for question-level scales), by question id. */
+  questions: Record<string, { text: string; options?: string[] }>;
+  /** Band labels by band id (sum and count scoring). */
+  bands?: Record<string, string>;
+  /** Flag labels by flag id. */
+  flags?: Record<string, string>;
+  /** Subscale labels and band labels, by subscale id. */
+  subscales?: Record<string, { label: string; bands?: Record<string, string> }>;
+}
+
 /** Answers keyed by question id. */
 export type AnswerMap = Record<string, number>;
 

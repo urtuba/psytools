@@ -1,6 +1,8 @@
 import type { AssessmentDefinition } from "../types.ts";
 import { Assessment } from "../assessment.ts";
 import { PsytoolsError } from "../errors.ts";
+import { applyLocale } from "../i18n.ts";
+import { availableLocales, localePacks } from "../locales/index.ts";
 import { phq9 } from "./phq9.ts";
 import { gad7 } from "./gad7.ts";
 import { dass21 } from "./dass21.ts";
@@ -37,13 +39,35 @@ export type InventoryId =
 
 /**
  * Instantiates a predefined inventory as an `Assessment`.
- * @throws PsytoolsError `unknown_inventory`
+ *
+ * Base definitions carry English only; other languages live in separate
+ * locale-pack modules that are dynamically imported — and only then held
+ * in memory — when listed in `options.locales` (data minimization by
+ * default). The returned assessment's definition is still one complete,
+ * serializable JSON object containing exactly the requested locales.
+ *
+ * @throws PsytoolsError `unknown_inventory` | `unknown_locale`
  */
-export function loadInventory(id: InventoryId | string): Assessment {
+export async function loadInventory(
+  id: InventoryId | string,
+  options?: { locales?: string[] },
+): Promise<Assessment> {
   const definition = inventories[id];
   if (!definition) {
     const known = Object.keys(inventories).join(", ");
     throw new PsytoolsError("unknown_inventory", `Unknown inventory "${id}" (available: ${known})`);
   }
-  return new Assessment(definition);
+  let merged = definition;
+  for (const locale of options?.locales ?? []) {
+    if (locale === definition.defaultLocale) continue;
+    const loader = localePacks[id]?.[locale];
+    if (!loader) {
+      throw new PsytoolsError(
+        "unknown_locale",
+        `No "${locale}" locale pack for inventory "${id}" (available: ${availableLocales(id).join(", ")})`,
+      );
+    }
+    merged = applyLocale(merged, (await loader()).default);
+  }
+  return new Assessment(merged);
 }

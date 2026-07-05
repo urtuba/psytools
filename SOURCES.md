@@ -24,7 +24,9 @@ The same provenance applies to every bundled inventory. If an inventory ever dev
 | zh | AI translation (Anthropic Claude, `claude-fable-5`) from the original English | No |
 | es | AI translation (Anthropic Claude, `claude-fable-5`) from the original English | No |
 
-Official validated translations exist for most of these instruments, but they were **not consulted** in preparing the bundled texts, so they are deliberately not cited as sources. The packaged Turkish and German wording has not been checked against them and has not been psychometrically validated. Validated instruments are only validated for their exact wording — before clinical or research use, obtain the official version for your language and compare or replace the text. Verification contributions from native speakers are very welcome.
+Official validated translations exist for most of these instruments, but they were **not consulted** in preparing the bundled texts, so they are deliberately not cited as sources. The packaged non-English wording has not been checked against them and has not been psychometrically validated. Validated instruments are only validated for their exact wording — before clinical or research use, obtain the official version for your language and compare or replace the text.
+
+Non-English texts live as one file per inventory per language under [`src/locales/<locale>/`](src/locales) — exactly the unit a native-speaker reviewer needs. Verification contributions are very welcome.
 
 ## PHQ-9 — Patient Health Questionnaire-9 (`phq9`)
 

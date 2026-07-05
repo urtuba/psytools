@@ -1,8 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { Assessment, AssessmentResponse, PsytoolsError, loadInventory } from "../src/index.ts";
+import { Assessment, AssessmentResponse, PsytoolsError, inventories } from "../src/index.ts";
 
-const gad7 = () => loadInventory("gad7");
+const gad7 = () => new Assessment(inventories["gad7"]!);
 
 test("answers one question at a time and tracks progress", () => {
   const response = gad7().createResponse();
@@ -113,7 +113,7 @@ test("submitted responses are immutable", () => {
 });
 
 test("optional questions do not block submission", () => {
-  const definition = structuredClone(loadInventory("gad7").definition);
+  const definition = structuredClone(new Assessment(inventories["gad7"]!).definition);
   definition.questions[6]!.optional = true;
 
   const response = new Assessment(definition).createResponse();

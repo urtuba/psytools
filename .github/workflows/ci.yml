@@ -25,16 +25,19 @@ jobs:
       - name: Smoke-test built outputs (CJS + ESM)
         run: |
           node -e "
-            const { loadInventory } = require('./dist/cjs/index.js');
-            const a = loadInventory('dass21');
-            const r = a.createResponse().answerAll(Array(21).fill(2)).submit();
-            const result = a.evaluate(r);
-            if (result.scales[0].score !== 28) throw new Error('CJS scoring broken');
-            console.log('CJS ok');
+            (async () => {
+              const { loadInventory } = require('./dist/cjs/index.js');
+              const a = await loadInventory('dass21', { locales: ['tr'] });
+              const r = a.createResponse().answerAll(Array(21).fill(2)).submit();
+              const result = a.evaluate(r);
+              if (result.scales[0].score !== 28) throw new Error('CJS scoring broken');
+              if (!result.scales[0].band.label.tr) throw new Error('CJS lazy locale pack broken');
+              console.log('CJS ok');
+            })().catch((e) => { console.error(e); process.exit(1); });
           "
           node --input-type=module -e "
             import { loadInventory } from './dist/esm/index.js';
-            const a = loadInventory('phq9');
+            const a = await loadInventory('phq9');
             const r = a.createResponse().answerAll([1,1,1,1,1,1,1,1,2]).submit();
             const result = a.evaluate(r);
             if (result.score !== 10 || result.flags[0]?.id !== 'suicidality') throw new Error('ESM scoring broken');
@@ -59,9 +62,12 @@ jobs:
       - name: Smoke-test built outputs (CJS + ESM)
         run: |
           node -e "
-            const { loadInventory } = require('./dist/cjs/index.js');
-            if (loadInventory('gad7').localize('tr').questions.length !== 7) throw new Error('CJS broken');
-            console.log('CJS ok');
+            (async () => {
+              const { loadInventory } = require('./dist/cjs/index.js');
+              const a = await loadInventory('gad7', { locales: ['tr'] });
+              if (a.localize('tr').questions.length !== 7) throw new Error('CJS broken');
+              console.log('CJS ok');
+            })().catch((e) => { console.error(e); process.exit(1); });
           "
           node --input-type=module -e "
             import { validateDefinition, phq9 } from './dist/esm/index.js';

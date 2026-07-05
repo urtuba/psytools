@@ -18,6 +18,7 @@ export type PsytoolsErrorCode =
   // serialization & lookup
   | "invalid_json"
   | "unknown_inventory"
+  | "unknown_locale"
   // API misuse
   | "invalid_argument";
 
