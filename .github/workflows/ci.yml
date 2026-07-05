@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Unit tests run TypeScript directly via node:test and require
+        # Node's type stripping (>= 22.18).
+        node: ["22.x", "24.x"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Smoke-test built outputs (CJS + ESM)
+        run: |
+          node -e "
+            const { loadInventory } = require('./dist/cjs/index.js');
+            const a = loadInventory('dass21');
+            const r = a.createResponse().answerAll(Array(21).fill(2)).submit();
+            const result = a.evaluate(r);
+            if (result.scales[0].score !== 28) throw new Error('CJS scoring broken');
+            console.log('CJS ok');
+          "
+          node --input-type=module -e "
+            import { loadInventory } from './dist/esm/index.js';
+            const a = loadInventory('phq9');
+            const r = a.createResponse().answerAll([1,1,1,1,1,1,1,1,2]).submit();
+            const result = a.evaluate(r);
+            if (result.score !== 10 || result.flags[0]?.id !== 'suicidality') throw new Error('ESM scoring broken');
+            console.log('ESM ok');
+          "
+
+  compat:
+    # Older runtimes cannot run the TS test suite but must be able to
+    # build and consume the published output (engines: >= 18).
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ["18.x", "20.x"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Smoke-test built outputs (CJS + ESM)
+        run: |
+          node -e "
+            const { loadInventory } = require('./dist/cjs/index.js');
+            if (loadInventory('gad7').localize('tr').questions.length !== 7) throw new Error('CJS broken');
+            console.log('CJS ok');
+          "
+          node --input-type=module -e "
+            import { validateDefinition, phq9 } from './dist/esm/index.js';
+            if (!validateDefinition(phq9).valid) throw new Error('ESM broken');
+            console.log('ESM ok');
+          "
