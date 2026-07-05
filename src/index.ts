@@ -41,6 +41,7 @@ export {
   asrs6,
   aq10,
   audit,
+  miniIpip,
   inventories,
   loadInventory,
   twoWeekFrequencyOptions,

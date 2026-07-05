@@ -98,6 +98,19 @@ Validated instruments are only validated for their exact wording. Before clinica
 | tr | Validated Turkish ASRS (Doğan et al., 2009) | Free with conditions (follows instrument terms) | AI-assisted (Claude, `claude-fable-5`), following the validated version | No |
 | de | WHO German ASRS-v1.1 distribution | Free with conditions (follows instrument terms) | AI-assisted (Claude, `claude-fable-5`), following the official version | No |
 
+## Mini-IPIP — Big Five personality scale (`mini-ipip`)
+
+**Instrument license: Free.** The International Personality Item Pool (Lewis Goldberg; <https://ipip.ori.org>) was created explicitly as a public-domain alternative to copyrighted commercial personality tests — items are free for any use, including commercial, without permission.
+
+- **Citation:** Donnellan, M. B., Oswald, F. L., Baird, B. M., & Lucas, R. E. (2006). The Mini-IPIP scales: Tiny-yet-effective measures of the Big Five factors of personality. *Psychological Assessment, 18*(2), 192–203.
+- **Scoring:** Five trait subscales (extraversion, agreeableness, conscientiousness, neuroticism, openness) of 4 items each on a 1–5 accuracy scale, half reverse-keyed; scores 4–20 per trait are descriptive — no clinical cutoffs exist, so no bands are defined.
+
+| Language | Basis | Translation rights | Preparation | Verified |
+| --- | --- | --- | --- | --- |
+| en | Original items (Donnellan et al., 2006; ipip.ori.org) | Free (public domain) | Reproduced from the original | Yes |
+| tr | **Provisional** — no specific validated Turkish Mini-IPIP was followed | Free (IPIP encourages translations) | AI-assisted (Claude, `claude-fable-5`) | No |
+| de | **Provisional** — no specific validated German Mini-IPIP was followed | Free (IPIP encourages translations) | AI-assisted (Claude, `claude-fable-5`) | No |
+
 ## AQ-10 — Autism Spectrum Quotient, 10-item adult version (`aq10`)
 
 **Instrument license: Free with conditions.** Copyright is held by the Autism Research Centre (ARC), University of Cambridge. ARC distributes its measures free of charge and the AQ-10 is recommended by NICE (CG142) for adult screening in clinical practice. Commercial redistribution is not explicitly licensed — verify with ARC before shipping commercially.

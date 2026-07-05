@@ -165,6 +165,36 @@ test("ASRS-6: items 1-3 screen positive from Sometimes, 4-6 from Often; 4+ is po
   assert.equal(positive.band?.id, "positive");
 });
 
+test("Mini-IPIP: five trait subscales with reverse-keyed items on a 1-5 scale", () => {
+  const assessment = loadInventory("mini-ipip");
+
+  // Answer "Very accurate" (5) to everything: positively keyed items score
+  // 5, reverse-keyed items score 6 - 5 = 1.
+  const result = assessment.evaluate(
+    Object.fromEntries(assessment.questions.map((q) => [q.id, 5])),
+  );
+  assert.equal(result.kind, "multiscale");
+  if (result.kind !== "multiscale") return;
+  assert.equal(result.scales.length, 5);
+
+  const byId = Object.fromEntries(result.scales.map((scale) => [scale.id, scale]));
+  for (const trait of ["extraversion", "agreeableness", "conscientiousness", "neuroticism"]) {
+    // 2 positive + 2 reverse items: 5 + 5 + 1 + 1.
+    assert.equal(byId[trait]?.score, 12, trait);
+    assert.equal(byId[trait]?.min, 4, trait);
+    assert.equal(byId[trait]?.max, 20, trait);
+    assert.equal(byId[trait]?.band, undefined, `${trait}: no clinical bands`);
+  }
+  // Openness has 1 positive + 3 reverse items: 5 + 1 + 1 + 1.
+  assert.equal(byId["openness"]?.score, 8);
+
+  // The 1-5 scale has no 0: out-of-scale answers are rejected.
+  assert.throws(
+    () => assessment.evaluate({ "mini-ipip-1": 0 }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_value",
+  );
+});
+
 test("AUDIT: per-question option scales are enforced and summed into WHO zones", () => {
   const assessment = loadInventory("audit");
 
