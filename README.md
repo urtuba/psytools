@@ -1,13 +1,29 @@
 # psytools
 
-Zero-dependency TypeScript toolkit for psychological assessments: a serializable data model, response collection with validation, declarative scoring, and predefined inventories (PHQ-9, GAD-7, DASS-21) in English, Turkish, and German.
+Give your app a validated psychological questionnaire — rendered, collected, and scored — in a few lines:
 
-Built for therapy apps and research tools where therapists or researchers use standardized tests or define their own, collect responses from clients or study participants, and track results over time.
+```ts
+import { loadInventory } from "psytools";
 
-- **Zero runtime dependencies** — works in Node (>= 18), browsers, and edge runtimes; ships ESM and CommonJS builds with full type declarations.
-- **Everything is plain JSON** — assessments and responses `stringify()`/`parse()` losslessly, so definitions can live in a database and travel between backend and frontend.
-- **Declarative scoring** — severity bands, subscales, and clinical flags are data, not code, so they survive serialization. Custom evaluator functions are supported when you need more.
-- **Multilingual by design** — every text is a `{ locale: string }` record; `localize()` produces a flat, render-ready view for any locale with sensible fallbacks.
+const phq9 = loadInventory("phq9");                    // Patient Health Questionnaire-9
+phq9.localize("en");                                   // render-ready questions & options for your UI
+
+const response = phq9.createResponse();
+response.answerAll([2, 1, 3, 1, 0, 1, 2, 0, 0]).submit();
+
+phq9.evaluate(response);
+// { score: 10, band: { id: "moderate", label: { en: "Moderate depression", ... } }, ... }
+```
+
+That's a complete depression screening: standardized items, answer validation, published severity cutoffs, and clinical flags (e.g. PHQ-9's self-harm item) — with zero dependencies.
+
+## Why psytools
+
+- **Batteries included** — PHQ-9, GAD-7, and DASS-21 ship ready to use in English, Turkish, and German, with published scoring rules and citations.
+- **Your tests too** — therapists and researchers can define their own instruments as one plain JSON object; psytools validates, localizes, and scores them the same way.
+- **Everything is plain JSON** — assessments and responses `stringify()`/`parse()` losslessly, so definitions live in your database and travel between backend and frontend. Scoring rules are data, not code, and survive the round trip.
+- **Safe by default** — every answer is validated against the option scale, incomplete responses can't be scored accidentally, and submitted responses are immutable.
+- **Runs anywhere** — zero runtime dependencies; Node (>= 18), browsers, and edge runtimes; ESM + CommonJS with full TypeScript declarations.
 
 ## Install
 
@@ -15,7 +31,7 @@ Built for therapy apps and research tools where therapists or researchers use st
 npm install psytools
 ```
 
-## Quick start
+## Walkthrough
 
 ```ts
 import { loadInventory } from "psytools";
@@ -28,12 +44,12 @@ const view = phq9.localize("tr");
 
 // 2. Collect answers — one by one or all at once.
 const response = phq9.createResponse({ respondentId: "client-42" });
-response.status;                         // "empty"
-response.answer("phq9-1", 2);           // one by one, validated immediately
-response.status;                         // "in-progress"
+response.answer("phq9-1", 2);           // validated immediately
 response.answerAll([2, 1, 3, 1, 0, 1, 2, 0, 0]); // or all at once (question order)
-response.status;                         // "complete"
-response.submit();                       // validates, freezes, timestamps -> "submitted"
+response.submit();                       // validates completeness, freezes, timestamps
+
+// Responses track their lifecycle as `response.status`:
+// "empty" -> "in-progress" -> "complete" -> "submitted"
 
 // 3. Evaluate.
 const result = phq9.evaluate(response);
@@ -43,9 +59,8 @@ const result = phq9.evaluate(response);
 //   flags: []   // phq9-9 > 0 would raise the "suicidality" flag here
 // }
 
-// Responses walk a simple state machine — empty -> in-progress -> complete
-// -> submitted — exposed as `response.status`. `evaluate()` refuses
-// responses that are not complete/submitted; score partial data explicitly:
+// evaluate() refuses responses that are not complete/submitted;
+// score partial data explicitly:
 phq9.evaluate(inProgressResponse, undefined, { allowIncomplete: true });
 
 // 4. Persist — both sides are plain JSON.
