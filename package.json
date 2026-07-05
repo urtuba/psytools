@@ -48,6 +48,16 @@
         "default": "./dist/cjs/index.js"
       }
     },
+    "./inventories/*": {
+      "import": {
+        "types": "./dist/esm/inventories/*.d.ts",
+        "default": "./dist/esm/inventories/*.js"
+      },
+      "require": {
+        "types": "./dist/cjs/inventories/*.d.ts",
+        "default": "./dist/cjs/inventories/*.js"
+      }
+    },
     "./package.json": "./package.json"
   },
   "files": [

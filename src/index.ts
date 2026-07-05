@@ -33,7 +33,7 @@ export type {
 
 export { PsytoolsError } from "./errors.ts";
 export type { PsytoolsErrorCode } from "./errors.ts";
-export { localizeText, collectLocales } from "./i18n.ts";
+export { localizeText, collectLocales, pickLocales } from "./i18n.ts";
 export { Assessment, validateDefinition } from "./assessment.ts";
 export { AssessmentResponse } from "./response.ts";
 export { evaluate } from "./evaluation.ts";

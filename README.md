@@ -147,6 +147,21 @@ Questions may also carry their own `options` to override the default scale, and 
 
 Non-JavaScript backends can validate stored definitions against the published [JSON Schema](schema/assessment-definition.schema.json) (shipped in the npm package under `schema/`).
 
+### Loading only what you need
+
+The whole library — engine, all inventories, all five languages — is ~35 kB gzipped, so most apps can just import it. When bundle or payload size matters:
+
+```ts
+// Bundle a single inventory (~5 kB gzipped) instead of the registry:
+import { phq9 } from "psytools/inventories/phq9";
+
+// Don't ship unused languages to the client — slim the definition server-side:
+import { pickLocales } from "psytools";
+res.json(pickLocales(phq9, [userLocale])); // keeps userLocale + defaultLocale only
+```
+
+Named imports also tree-shake (`sideEffects: false`): importing `phq9` from the package root lets bundlers drop the other inventories, as long as you avoid the `inventories` registry and `loadInventory`. Locales are deliberately embedded in definitions rather than lazy-loaded — a definition stays one self-contained JSON object that survives database round-trips.
+
 ### Missing answers
 
 Declarative scoring takes an optional missing-data policy governing how incomplete answer sets are scored (they reach the scorer via raw answer maps or `allowIncomplete`):
