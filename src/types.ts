@@ -176,17 +176,21 @@ export interface AssessmentDefinition {
  * One language for one inventory, shipped as a separate lazily-loadable
  * module so that only requested locales are bundled and held in memory.
  * Merge into a base definition with `applyLocale`.
+ *
+ * Packs are partial: every field but `id`/`locale` is optional, so the same
+ * shape also works as a small local override (e.g. reword one question) via
+ * `loadInventory(id, { overrides })` — no need to restate the whole pack.
  */
 export interface InventoryLocalePack {
   /** Id of the inventory this pack translates. */
   id: string;
   /** BCP-47 language tag of the pack, e.g. `"tr"`. */
   locale: string;
-  title: string;
+  title?: string;
   description?: string;
   instructions?: string;
-  /** Labels of the assessment-level option scale, by option index. */
-  options: string[];
+  /** Labels of the assessment-level option scale, by option index. Length must match the option scale's when present. */
+  options?: string[];
   /** Per-question texts (and option labels for question-level scales), by question id. */
   questions: Record<string, { text: string; options?: string[] }>;
   /** Band labels by band id (sum and count scoring). */

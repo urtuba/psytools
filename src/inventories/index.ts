@@ -1,4 +1,4 @@
-import type { AssessmentDefinition } from "../types.ts";
+import type { AssessmentDefinition, InventoryLocalePack } from "../types.ts";
 import { Assessment } from "../assessment.ts";
 import { PsytoolsError } from "../errors.ts";
 import { applyLocale } from "../i18n.ts";
@@ -46,11 +46,18 @@ export type InventoryId =
  * default). The returned assessment's definition is still one complete,
  * serializable JSON object containing exactly the requested locales.
  *
- * @throws PsytoolsError `unknown_inventory` | `unknown_locale`
+ * `options.overrides` applies one or more local, partial locale packs
+ * (same shape as the bundled ones) after the built-in packs, so a consumer
+ * can reword specific questions/options/instructions without forking the
+ * inventory. Later overrides win over earlier ones and over the built-in
+ * text; each is validated exactly like a bundled pack (unknown question
+ * ids and option-count mismatches still throw `invalid_argument`).
+ *
+ * @throws PsytoolsError `unknown_inventory` | `unknown_locale` | `invalid_argument`
  */
 export async function loadInventory(
   id: InventoryId | string,
-  options?: { locales?: string[] },
+  options?: { locales?: string[]; overrides?: InventoryLocalePack | InventoryLocalePack[] },
 ): Promise<Assessment> {
   const definition = inventories[id];
   if (!definition) {
@@ -68,6 +75,14 @@ export async function loadInventory(
       );
     }
     merged = applyLocale(merged, (await loader()).default);
+  }
+  const overrides = options?.overrides
+    ? Array.isArray(options.overrides)
+      ? options.overrides
+      : [options.overrides]
+    : [];
+  for (const override of overrides) {
+    merged = applyLocale(merged, override);
   }
   return new Assessment(merged);
 }

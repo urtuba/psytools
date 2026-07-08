@@ -169,6 +169,27 @@ Minimization is the default, at every layer:
 
 Merged definitions remain one self-contained JSON object — locale loading never breaks the `stringify → DB → parse` round trip.
 
+### Local translation overrides
+
+The bundled translations are unverified AI output (see [Translation provenance](#important-notes) below) — you may want to reword a specific question, option label, or instruction locally without forking the inventory. `loadInventory` accepts `overrides`: one or more partial locale packs, applied **after** the built-in packs, later-wins:
+
+```ts
+const phq9 = await loadInventory("phq9", {
+  locales: ["tr"],
+  overrides: {
+    id: "phq9",
+    locale: "tr",
+    // Only the bits you want to change — everything else keeps the
+    // bundled tr text (or falls back to English if tr was never loaded).
+    questions: {
+      "phq9-3": { text: "Uykuya dalmakta veya uykuyu sürdürmekte güçlük" },
+    },
+  },
+});
+```
+
+An override pack has the same shape as a bundled `InventoryLocalePack` (see [`applyLocale`](#data-minimization) above), but every field except `id`/`locale`/`questions` is optional, and `questions` only needs entries for what you're changing. Pass an array to apply several overrides in order; option-count mismatches and unknown question ids still throw `invalid_argument`, same as a bundled pack. This is a local, in-memory concern — psytools doesn't track override provenance or verification status; that's still on you and your own docs.
+
 ### Missing answers
 
 Declarative scoring takes an optional missing-data policy governing how incomplete answer sets are scored (they reach the scorer via raw answer maps or `allowIncomplete`):
@@ -224,7 +245,7 @@ const history = rows
 | `AssessmentResponse` | `answer()`, `answerAll()`, `clearAnswer()`, `status`, `progress()`, `validate()`, `submit()`, `stringify()`/`parse()` |
 | `evaluate(definition, answers, { evaluator? })` | Standalone scoring (also available as `Assessment#evaluate`) |
 | `validateDefinition(input)` | Non-throwing structural validation of definitions |
-| `loadInventory(id, { locales? })` / `inventories` | Predefined instruments (async; English-only base definitions also exported by name) |
+| `loadInventory(id, { locales?, overrides? })` / `inventories` | Predefined instruments (async; English-only base definitions also exported by name); `overrides` applies local partial locale packs after the built-in ones |
 | `applyLocale(definition, pack)` / `availableLocales(id)` / `localePacks` | Lazy per-inventory locale packs |
 | `localizeText(text, locale, fallback?)` / `collectLocales(texts)` / `pickLocales(definition, locales)` | Locale helpers |
 | `PsytoolsError` | All errors carry a `code` typed as `PsytoolsErrorCode` (e.g. `invalid_value`, `already_submitted`) |
@@ -242,7 +263,7 @@ npm run build   # ESM + CJS + type declarations into dist/
 - **Not a diagnostic tool.** Scores, severity bands, and flags implement the published scoring rules of screening instruments; they are not diagnoses and do not replace clinical judgment.
 - **Crisis-relevant answers.** PHQ-9 item 9 raises a `suicidality` flag — applications should surface this to a responsible clinician and provide crisis resources to respondents.
 - **Instrument licensing.** [SOURCES.md](SOURCES.md) flags every bundled instrument as **Free** (PHQ-9, GAD-7, DASS-21, WHO-5 — usable without permission, including commercially) or **Free with conditions** (ASRS v1.1, AQ-10 — free for clinical/research use; verify with the rights holder before embedding in commercial products). Each inventory's `meta.licenseFlag` carries the same flag programmatically.
-- **Translation provenance.** English texts are reproduced from the original instruments. Turkish and German texts are AI translations (Anthropic Claude, model `claude-fable-5`) of the original English — official translations were **not** consulted and the texts are unverified; see [SOURCES.md](SOURCES.md). Obtain and compare the official version for your language before clinical use. Corrections: <samed@luckys.dev>.
+- **Translation provenance.** English texts are reproduced from the original instruments. Turkish, German, Simplified Chinese, and Spanish texts are AI translations (Anthropic Claude, model `claude-fable-5`) of the original English — official translations were **not** consulted and the texts are unverified. This status is documentation-only: psytools does not track or expose per-pack verification programmatically (no `verified` field, no gating option, no status API) — read [SOURCES.md](SOURCES.md) and decide for yourself whether the bundled wording is fit for your use case. If it isn't for a specific item, use [local overrides](#local-translation-overrides) rather than forking the package. Obtain and compare the official version for your language before clinical use. Corrections: <samed@luckys.dev>.
 
 ## License
 

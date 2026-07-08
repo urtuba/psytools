@@ -103,6 +103,58 @@ test("loadInventory rejects unknown ids and unknown locales", async () => {
   );
 });
 
+test("loadInventory overrides are applied after built-in locale packs and win", async () => {
+  const assessment = await loadInventory("phq9", {
+    locales: ["tr"],
+    overrides: {
+      id: "phq9",
+      locale: "tr",
+      questions: { "phq9-1": { text: "Yerel geçersiz kılma metni" } },
+    },
+  });
+
+  const view = assessment.localize("tr");
+  // The overridden question uses the local text, not the bundled tr pack's.
+  assert.equal(view.questions[0]?.text, "Yerel geçersiz kılma metni");
+  // Untouched questions still carry the bundled tr translation, not English.
+  assert.notEqual(view.questions[1]?.text, phq9.questions[1]?.text["en"]);
+});
+
+test("loadInventory accepts multiple overrides, later-applied wins", async () => {
+  const assessment = await loadInventory("phq9", {
+    overrides: [
+      { id: "phq9", locale: "en", questions: { "phq9-1": { text: "First override" } } },
+      { id: "phq9", locale: "en", questions: { "phq9-1": { text: "Second override" } } },
+    ],
+  });
+  assert.equal(assessment.localize("en").questions[0]?.text, "Second override");
+});
+
+test("loadInventory overrides work with no built-in locales requested", async () => {
+  const assessment = await loadInventory("gad7", {
+    overrides: { id: "gad7", locale: "en", questions: { "gad7-1": { text: "Reworded item" } } },
+  });
+  assert.equal(assessment.localize("en").questions[0]?.text, "Reworded item");
+  assert.deepEqual(assessment.locales, ["en"]);
+});
+
+test("loadInventory overrides still enforce option-count mismatch and unknown-question checks", async () => {
+  await assert.rejects(
+    () =>
+      loadInventory("phq9", {
+        overrides: { id: "phq9", locale: "tr", options: ["only one label"], questions: {} },
+      }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_argument",
+  );
+  await assert.rejects(
+    () =>
+      loadInventory("phq9", {
+        overrides: { id: "phq9", locale: "tr", questions: { "not-a-real-question": { text: "x" } } },
+      }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_argument",
+  );
+});
+
 test("localize produces a flat render-ready view", async () => {
   const assessment = await loadInventory("phq9", { locales: ["tr"] });
   const view = assessment.localize("tr");

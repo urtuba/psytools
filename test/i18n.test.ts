@@ -32,6 +32,38 @@ test("applyLocale rejects packs for a different assessment", async () => {
   );
 });
 
+test("applyLocale accepts a partial pack that omits title and options", () => {
+  // Only rewording one question — no title, no top-level options array.
+  const pack = {
+    id: "phq9",
+    locale: "tr",
+    questions: { "phq9-3": { text: "Uykuya dalmakta veya uykuyu sürdürmekte güçlük" } },
+  };
+  const merged = applyLocale(inventories["phq9"]!, pack);
+
+  // The overridden question gained a tr text; everything else stayed as-is.
+  const q3 = merged.questions.find((q) => q.id === "phq9-3");
+  assert.equal(q3!.text["tr"], "Uykuya dalmakta veya uykuyu sürdürmekte güçlük");
+  assert.equal(merged.title["tr"], undefined);
+  assert.deepEqual(merged.options, inventories["phq9"]!.options);
+
+  // The base definition is not mutated.
+  assert.equal(inventories["phq9"]!.questions.find((q) => q.id === "phq9-3")!.text["tr"], undefined);
+});
+
+test("applyLocale still throws on option-count mismatch when options is present", () => {
+  const pack = {
+    id: "phq9",
+    locale: "tr",
+    options: ["Sadece bir etiket"], // phq9's option scale has 4 entries
+    questions: {},
+  };
+  assert.throws(
+    () => applyLocale(inventories["phq9"]!, pack),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_argument",
+  );
+});
+
 test("pickLocales strips a definition down to the requested locales", async () => {
   const full = (await loadInventory("dass21", { locales: ["tr", "de", "zh", "es"] })).definition;
   const slim = new Assessment(pickLocales(full, ["tr"]));

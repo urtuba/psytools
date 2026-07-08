@@ -28,6 +28,8 @@ Official validated translations exist for most of these instruments, but they we
 
 Non-English texts live as one file per inventory per language under [`src/locales/<locale>/`](src/locales) — exactly the unit a native-speaker reviewer needs. Verification contributions are very welcome.
 
+This table is the only place translation status is tracked — psytools has no `verified` field, no gating option, and no API to query pack status at runtime; that would overstate a confidence level nobody has confirmed. If you've corrected a specific item's wording for your own use and don't want to wait on an upstream fix, apply it locally with `loadInventory(id, { overrides })` (see the README's [local translation overrides](README.md#local-translation-overrides)) rather than forking the package — or, better, send the correction upstream so everyone benefits.
+
 ## Missing-data policies
 
 Bundled inventories ship with declarative missing-data policies (`scoring.missing`). **The prorating thresholds are implementation choices reflecting common research practice — they are not part of the instruments' official scoring rules.** Override by cloning the definition if your protocol differs.
