@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/urtuba/psytools/compare/v0.5.1...v0.5.2) (2026-07-09)
+
+
+### Features
+
+* **i18n:** local translation override packs ([76ae2eb](https://github.com/urtuba/psytools/commit/76ae2eb25df97a1396682d477946cab8c0c0853e))
+
 ## [0.5.1](https://github.com/urtuba/psytools/compare/v0.5.0...v0.5.1) (2026-07-05)
 
 
