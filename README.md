@@ -19,7 +19,7 @@ That's a complete depression screening: standardized items, answer validation, p
 
 ## Why psytools
 
-- **Batteries included** — twelve instruments (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, CES-D, ECR-R, ERQ, HSPS) ship ready to use in up to five languages (English, Turkish, German, Chinese, Spanish — see the table below), with published scoring rules, citations, and categories for filtering.
+- **Batteries included** — seventeen instruments (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES) ship ready to use in up to five languages (English, Turkish, German, Chinese, Spanish — see the table below), with published scoring rules, citations, and categories for filtering.
 - **Your tests too** — therapists and researchers can define their own instruments as one plain JSON object; psytools validates, localizes, and scores them the same way.
 - **Everything is plain JSON** — assessments and responses `stringify()`/`parse()` losslessly, so definitions live in your database and travel between backend and frontend. Scoring rules are data, not code, and survive the round trip.
 - **Safe by default** — every answer is validated against the option scale, incomplete responses can't be scored accidentally, and submitted responses are immutable.
@@ -95,6 +95,11 @@ const response = AssessmentResponse.parse(assessment, rowFromDb); // answers re-
 | `ecr-r` | Experiences in Close Relationships-Revised (adult attachment) | attachment, relationships | 36 | 2 subscales × 18 items (anxiety, avoidance), 14 reverse-keyed, no cutoffs | en, tr¹ |
 | `erq` | Emotion Regulation Questionnaire | emotion-regulation | 10 | 2 subscales (reappraisal 6, suppression 4), no reversals, no cutoffs | en, tr, de, zh, es |
 | `hsps` | Highly Sensitive Person Scale | sensory-processing, personality | 27 | Sum 27–189, no reversals, no cutoffs | en, tr¹ |
+| `swls` | Satisfaction with Life Scale | well-being | 5 | Sum 5–35, Diener's 7 score groupings | en, tr, de, zh, es |
+| `flourishing` | Flourishing Scale | well-being | 8 | Sum 8–56, no cutoffs | en, tr, de, zh, es |
+| `k10` | Kessler Psychological Distress Scale (K10) | distress | 10 | Sum 10–50 (1–5 coding), 4 severity bands | en, tr, de, zh, es |
+| `k6` | Kessler Psychological Distress Scale (K6) | distress | 6 | Sum 0–24 (0–4 coding), ≥13 serious distress | en, tr, de, zh, es |
+| `rses` | Rosenberg Self-Esteem Scale | self-esteem | 10 | Sum 0–30, 5 reverse-keyed items, 15–25 normal range | en, tr, de, zh, es |
 
 ¹ The `ecr-r` and `hsps` Turkish packs reproduce **published, validated Turkish adaptations** (Sümer and colleagues — see [SOURCES.md](SOURCES.md)); other locales can follow once verified sources are available. `ecr-r`, `erq`, and `hsps` are licensed for **non-commercial research use only** — check [SOURCES.md](SOURCES.md) before shipping them in a product. Each definition also carries `categories` for filtering (e.g. `inventories` entries with `categories.includes("depression")`).
 

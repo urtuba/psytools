@@ -19,10 +19,12 @@ The same provenance applies to every bundled inventory **except where an invento
 | Language | Text source | Verified against an official version |
 | --- | --- | --- |
 | en | Reproduced from the original published instrument | Yes |
-| tr | AI translation (Anthropic Claude, `claude-fable-5`) from the original English | No |
-| de | AI translation (Anthropic Claude, `claude-fable-5`) from the original English | No |
-| zh | AI translation (Anthropic Claude, `claude-fable-5`) from the original English | No |
-| es | AI translation (Anthropic Claude, `claude-fable-5`) from the original English | No |
+| tr | AI translation (Anthropic Claude) from the original English | No |
+| de | AI translation (Anthropic Claude) from the original English | No |
+| zh | AI translation (Anthropic Claude) from the original English | No |
+| es | AI translation (Anthropic Claude) from the original English | No |
+
+The exact translating model is stated per inventory in `meta.translationProvenance` (`claude-fable-5` for the original batch, `claude-sonnet-5` for later additions).
 
 Official validated translations exist for most of these instruments, but they were **not consulted** in preparing the bundled texts, so they are deliberately not cited as sources. The packaged non-English wording has not been checked against them and has not been psychometrically validated. Validated instruments are only validated for their exact wording — before clinical or research use, obtain the official version for your language and compare or replace the text.
 
@@ -46,6 +48,8 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 | `ecr-r` | prorate, ≥14 of 18 per subscale | Subscales are mean-based in the literature; prorating is equivalent |
 | `erq` | require-complete | Short subscales (6 and 4 items); partial means are unstable |
 | `hsps` | prorate, ≥21 of 27 answered | Total is mean-based in the literature; prorating is equivalent |
+| `swls`, `flourishing`, `k10`, `k6` | require-complete | Short instruments; cutoffs are undefined for partial data (K10 note: the interview form scores skipped items 1 — see its section) |
+| `rses` | prorate, ≥8 of 10 answered | Common research practice (80% completion) |
 
 ## PHQ-9 — Patient Health Questionnaire-9 (`phq9`)
 
@@ -133,3 +137,38 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 - **Citation:** Aron, E. N., & Aron, A. (1997). Sensory-processing sensitivity and its relation to introversion and emotionality. *Journal of Personality and Social Psychology, 73*(2), 345–368.
 - **Turkish adaptation (validated, reproduced):** Şengül-İnal, G., & Sümer, N. (2017). Exploring the multidimensional structure of sensory processing sensitivity in Turkish samples. *Current Psychology.* The `tr` locale pack **deviates from the global provenance table**: items, title, and option anchors reproduce this published adaptation (via nebisumer.com) rather than an AI translation; only the pack's description and instructions are adapted for on-screen rendering. The Turkish item order matches the original 1:1.
 - **Scoring:** Sum over all 27 items (27–189), no reverse-scored items; the literature commonly reports the item mean (divide by 27). Sensory-processing sensitivity is a continuous trait — no clinical cutoffs are defined.
+
+## SWLS — Satisfaction with Life Scale (`swls`)
+
+**License: Free with conditions.** Copyrighted by Ed Diener and co-authors; per the authors' site the scale may be used "without permission or charge by all professionals (researchers and practitioners)" as long as credit is given, **for non-commercial purposes only** (<https://eddiener.com/scales/>). Embedding in commercial products is not licensed.
+
+- **Citation:** Diener, E., Emmons, R. A., Larsen, R. J., & Griffin, S. (1985). The Satisfaction With Life Scale. *Journal of Personality Assessment, 49*(1), 71–75.
+- **Scoring:** Sum 5–35 on a fully labeled 1–7 agreement scale; interpreted against Diener's published groupings (5–9 extremely dissatisfied … 20 neutral … 31–35 extremely satisfied).
+
+## FS — Flourishing Scale (`flourishing`)
+
+**License: Free with conditions.** Same rights statement as the SWLS (copyright Ed Diener and co-authors; free for researchers and practitioners with credit, non-commercial purposes only).
+
+- **Citation:** Diener, E., Wirtz, D., Tov, W., Kim-Prieto, C., Choi, D., Oishi, S., & Biswas-Diener, R. (2010). New well-being measures: Short scales to assess flourishing and positive and negative feelings. *Social Indicators Research, 97*(2), 143–156.
+- **Scoring:** Sum 8–56; higher scores indicate more self-perceived psychological resources. No published cutoffs.
+
+## K10 — Kessler Psychological Distress Scale, 10 items (`k10`)
+
+**License: Free.** The K10/K6 scales are in the public domain and free for clinical and research use (Kessler and colleagues; distributed via the Harvard NCS site and government health surveys worldwide).
+
+- **Citation:** Kessler, R. C., Andrews, G., Colpe, L. J., Hiripi, E., Mroczek, D. K., Normand, S.-L. T., Walters, E. E., & Zaslavsky, A. M. (2002). Short screening scales to monitor population prevalences and trends in non-specific psychological distress. *Psychological Medicine, 32*(6), 959–976.
+- **Scoring:** Items scored 1–5, sum 10–50. The bundled severity groupings (10–19 likely well, 20–24 mild, 25–29 moderate, 30–50 severe) follow the widely used Australian convention; other groupings exist. The full interview administration skips items 3/6 after a "none of the time" answer and scores them 1; this simple form administers all items.
+
+## K6 — Kessler Psychological Distress Scale, 6 items (`k6`)
+
+**License: Free.** Same public-domain status as the K10.
+
+- **Citation:** Kessler et al. (2002), as above. Serious-distress cutoff: Kessler, R. C., Barker, P. R., Colpe, L. J., et al. (2003). Screening for serious mental illness in the general population. *Archives of General Psychiatry, 60*(2), 184–189. Moderate band: Prochaska, J. J., Sung, H.-Y., Max, W., Shi, Y., & Ong, M. (2012). Validity study of the K6 scale as a measure of moderate mental distress based on mental health treatment need and utilization. *International Journal of Methods in Psychiatric Research, 21*(2), 88–97.
+- **Scoring:** U.S. convention — items scored 0–4, sum 0–24; ≥13 indicates serious psychological distress, 5–12 moderate distress.
+
+## RSES — Rosenberg Self-Esteem Scale (`rses`)
+
+**License: Free with conditions.** The Rosenberg family (Morris Rosenberg Foundation) permits use of the scale for educational and professional research without charge or explicit permission, with attribution; see the University of Maryland Department of Sociology FAQ (<https://socy.umd.edu/rosenberg-scale-faq>). Commercial use is not explicitly licensed.
+
+- **Citation:** Rosenberg, M. (1965). *Society and the Adolescent Self-Image.* Princeton, NJ: Princeton University Press.
+- **Scoring:** Items scored 0–3 (Strongly disagree = 0 … Strongly agree = 3), items 2, 5, 6, 8, 9 reverse-scored, sum 0–30. Scores 15–25 are commonly described as the normal range (University of Maryland scoring guidance).
