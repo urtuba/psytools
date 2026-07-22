@@ -77,6 +77,36 @@ export const localePacks: Readonly<Record<string, Readonly<Record<string, Locale
   "hsps": {
     tr: () => import("./tr/hsps.ts"),
   },
+  "swls": {
+    tr: () => import("./tr/swls.ts"),
+    de: () => import("./de/swls.ts"),
+    zh: () => import("./zh/swls.ts"),
+    es: () => import("./es/swls.ts"),
+  },
+  "flourishing": {
+    tr: () => import("./tr/flourishing.ts"),
+    de: () => import("./de/flourishing.ts"),
+    zh: () => import("./zh/flourishing.ts"),
+    es: () => import("./es/flourishing.ts"),
+  },
+  "k10": {
+    tr: () => import("./tr/k10.ts"),
+    de: () => import("./de/k10.ts"),
+    zh: () => import("./zh/k10.ts"),
+    es: () => import("./es/k10.ts"),
+  },
+  "k6": {
+    tr: () => import("./tr/k6.ts"),
+    de: () => import("./de/k6.ts"),
+    zh: () => import("./zh/k6.ts"),
+    es: () => import("./es/k6.ts"),
+  },
+  "rses": {
+    tr: () => import("./tr/rses.ts"),
+    de: () => import("./de/rses.ts"),
+    zh: () => import("./zh/rses.ts"),
+    es: () => import("./es/rses.ts"),
+  },
 };
 
 /** Locales available for an inventory (its base locale plus lazy packs). */
