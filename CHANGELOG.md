@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.5.3](https://github.com/urtuba/psytools/compare/v0.5.2...v0.5.3) (2026-07-22)
+
+
+### Features
+
+* **core:** extend the category vocabulary with distress and self-esteem ([92853e7](https://github.com/urtuba/psytools/commit/92853e7e8e90af1caeb8d42d413f0087a5ed2ca3))
+* **core:** first-class categories on assessment definitions ([bdb2bd8](https://github.com/urtuba/psytools/commit/bdb2bd8ec46ade152261d90914970c4d5d600b70))
+* **inventories:** add CES-D depression scale (en, tr, de, zh, es) ([d69cd2f](https://github.com/urtuba/psytools/commit/d69cd2f594fcf0fa0fb3919e210b86399ce655be))
+* **inventories:** add ECR-R, ERQ, and HSPS with validated Turkish adaptations ([fe090fc](https://github.com/urtuba/psytools/commit/fe090fce05a115513bb6d9366791c9ac32665ba8))
+* **inventories:** add SWLS, Flourishing Scale, K10, K6, and RSES (en, tr, de, zh, es) ([72021af](https://github.com/urtuba/psytools/commit/72021af05adb880b303d91c028538a8729a4b5c3))
+
 ## [0.5.2](https://github.com/urtuba/psytools/compare/v0.5.1...v0.5.2) (2026-07-09)
 
 

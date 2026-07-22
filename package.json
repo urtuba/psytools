@@ -1,6 +1,6 @@
 {
   "name": "psytools",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Zero-dependency toolkit for psychological assessments: data models, response validation, scoring, and predefined inventories (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES) in multiple languages.",
   "keywords": [
     "psychology",
