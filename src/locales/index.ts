@@ -62,6 +62,21 @@ export const localePacks: Readonly<Record<string, Readonly<Record<string, Locale
     zh: () => import("./zh/cesd.ts"),
     es: () => import("./es/cesd.ts"),
   },
+  // ecr-r and hsps ship en plus the published, validated Turkish
+  // adaptations (nebisumer.com); other locales can follow once verified
+  // sources are available.
+  "ecr-r": {
+    tr: () => import("./tr/ecr-r.ts"),
+  },
+  "erq": {
+    tr: () => import("./tr/erq.ts"),
+    de: () => import("./de/erq.ts"),
+    zh: () => import("./zh/erq.ts"),
+    es: () => import("./es/erq.ts"),
+  },
+  "hsps": {
+    tr: () => import("./tr/hsps.ts"),
+  },
 };
 
 /** Locales available for an inventory (its base locale plus lazy packs). */
