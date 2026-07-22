@@ -163,7 +163,9 @@ export type InventoryCategory =
   | "attachment"
   | "relationships"
   | "emotion-regulation"
-  | "sensory-processing";
+  | "sensory-processing"
+  | "distress"
+  | "self-esteem";
 
 /**
  * The complete, serializable description of an assessment.

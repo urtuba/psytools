@@ -98,7 +98,7 @@ test("every predefined inventory declares license and translation provenance", (
       // AI-translated packs must disclose the translator; inventories whose
       // only non-English pack reproduces a published, validated adaptation
       // must say so instead.
-      /claude-fable-5/.test(provenance) ||
+      /claude-(fable|sonnet)-5/.test(provenance) ||
         /reproduced from the published Turkish adaptation/.test(provenance),
       `${id}: meta.translationProvenance must disclose the text's origin`,
     );
@@ -109,7 +109,7 @@ test("every predefined inventory declares at least one known category", () => {
   const known = new Set([
     "depression", "anxiety", "stress", "well-being", "adhd", "autism",
     "substance-use", "personality", "attachment", "relationships",
-    "emotion-regulation", "sensory-processing",
+    "emotion-regulation", "sensory-processing", "distress", "self-esteem",
   ]);
   for (const [id, definition] of Object.entries(inventories)) {
     const categories = definition.categories ?? [];
