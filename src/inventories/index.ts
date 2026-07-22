@@ -11,8 +11,9 @@ import { asrs6 } from "./asrs6.ts";
 import { aq10 } from "./aq10.ts";
 import { audit } from "./audit.ts";
 import { miniIpip } from "./mini-ipip.ts";
+import { cesd } from "./cesd.ts";
 
-export { phq9, gad7, dass21, who5, asrs6, aq10, audit, miniIpip };
+export { phq9, gad7, dass21, who5, asrs6, aq10, audit, miniIpip, cesd };
 export { twoWeekFrequencyOptions, twoWeekInstructions } from "./common.ts";
 
 /** All predefined inventory definitions shipped with psytools, by id. */
@@ -25,6 +26,7 @@ export const inventories: Readonly<Record<string, AssessmentDefinition>> = {
   aq10,
   audit,
   "mini-ipip": miniIpip,
+  cesd,
 };
 
 export type InventoryId =
@@ -35,7 +37,8 @@ export type InventoryId =
   | "asrs6"
   | "aq10"
   | "audit"
-  | "mini-ipip";
+  | "mini-ipip"
+  | "cesd";
 
 /**
  * Instantiates a predefined inventory as an `Assessment`.

@@ -56,6 +56,12 @@ export const localePacks: Readonly<Record<string, Readonly<Record<string, Locale
     zh: () => import("./zh/mini-ipip.ts"),
     es: () => import("./es/mini-ipip.ts"),
   },
+  "cesd": {
+    tr: () => import("./tr/cesd.ts"),
+    de: () => import("./de/cesd.ts"),
+    zh: () => import("./zh/cesd.ts"),
+    es: () => import("./es/cesd.ts"),
+  },
 };
 
 /** Locales available for an inventory (its base locale plus lazy packs). */

@@ -51,6 +51,7 @@ export {
   aq10,
   audit,
   miniIpip,
+  cesd,
   inventories,
   loadInventory,
   twoWeekFrequencyOptions,
