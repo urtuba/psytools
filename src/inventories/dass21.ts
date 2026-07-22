@@ -36,6 +36,7 @@ const stressBands: ScoreBand[] = [
 export const dass21: AssessmentDefinition = {
   id: "dass21",
   version: "1.0.0",
+  categories: ["depression", "anxiety", "stress"],
   title: {
     en: "Depression Anxiety Stress Scales (DASS-21)",
   },

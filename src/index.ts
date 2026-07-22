@@ -3,6 +3,7 @@ export type {
   AssessmentOption,
   AssessmentQuestion,
   AssessmentDefinition,
+  InventoryCategory,
   ScoreBand,
   ScoreFlag,
   SumScoring,

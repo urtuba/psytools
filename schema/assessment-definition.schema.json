@@ -9,6 +9,11 @@
   "properties": {
     "id": { "type": "string", "minLength": 1 },
     "version": { "type": "string" },
+    "categories": {
+      "type": "array",
+      "description": "What the assessment measures, e.g. [\"depression\"]. Bundled inventories use a small controlled vocabulary; custom definitions may use any strings.",
+      "items": { "type": "string", "minLength": 1 }
+    },
     "title": { "$ref": "#/$defs/localizedText" },
     "description": { "$ref": "#/$defs/localizedText" },
     "instructions": { "$ref": "#/$defs/localizedText" },

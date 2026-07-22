@@ -62,14 +62,21 @@ test("Assessment constructor throws on invalid definitions", () => {
 });
 
 test("base inventories are English-only; locale packs load on request", async () => {
+  // ecr-r and hsps ship en plus the published, validated Turkish
+  // adaptation only; every other inventory carries the full locale set.
+  const expectedLocales: Record<string, string[]> = {
+    "ecr-r": ["en", "tr"],
+    "hsps": ["en", "tr"],
+  };
   for (const id of Object.keys(inventories)) {
     // Data minimization by default: the eagerly-imported base carries en only.
     assert.deepEqual(new Assessment(inventories[id]!).locales, ["en"], id);
-    assert.deepEqual(availableLocales(id), ["de", "en", "es", "tr", "zh"], id);
+    const expected = expectedLocales[id] ?? ["de", "en", "es", "tr", "zh"];
+    assert.deepEqual(availableLocales(id), expected, id);
 
     // Requesting locales lazily merges the packs into a complete definition.
     const full = await loadInventory(id, { locales: availableLocales(id) });
-    assert.deepEqual(full.locales, ["de", "en", "es", "tr", "zh"], id);
+    assert.deepEqual(full.locales, expected, id);
 
     const single = await loadInventory(id, { locales: ["tr"] });
     assert.deepEqual(single.locales, ["en", "tr"], id);
@@ -80,15 +87,36 @@ test("every predefined inventory declares license and translation provenance", (
   for (const id of Object.keys(inventories)) {
     const meta = inventories[id]!.meta ?? {};
     assert.ok(
-      meta["licenseFlag"] === "free" || meta["licenseFlag"] === "free-with-conditions",
+      meta["licenseFlag"] === "free" ||
+        meta["licenseFlag"] === "free-with-conditions" ||
+        meta["licenseFlag"] === "research-only",
       `${id}: meta.licenseFlag must be a known flag`,
     );
     assert.equal(typeof meta["reference"], "string", `${id}: meta.reference missing`);
-    assert.match(
-      String(meta["translationProvenance"]),
-      /claude-fable-5/,
-      `${id}: meta.translationProvenance must disclose the AI translator`,
+    const provenance = String(meta["translationProvenance"]);
+    assert.ok(
+      // AI-translated packs must disclose the translator; inventories whose
+      // only non-English pack reproduces a published, validated adaptation
+      // must say so instead.
+      /claude-fable-5/.test(provenance) ||
+        /reproduced from the published Turkish adaptation/.test(provenance),
+      `${id}: meta.translationProvenance must disclose the text's origin`,
     );
+  }
+});
+
+test("every predefined inventory declares at least one known category", () => {
+  const known = new Set([
+    "depression", "anxiety", "stress", "well-being", "adhd", "autism",
+    "substance-use", "personality", "attachment", "relationships",
+    "emotion-regulation", "sensory-processing",
+  ]);
+  for (const [id, definition] of Object.entries(inventories)) {
+    const categories = definition.categories ?? [];
+    assert.ok(categories.length > 0, `${id}: categories missing`);
+    for (const category of categories) {
+      assert.ok(known.has(category), `${id}: unknown category "${category}"`);
+    }
   }
 });
 

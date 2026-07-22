@@ -12,6 +12,7 @@ import type { AssessmentDefinition } from "../types.ts";
 export const asrs6: AssessmentDefinition = {
   id: "asrs6",
   version: "1.0.0",
+  categories: ["adhd"],
   title: {
     en: "Adult ADHD Self-Report Scale (ASRS-v1.1) Screener",
   },

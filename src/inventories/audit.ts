@@ -54,6 +54,7 @@ const injuryOptions: AssessmentOption[] = [
 export const audit: AssessmentDefinition = {
   id: "audit",
   version: "1.0.0",
+  categories: ["substance-use"],
   title: {
     en: "Alcohol Use Disorders Identification Test (AUDIT)",
   },

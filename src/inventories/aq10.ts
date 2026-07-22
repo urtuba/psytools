@@ -13,6 +13,7 @@ import type { AssessmentDefinition } from "../types.ts";
 export const aq10: AssessmentDefinition = {
   id: "aq10",
   version: "1.0.0",
+  categories: ["autism"],
   title: {
     en: "Autism Spectrum Quotient (AQ-10) — Adult",
   },

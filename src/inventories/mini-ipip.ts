@@ -12,6 +12,7 @@ import type { AssessmentDefinition } from "../types.ts";
 export const miniIpip: AssessmentDefinition = {
   id: "mini-ipip",
   version: "1.0.0",
+  categories: ["personality"],
   title: {
     en: "Mini-IPIP Big Five Personality Scale",
   },

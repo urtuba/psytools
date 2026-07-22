@@ -13,6 +13,7 @@ import { twoWeekFrequencyOptions, twoWeekInstructions } from "./common.ts";
 export const phq9: AssessmentDefinition = {
   id: "phq9",
   version: "1.0.0",
+  categories: ["depression"],
   title: {
     en: "Patient Health Questionnaire (PHQ-9)",
   },

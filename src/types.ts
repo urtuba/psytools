@@ -147,6 +147,25 @@ export interface CountScoring {
 export type ScoringDefinition = SumScoring | SubscaleScoring | CountScoring;
 
 /**
+ * Categories used by the bundled inventories to describe what an
+ * instrument measures. `AssessmentDefinition.categories` accepts any
+ * string, so custom assessments are free to define their own taxonomy.
+ */
+export type InventoryCategory =
+  | "depression"
+  | "anxiety"
+  | "stress"
+  | "well-being"
+  | "adhd"
+  | "autism"
+  | "substance-use"
+  | "personality"
+  | "attachment"
+  | "relationships"
+  | "emotion-regulation"
+  | "sensory-processing";
+
+/**
  * The complete, serializable description of an assessment.
  *
  * This is the unit you persist, exchange between backend and frontend, and
@@ -157,6 +176,12 @@ export interface AssessmentDefinition {
   id: string;
   /** Version of this definition (semver or free-form), for provenance. */
   version?: string;
+  /**
+   * What the assessment measures, for filtering and display. Bundled
+   * inventories use `InventoryCategory` values; custom definitions may use
+   * any strings.
+   */
+  categories?: string[];
   title: LocalizedText;
   description?: LocalizedText;
   /** Instructions shown to the respondent (incl. the recall timeframe). */
