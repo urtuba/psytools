@@ -10,11 +10,11 @@ psytools is integrated into real products, so this file states precisely — per
 | --- | --- |
 | **Free** | Public domain or explicitly free for any use, including commercial products, without permission. |
 | **Free with conditions** | Free for clinical and research use as distributed; embedding in commercial products is not explicitly licensed — verify with the rights holder before shipping. |
-| **Research only** | Usable in research contexts only. *(No bundled instrument currently carries this flag, and none will be added without it being stated here.)* |
+| **Research only** | Usable in non-commercial research contexts only; not licensed for clinical products, diagnosis, or personnel selection. Carried by the ECR-R, ERQ, and HSPS — see their sections. |
 
 ## Translation provenance — read this before clinical use
 
-The same provenance applies to every bundled inventory. If an inventory ever deviates (e.g. an official translation is adopted and verified), it will be stated in its section below.
+The same provenance applies to every bundled inventory **except where an inventory's section below states otherwise**. Two inventories deviate: the ECR-R and HSPS Turkish packs reproduce published, validated Turkish adaptations (see their sections) instead of AI translations.
 
 | Language | Text source | Verified against an official version |
 | --- | --- | --- |
@@ -42,6 +42,10 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 | `mini-ipip` | prorate, ≥3 of 4 per trait | IPIP scoring is mean-based; prorating is equivalent |
 | `who5`, `asrs6`, `aq10` | require-complete | Short instruments; cutoffs/counts are undefined for partial data |
 | `audit` | ignore | Unanswered items score 0, matching the instrument's skip logic (e.g. non-drinkers skipping items 2–8) |
+| `cesd` | prorate, ≥16 of 20 answered | Common research practice (≈80% completion) |
+| `ecr-r` | prorate, ≥14 of 18 per subscale | Subscales are mean-based in the literature; prorating is equivalent |
+| `erq` | require-complete | Short subscales (6 and 4 items); partial means are unstable |
+| `hsps` | prorate, ≥21 of 27 answered | Total is mean-based in the literature; prorating is equivalent |
 
 ## PHQ-9 — Patient Health Questionnaire-9 (`phq9`)
 
@@ -98,3 +102,34 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 
 - **Citation:** Allison, C., Auyeung, B., & Baron-Cohen, S. (2012). Toward brief "Red Flags" for autism screening: The Short Autism Spectrum Quotient and the Short Quantitative Checklist in 1,000 cases and 3,000 controls. *Journal of the American Academy of Child & Adolescent Psychiatry, 51*(2), 202–212.
 - **Scoring:** 1 point per item in the trait direction (agree on items 1, 7, 8, 10; disagree on the rest); ≥6 suggests specialist referral, per Allison et al. (2012).
+
+## CES-D — Center for Epidemiologic Studies Depression Scale (`cesd`)
+
+**License: Free.** Developed by Lenore Radloff at the U.S. National Institute of Mental Health; as a work of the U.S. government it is in the public domain and may be used without permission. The English text was taken from the NIDA "Seek, Test, Treat and Retain" data harmonization packet (<https://nida.nih.gov/sites/default/files/Mental_HealthV.pdf>).
+
+- **Citation:** Radloff, L. S. (1977). The CES-D Scale: A self-report depression scale for research in the general population. *Applied Psychological Measurement, 1*(3), 385–401.
+- **Scoring:** Sum 0–60 with items 4, 8, 12, 16 reverse-scored. The bundled bands split at the classic cutoff — scores ≥16 indicate elevated depressive symptoms (Radloff, 1977). The cutoff screens for risk; it is not a diagnosis.
+
+## ECR-R — Experiences in Close Relationships-Revised (`ecr-r`)
+
+**License: Research only.** Per the authors, the items "were published in a scientific journal for use in the public domain" and may be used **in non-commercial research without permission; commercial use requires permission** (R. C. Fraley, <https://labs.psychology.illinois.edu/~rcfraley/measures/>). The Turkish adaptation is distributed at <http://www.nebisumer.com> for scientific research only — explicitly not for clinical diagnosis, psychological evaluation, or personnel selection.
+
+- **Citation:** Fraley, R. C., Waller, N. G., & Brennan, K. A. (2000). An item response theory analysis of self-report measures of adult attachment. *Journal of Personality and Social Psychology, 78*(2), 350–365.
+- **Turkish adaptation (validated, reproduced):** Selçuk, E., Günaydın, G., Sümer, N., & Uysal, A. (2005). Yetişkin bağlanma boyutları için yeni bir ölçüm: Yakın İlişkilerde Yaşantılar Envanteri-II'nin Türk örnekleminde psikometrik açıdan değerlendirilmesi. *Türk Psikoloji Yazıları, 8*, 1–11. The `tr` locale pack **deviates from the global provenance table**: it reproduces this published adaptation's wording (via nebisumer.com) rather than an AI translation. The Turkish source presents the same 36 items interleaved (odd = anxiety, even = avoidance); the bundled definition keeps the original English item order, with each Turkish wording attached to its matching item — the item-level reverse keys of both published versions agree under this mapping. The pack's description and final instruction sentence are adapted for on-screen rendering.
+- **Scoring:** Two 18-item subscales (attachment anxiety: items 1–18; avoidance: items 19–36), 14 items reverse-scored. psytools reports subscale sums (18–126); the published convention is the item mean (divide by 18). No clinical cutoffs exist.
+
+## ERQ — Emotion Regulation Questionnaire (`erq`)
+
+**License: Research only.** Distributed by the authors free of charge for non-commercial research (Stanford Psychophysiology Laboratory, <https://spl.stanford.edu>); commercial use is not licensed.
+
+- **Citation:** Gross, J. J., & John, O. P. (2003). Individual differences in two emotion regulation processes: Implications for affect, relationships, and well-being. *Journal of Personality and Social Psychology, 85*(2), 348–362.
+- **Scoring:** Two subscales, no reversals: cognitive reappraisal (items 1, 3, 5, 7, 8, 10) and expressive suppression (items 2, 4, 6, 9). psytools reports sums; the published convention is item means. The authors instruct not to change the item order (items 1 and 3 define "positive emotion" and "negative emotion").
+- **Turkish note:** A validated Turkish adaptation exists (Ulaşan Özgüle, E. T., 2011, unpublished Ph.D. dissertation, METU; distributed at nebisumer.com), but it uses a **6-point "how true of me" scale and a different item order**, so its wording cannot be attached to this 7-point agreement definition without misrepresenting the validated form. The bundled `tr` pack is therefore an AI translation like the other locales.
+
+## HSPS — Highly Sensitive Person Scale (`hsps`)
+
+**License: Research only.** HSP Scale © 1997 Elaine Aron; the scale is distributed for research use (see Aron & Aron, 1997, and <https://hsperson.com>). The Turkish adaptation is distributed at <http://www.nebisumer.com> for scientific research only — explicitly not for clinical diagnosis, psychological evaluation, or personnel selection.
+
+- **Citation:** Aron, E. N., & Aron, A. (1997). Sensory-processing sensitivity and its relation to introversion and emotionality. *Journal of Personality and Social Psychology, 73*(2), 345–368.
+- **Turkish adaptation (validated, reproduced):** Şengül-İnal, G., & Sümer, N. (2017). Exploring the multidimensional structure of sensory processing sensitivity in Turkish samples. *Current Psychology.* The `tr` locale pack **deviates from the global provenance table**: items, title, and option anchors reproduce this published adaptation (via nebisumer.com) rather than an AI translation; only the pack's description and instructions are adapted for on-screen rendering. The Turkish item order matches the original 1:1.
+- **Scoring:** Sum over all 27 items (27–189), no reverse-scored items; the literature commonly reports the item mean (divide by 27). Sensory-processing sensitivity is a continuous trait — no clinical cutoffs are defined.
