@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.3](https://github.com/urtuba/psytools/compare/v0.6.2...v0.6.3) (2026-07-29)
+
+
+### Features
+
+* **inventories:** add five instruments — PHQ-15, PCL-5, EAT-26, CSI-16, UCLA Loneliness v3 ([d61bf6e](https://github.com/urtuba/psytools/commit/d61bf6e040e1f5547b08bb879a76add5f4b1c999))
+* **inventories:** add the Copenhagen Burnout Inventory ([8bab89f](https://github.com/urtuba/psytools/commit/8bab89f2b2157cb5ccc6dcdea416910345a711a3))
+
+
+### Bug Fixes
+
+* update LICENSE for the five instruments of the coverage wave ([82986f8](https://github.com/urtuba/psytools/commit/82986f8e08c157e95f4a48598b594f69c519ce8f))
+
 ## [0.6.2](https://github.com/urtuba/psytools/compare/v0.6.1...v0.6.2) (2026-07-29)
 
 
