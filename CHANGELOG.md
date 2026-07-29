@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.4](https://github.com/urtuba/psytools/compare/v0.5.3...v0.5.4) (2026-07-29)
+
+
+### Features
+
+* **core:** target-audience and respondent axes on assessment definitions ([0850057](https://github.com/urtuba/psytools/commit/085005777f3653676846aec4bddd98840d9481ff))
+
+
+### Bug Fixes
+
+* **inventories:** name the correct asrs6 rights holder and carry its attribution ([269c37d](https://github.com/urtuba/psytools/commit/269c37d21b774e72f16f87e375d197e52c474e1a))
+
 ## [0.5.3](https://github.com/urtuba/psytools/compare/v0.5.2...v0.5.3) (2026-07-22)
 
 
