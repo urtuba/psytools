@@ -9,7 +9,7 @@ psytools is integrated into real products, so this file states precisely — per
 | Flag | Meaning |
 | --- | --- |
 | **Free** | Public domain or explicitly free for any use, including commercial products, without permission. |
-| **Free with conditions** | Free for clinical and research use as distributed; embedding in commercial products is not explicitly licensed — verify with the rights holder before shipping. |
+| **Free with conditions** | Free to use as distributed, but the rights holder attaches conditions — mandatory attribution, limits on modification, or commercial terms that are simply unstated. The conditions differ per instrument, so read that instrument's section below before shipping. |
 | **Research only** | Usable in non-commercial research contexts only; not licensed for clinical products, diagnosis, or personnel selection. Carried by the ECR-R, ERQ, and HSPS — see their sections. |
 
 ## Translation provenance — read this before clinical use
@@ -106,10 +106,18 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 
 ## ASRS v1.1 — Adult ADHD Self-Report Scale, 6-item screener (`asrs6`)
 
-**License: Free with conditions.** Copyright is held by the World Health Organization and the Workgroup on Adult ADHD (Harvard Medical School / NYU). The screener is distributed free of charge for clinical and research use. Embedding in commercial products is not explicitly covered by the public distribution terms — verify with the rights holders (Harvard NCS/ASRS distribution) before shipping commercially.
+**License: Free with conditions.** Copyright is held by **New York University and the President and Fellows of Harvard College**; licensing is administered by NYU Technology Opportunities & Ventures (<https://license.tov.med.nyu.edu/product/asrs6Qscreener>). The WHO's name is in the instrument's title, not on its copyright. The licensing page states: "The screener is freely available for clinical and non-clinical use, including commercial use, but does require attribution. This is an evidence-based tool, and as such no other modifications, other than creating electronic versions, are permitted." Commercial use therefore needs no separate permission; the two conditions below are what the flag refers to.
 
+- **Attribution is mandatory.** Display this credit line, verbatim, wherever the screener or its results appear. It ships in `meta.attribution` so applications can render it:
+
+  > The 6-question Adult Self-Report Scale-Version1.1 (ASRS-V1.1) Screener is a subset of the 18-question Adult ADHD Self-Report Scale-Version1.1 (Adult ASRSV1.1) Symptom Checklist. © New York University and the President and Fellows of Harvard College.
+
+  This is the copyright attribution the license demands, which is a different thing from the scientific citation below — hence two fields, `meta.attribution` and `meta.reference`.
+- **Whether translation is a permitted "modification" is unresolved.** The license permits no modifications "other than creating electronic versions" and says nothing about translation in either direction. psytools ships `asrs6` in tr, de, zh, and es as AI translations, so their standing under that clause is an open question. Settling it takes a direct question to NYU TOV, which is pending; this file will be updated when there is an answer. One fact that bears on it without settling it: NYU TOV distributes its own official translations of the screener in about fifteen languages (Arabic, Chinese, Dutch, French, German, Hebrew, Italian, Japanese, Norwegian, Portuguese, Russian, Serbian, Spanish, Swedish, Thai — Turkish is not among them). A rights holder that maintains its own translations cuts somewhat against reading third-party translation as freely permitted. The English text is unaffected either way.
 - **Citation:** Kessler, R. C., Adler, L., Ames, M., Demler, O., Faraone, S., Hiripi, E., et al. (2005). The World Health Organization Adult ADHD Self-Report Scale (ASRS): A short screening scale for use in the general population. *Psychological Medicine, 35*(2), 245–256.
 - **Scoring:** Count of screen-positive items (items 1–3 from "Sometimes", items 4–6 from "Often"); ≥4 positives = positive screen, per the ASRS-v1.1 screener key.
+
+*Correction, 2026-07-29:* psytools up to and including 0.5.3 named the World Health Organization and the Workgroup on Adult ADHD as the rights holders, carried no attribution, and hedged on commercial use. All three were wrong. The record above follows the rights holder's current licensing page.
 
 ## AQ-10 — Autism Spectrum Quotient, 10-item adult version (`aq10`)
 
@@ -185,3 +193,16 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 - **Citation:** Rosenberg, M. (1965). *Society and the Adolescent Self-Image.* Princeton, NJ: Princeton University Press.
 - **Scoring:** Items scored 0–3 (Strongly disagree = 0 … Strongly agree = 3), items 2, 5, 6, 8, 9 reverse-scored, sum 0–30. Scores 15–25 are commonly described as the normal range (University of Maryland scoring guidance).
 - **Audience — deviates from the default:** `audience: ["adolescent", "adult"]`. Rosenberg developed the scale on high-school students (*Society and the Adolescent Self-Image*), and the same ten items are the standard self-esteem measure for adolescents and adults alike — the wording does not change between bands.
+
+## Instruments evaluated and not bundled
+
+Instruments considered for inclusion and not shipped, each checked against the rights holder's own published terms. Recorded so the same ground is not covered twice. Today's entries all come from one sweep of widely used ADHD instruments (July 2026); five are blocked by their licensing and one is waiting on a permission request.
+
+- **ASRS v1.1, full 18-item Symptom Checklist** — © New York University and the President and Fellows of Harvard College. A separate product on the same NYU TOV platform from the 6-item screener, and the screener's free-commercial grant does not extend to it: clinical use is routed to a different site, research use requires an institutional signatory, and no commercial tier is offered. Not bundled.
+- **ASRS-5 (DSM-5-aligned, 6 items)** — © New York University / NYU Langone Health. A different instrument from the v1.1 screener despite the similar name and length. Only a research-and-academic license is publicly offered, and the rights holder's own product listing calls the scoring rules proprietary. Not bundled.
+- **WURS-25 (Wender Utah Rating Scale)** — American Psychiatric Association Publishing (*American Journal of Psychiatry*, 1993). No free-redistribution grant could be found; the "public domain" claim repeated across the web traces to no source. Not bundled.
+- **SNAP-IV** — James M. Swanson / University of California, Irvine. Neither the instrument nor the developer's own published history of the scale carries a copyright or license statement at all. The absence of a grant is not a grant. Not bundled.
+- **NICHQ Vanderbilt Assessment Scales (parent and teacher forms)** — © 2012 American Academy of Pediatrics, printed "All Rights Reserved" on the instrument. Free to download and administer, which is not the same as licensed to redistribute inside a package. Not bundled.
+- **WFIRS-P / WFIRS-S (Weiss Functional Impairment Rating Scale)** — © Margaret Danielle Weiss, MD PhD. Permissive terms, but the notice asks that the author be contacted before translation. **A permission request is in progress** — not rejected, just not bundled yet.
+
+Hold rights to any of these, or know of a grant we missed? Please write to <samed@luckys.dev> — a correction here is as welcome as one to a bundled instrument.
