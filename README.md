@@ -19,7 +19,7 @@ That's a complete depression screening: standardized items, answer validation, p
 
 ## Why psytools
 
-- **Batteries included** — twenty-one instruments (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, Mini-IPIP6, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES, IPIP BIS/BAS, IPIP-NEO-60, IPIP-VIA-R) ship ready to use in up to five languages (English, Turkish, German, Chinese, Spanish — see the table below), with published scoring rules, citations, and filtering metadata (category, target audience, respondent role).
+- **Batteries included** — twenty-six instruments (PHQ-9, PHQ-15, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, Mini-IPIP6, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES, IPIP BIS/BAS, IPIP-NEO-60, IPIP-VIA-R, PCL-5, EAT-26, CSI-16, UCLA Loneliness Scale) ship ready to use in up to five languages (English, Turkish, German, Chinese, Spanish — see the table below), with published scoring rules, citations, and filtering metadata (category, target audience, respondent role).
 - **Your tests too** — therapists and researchers can define their own instruments as one plain JSON object; psytools validates, localizes, and scores them the same way.
 - **Everything is plain JSON** — assessments and responses `stringify()`/`parse()` losslessly, so definitions live in your database and travel between backend and frontend. Scoring rules are data, not code, and survive the round trip.
 - **Safe by default** — every answer is validated against the option scale, incomplete responses can't be scored accidentally, and submitted responses are immutable.
@@ -104,8 +104,15 @@ const response = AssessmentResponse.parse(assessment, rowFromDb); // answers re-
 | `bis-bas` | IPIP BIS/BAS scales (approach and avoidance motivation) | personality, motivation | 36 | 4 subscales (BIS 10, fun-seeking 10, drive 10, reward responsiveness 6), 10 reverse-keyed, no cutoffs | en, tr, de, zh, es |
 | `ipip-neo-60` | IPIP-NEO-60 personality inventory | personality | 60 | 5 domain subscales × 12 items (12–60 each), 23 reverse-keyed, no cutoffs | en, tr, de, zh, es |
 | `ipip-via-r` | IPIP-VIA-R short scales (24 character strengths) | character-strengths, personality | 96 | 24 strength subscales × 4 items (4–20 each), balanced 2 positive / 2 reverse, no cutoffs | en, tr, de, zh, es |
+| `phq15` | Patient Health Questionnaire-15 (somatic symptoms) | somatic-symptoms | 15 | Sum 0–30 (0–2 coding), 4 severity bands, item 4 optional (women only) | en, tr, de, zh, es |
+| `pcl5` | PTSD Checklist for DSM-5 (PCL-5), standard form | post-traumatic-stress | 20 | Sum 0–80, no bands² | en, tr, de, zh, es |
+| `eat26` | Eating Attitudes Test (EAT-26) | disordered-eating | 26 | Sum 0–78 on an asymmetric key, referral at ≥20 | en, tr, de, zh, es |
+| `csi16` | Couples Satisfaction Index (CSI-16) | relationships | 16 | Sum 0–81, **higher is better**, dissatisfied below 51.5 | en, tr, de, zh, es |
+| `ucla-ls3` | UCLA Loneliness Scale (Version 3) | loneliness | 20 | Sum 20–80, 9 reverse-keyed items, no bands² | en, tr, de, zh, es |
 
-¹ The `ecr-r` and `hsps` Turkish packs reproduce **published, validated Turkish adaptations** (Sümer and colleagues — see [SOURCES.md](SOURCES.md)); other locales can follow once verified sources are available. `ecr-r`, `erq`, and `hsps` are licensed for **non-commercial research use only** — check [SOURCES.md](SOURCES.md) before shipping them in a product. `asrs6` is free to ship, commercially included, but its license makes attribution mandatory: render `meta.attribution` wherever it appears.
+¹ The `ecr-r` and `hsps` Turkish packs reproduce **published, validated Turkish adaptations** (Sümer and colleagues — see [SOURCES.md](SOURCES.md)); other locales can follow once verified sources are available. `ecr-r`, `erq`, and `hsps` are licensed for **non-commercial research use only** — check [SOURCES.md](SOURCES.md) before shipping them in a product. `asrs6` is free to ship, commercially included, but its license makes attribution mandatory: render `meta.attribution` wherever it appears. `eat26` is free for individual use but a **commercial web platform that charges user fees needs a licensing agreement** from its copyright holder — read its section in [SOURCES.md](SOURCES.md) before you build one.
+
+² `pcl5` and `ucla-ls3` ship no severity bands, because their rights holders publish none to ship: the VA offers a cutoff *range* (31–33) it describes as initial research, and Russell scores the loneliness scale continuously. Both record what is published in `meta.scoringNote` so you can apply your own threshold. Note also that `csi16` runs the opposite way to every other inventory here — a high score is a good result — so do not wire it to a shared "higher is worse" display.
 
 ```ts
 import { loadInventory, inventories, dass21 } from "psytools";
@@ -131,7 +138,9 @@ Every definition carries three optional fields for picking the right instrument:
 
 Audience and respondent are separate axes because instruments *about* children are commonly filled in by someone else — a parent-report ADHD scale is `audience: ["child"]`, `respondent: "parent"`. `audience` is an array, since one wording is often validated across bands; `respondent` is a single value, since a definition is written from exactly one point of view. Parent- and teacher-report forms of the same instrument say "your child" and "this student", so they are separate definitions with separate ids, not one definition with two respondents.
 
-Neither field encodes the recall timeframe or the administration mode: a retrospective instrument answered by an adult about their own childhood is `["adult"]` + `"self"`, with the childhood framing in `instructions`, and a clinician reading items aloud to a client is still `"self"` because the answers are the client's own report. Every bundled inventory is `respondent: "self"` and `audience: ["adult"]`, except `rses` — Rosenberg developed the scale on high-school students and the same ten items are standard for both bands, so it is `["adolescent", "adult"]`.
+Neither field encodes the recall timeframe or the administration mode: a retrospective instrument answered by an adult about their own childhood is `["adult"]` + `"self"`, with the childhood framing in `instructions`, and a clinician reading items aloud to a client is still `"self"` because the answers are the client's own report. Every bundled inventory is `respondent: "self"` and `audience: ["adult"]`, except `rses` and `eat26`, which are both `["adolescent", "adult"]` — Rosenberg developed his scale on high-school students, Garner names high school and college among the EAT-26's screening populations, and neither instrument changes its wording between bands.
+
+No bundled inventory is adolescent- or child-only yet, and none has a `respondent` other than `"self"`. That reflects who licenses their instruments freely, not what exists — the parent- and teacher-report scales that would fill those gaps are recorded, with their terms, under [instruments evaluated and not bundled](SOURCES.md#instruments-evaluated-and-not-bundled).
 
 ## Defining your own assessment
 
@@ -227,7 +236,7 @@ scoring: {
 
 `ignore` sums what is answered (partial totals understate severity — use deliberately); `prorate` scales the raw score up to the full item count (rounded) and refuses to score below `minAnswered`; `require-complete` throws unless every contributing non-optional item is answered. For subscale scoring the policy applies to each subscale independently.
 
-The bundled inventories ship with policies (PHQ-9/GAD-7/DASS-21 and the five IPIP inventories prorate with thresholds, WHO-5/ASRS/AQ-10 require-complete, AUDIT ignores to match its skip logic) — see [SOURCES.md](SOURCES.md#missing-data-policies) for the rationale and how to override.
+The bundled inventories ship with policies (PHQ-9/GAD-7/DASS-21 and the five IPIP inventories prorate with thresholds, WHO-5/ASRS/AQ-10/CSI-16 require-complete, AUDIT ignores to match its skip logic, PHQ-15 ignores because its item 4 is marked women-only on the instrument) — see [SOURCES.md](SOURCES.md#missing-data-policies) for the rationale and how to override.
 
 ## Custom evaluation
 

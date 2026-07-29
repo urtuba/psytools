@@ -169,7 +169,15 @@ export type InventoryCategory =
   /** Approach and avoidance motivation — what drives a person towards reward or away from punishment. */
   | "motivation"
   /** Positively valued traits of character, such as gratitude, curiosity, or perseverance. */
-  | "character-strengths";
+  | "character-strengths"
+  /** Intrusion, avoidance, negative alterations in cognition and mood, and arousal following a traumatic event. */
+  | "post-traumatic-stress"
+  /** Burden of bodily complaints — pain, fatigue, gastrointestinal and cardiopulmonary symptoms. */
+  | "somatic-symptoms"
+  /** Attitudes and behaviours around eating, body weight and shape that characterize eating disorders. */
+  | "disordered-eating"
+  /** The subjective experience of lacking companionship and social connection. */
+  | "loneliness";
 
 /**
  * Age bands used by the bundled inventories to say who an instrument is

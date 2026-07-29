@@ -121,7 +121,8 @@ test("every predefined inventory declares at least one known category", () => {
     "depression", "anxiety", "stress", "well-being", "adhd", "autism",
     "substance-use", "personality", "attachment", "relationships",
     "emotion-regulation", "sensory-processing", "distress", "self-esteem",
-    "motivation", "character-strengths",
+    "motivation", "character-strengths", "post-traumatic-stress",
+    "somatic-symptoms", "disordered-eating", "loneliness",
   ]);
   for (const [id, definition] of Object.entries(inventories)) {
     const categories = definition.categories ?? [];

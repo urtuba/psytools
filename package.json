@@ -1,7 +1,7 @@
 {
   "name": "psytools",
   "version": "0.6.2",
-  "description": "Zero-dependency toolkit for psychological assessments: data models, response validation, scoring, and predefined inventories (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, Mini-IPIP6, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES, IPIP BIS/BAS, IPIP-NEO-60, IPIP-VIA-R) in multiple languages.",
+  "description": "Zero-dependency toolkit for psychological assessments: data models, response validation, scoring, and predefined inventories (PHQ-9, PHQ-15, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, Mini-IPIP6, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES, IPIP BIS/BAS, IPIP-NEO-60, IPIP-VIA-R, PCL-5, EAT-26, CSI-16, UCLA Loneliness Scale) in multiple languages.",
   "keywords": [
     "psychology",
     "assessment",
@@ -47,7 +47,18 @@
     "mental-health",
     "therapy",
     "screening",
-    "likert"
+    "likert",
+    "phq-15",
+    "somatic-symptoms",
+    "pcl-5",
+    "ptsd",
+    "trauma",
+    "eat-26",
+    "eating-disorders",
+    "csi-16",
+    "relationship-satisfaction",
+    "ucla-loneliness-scale",
+    "loneliness"
   ],
   "license": "SEE LICENSE IN LICENSE",
   "author": "Samed Kahyaoglu <samed@luckys.dev>",

@@ -131,6 +131,36 @@ export const localePacks: Readonly<Record<string, Readonly<Record<string, Locale
     zh: () => import("./zh/ipip-via-r.ts"),
     es: () => import("./es/ipip-via-r.ts"),
   },
+  "phq15": {
+    tr: () => import("./tr/phq15.ts"),
+    de: () => import("./de/phq15.ts"),
+    zh: () => import("./zh/phq15.ts"),
+    es: () => import("./es/phq15.ts"),
+  },
+  "pcl5": {
+    tr: () => import("./tr/pcl5.ts"),
+    de: () => import("./de/pcl5.ts"),
+    zh: () => import("./zh/pcl5.ts"),
+    es: () => import("./es/pcl5.ts"),
+  },
+  "eat26": {
+    tr: () => import("./tr/eat26.ts"),
+    de: () => import("./de/eat26.ts"),
+    zh: () => import("./zh/eat26.ts"),
+    es: () => import("./es/eat26.ts"),
+  },
+  "csi16": {
+    tr: () => import("./tr/csi16.ts"),
+    de: () => import("./de/csi16.ts"),
+    zh: () => import("./zh/csi16.ts"),
+    es: () => import("./es/csi16.ts"),
+  },
+  "ucla-ls3": {
+    tr: () => import("./tr/ucla-ls3.ts"),
+    de: () => import("./de/ucla-ls3.ts"),
+    zh: () => import("./zh/ucla-ls3.ts"),
+    es: () => import("./es/ucla-ls3.ts"),
+  },
 };
 
 /** Locales available for an inventory (its base locale plus lazy packs). */
