@@ -287,4 +287,13 @@ npm run build   # ESM + CJS + type declarations into dist/
 
 ## License
 
-MIT
+The code is MIT — Samed Kahyaoglu, 2026. See [LICENSE](LICENSE).
+
+The bundled instrument text is a separate matter: each of the seventeen instruments is licensed by its own rights holder, on terms that differ instrument to instrument. The quick answer:
+
+- **Nine ship free, including in commercial products, no permission needed:** PHQ-9, GAD-7, DASS-21, WHO-5, AUDIT, Mini-IPIP, CES-D, K10, K6.
+- **The ASRS-v1.1 screener (`asrs6`) ships free, including commercially, with one mandatory condition — attribution.** Render the credit line psytools ships in `meta.attribution` wherever the screener or its results appear.
+- **Three ship for non-commercial research only: ECR-R, ERQ, and HSPS.** Commercial use of any of these needs permission directly from that instrument's own rights holder (R. C. Fraley for the ECR-R; the Stanford Psychophysiology Laboratory for the ERQ; Elaine Aron for the HSPS) — that permission is theirs to give, not psytools'.
+- **AQ-10, RSES, SWLS, and the Flourishing Scale ship free with conditions of their own, and the conditions aren't uniform.** AQ-10's and RSES's rights holders haven't addressed commercial use (confirm with them before shipping commercially). SWLS's and the Flourishing Scale's rights holder (Ed Diener and co-authors) licenses them for non-commercial purposes only — treat those two like the research-only three for commercial shipping.
+
+[SOURCES.md](SOURCES.md) has the full record for every instrument — rights holder, citation, exact conditions, translation provenance. Read the relevant section before you ship an instrument, especially any instrument outside the first two bullets above.
