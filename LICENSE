@@ -14,11 +14,17 @@ SOURCES.md. SOURCES.md, not the MIT License below, is where your
 rights over any specific instrument's text come from.
 
 Most bundled instruments are free to use, including in commercial
-products. Some carry conditions of their own — mandatory attribution,
-or other limits on what "free" covers. Three of them, the ECR-R, the
-ERQ, and the HSPS, are licensed for non-commercial research only.
-Read SOURCES.md before you rely on any instrument's text, particularly
-before commercial use.
+products, though a few carry a lighter condition of their own —
+mandatory attribution, most notably. Five need their rights holder's
+permission before commercial use: the ECR-R, the ERQ, and the HSPS,
+which SOURCES.md tags "Research only," and the SWLS and the
+Flourishing Scale, which SOURCES.md tags "Free with conditions" but
+whose own terms are non-commercial-only — the same restriction in
+substance, under a different tag. Two more, the AQ-10 and the RSES,
+are neither free nor restricted for commercial use: their rights
+holders simply haven't addressed it, so confirm with them before
+shipping commercially. Read SOURCES.md before you rely on any
+instrument's text, particularly before commercial use.
 
 The MIT License below is the license for the code. The bundled
 instrument text is licensed as described above, not under this MIT
