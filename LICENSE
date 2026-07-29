@@ -1,3 +1,30 @@
+This repository ships two different things, licensed differently.
+
+The code — the TypeScript source, compiled output, type definitions,
+scoring engine, validation, localization logic, and JSON Schema,
+everything that makes psytools run — is licensed under the MIT
+License below. Copyright (c) 2026 Samed Kahyaoglu.
+
+The bundled instrument text — the titles, descriptions, instructions,
+item wording, and answer-option labels of the seventeen third-party
+psychological assessment instruments psytools ships, in every
+language psytools provides them — is licensed by each instrument's
+own rights holder, on the terms recorded instrument by instrument in
+SOURCES.md. SOURCES.md, not the MIT License below, is where your
+rights over any specific instrument's text come from.
+
+Most bundled instruments are free to use, including in commercial
+products. Some carry conditions of their own — mandatory attribution,
+or other limits on what "free" covers. Three of them, the ECR-R, the
+ERQ, and the HSPS, are licensed for non-commercial research only.
+Read SOURCES.md before you rely on any instrument's text, particularly
+before commercial use.
+
+The MIT License below is the license for the code. The bundled
+instrument text is licensed as described above, not under this MIT
+grant.
+
+
 MIT License
 
 Copyright (c) 2026 Samed Kahyaoglu
@@ -19,3 +46,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+"The Software" above means the code described above — psytools' own
+source, build output, and documentation. Rights over the bundled
+instrument text come from that text's own rights holder, per
+SOURCES.md.
