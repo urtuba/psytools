@@ -15,6 +15,8 @@ export const k6: AssessmentDefinition = {
   id: "k6",
   version: "1.0.0",
   categories: ["distress"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "Kessler Psychological Distress Scale (K6)",
   },

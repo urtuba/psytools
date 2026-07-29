@@ -13,6 +13,8 @@ export const gad7: AssessmentDefinition = {
   id: "gad7",
   version: "1.0.0",
   categories: ["anxiety"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "Generalized Anxiety Disorder Scale (GAD-7)",
   },

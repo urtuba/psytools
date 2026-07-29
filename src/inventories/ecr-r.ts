@@ -28,6 +28,8 @@ export const ecrR: AssessmentDefinition = {
   id: "ecr-r",
   version: "1.0.0",
   categories: ["attachment", "relationships"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "Experiences in Close Relationships-Revised (ECR-R)",
   },

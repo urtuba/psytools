@@ -13,6 +13,8 @@ export const who5: AssessmentDefinition = {
   id: "who5",
   version: "1.0.0",
   categories: ["well-being"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "WHO-5 Well-Being Index",
   },

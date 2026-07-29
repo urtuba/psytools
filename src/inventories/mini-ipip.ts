@@ -13,6 +13,8 @@ export const miniIpip: AssessmentDefinition = {
   id: "mini-ipip",
   version: "1.0.0",
   categories: ["personality"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "Mini-IPIP Big Five Personality Scale",
   },

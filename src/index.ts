@@ -4,6 +4,8 @@ export type {
   AssessmentQuestion,
   AssessmentDefinition,
   InventoryCategory,
+  InventoryAudience,
+  InventoryRespondent,
   ScoreBand,
   ScoreFlag,
   SumScoring,

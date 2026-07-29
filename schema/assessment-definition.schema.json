@@ -14,6 +14,17 @@
       "description": "What the assessment measures, e.g. [\"depression\"]. Bundled inventories use a small controlled vocabulary; custom definitions may use any strings.",
       "items": { "type": "string", "minLength": 1 }
     },
+    "audience": {
+      "type": "array",
+      "description": "Age band(s) the instrument is written and validated for — who it is about, e.g. [\"adult\"]. Bundled inventories use a small controlled vocabulary (adult, adolescent, child); custom definitions may use any strings.",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "respondent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Whose report the answers are: \"self\" for the person the assessment is about, otherwise a proxy informant (\"parent\", \"teacher\", \"clinician\"). Not the administration mode — an interviewer-read self-report is still \"self\". Custom definitions may use any string.",
+      "examples": ["self", "parent", "teacher", "clinician"]
+    },
     "title": { "$ref": "#/$defs/localizedText" },
     "description": { "$ref": "#/$defs/localizedText" },
     "instructions": { "$ref": "#/$defs/localizedText" },

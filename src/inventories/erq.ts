@@ -28,6 +28,8 @@ export const erq: AssessmentDefinition = {
   id: "erq",
   version: "1.0.0",
   categories: ["emotion-regulation"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "Emotion Regulation Questionnaire (ERQ)",
   },

@@ -13,6 +13,8 @@ export const rses: AssessmentDefinition = {
   id: "rses",
   version: "1.0.0",
   categories: ["self-esteem"],
+  audience: ["adolescent", "adult"],
+  respondent: "self",
   title: {
     en: "Rosenberg Self-Esteem Scale (RSES)",
   },

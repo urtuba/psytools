@@ -26,6 +26,8 @@ export const hsps: AssessmentDefinition = {
   id: "hsps",
   version: "1.0.0",
   categories: ["sensory-processing", "personality"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "Highly Sensitive Person Scale (HSPS)",
   },

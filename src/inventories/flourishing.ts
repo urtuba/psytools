@@ -15,6 +15,8 @@ export const flourishing: AssessmentDefinition = {
   id: "flourishing",
   version: "1.0.0",
   categories: ["well-being"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "Flourishing Scale (FS)",
   },

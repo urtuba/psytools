@@ -15,6 +15,8 @@ export const swls: AssessmentDefinition = {
   id: "swls",
   version: "1.0.0",
   categories: ["well-being"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "Satisfaction with Life Scale (SWLS)",
   },

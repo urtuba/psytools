@@ -55,6 +55,8 @@ export const audit: AssessmentDefinition = {
   id: "audit",
   version: "1.0.0",
   categories: ["substance-use"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "Alcohol Use Disorders Identification Test (AUDIT)",
   },

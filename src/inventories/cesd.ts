@@ -13,6 +13,8 @@ export const cesd: AssessmentDefinition = {
   id: "cesd",
   version: "1.0.0",
   categories: ["depression"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "Center for Epidemiologic Studies Depression Scale (CES-D)",
   },

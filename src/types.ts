@@ -168,6 +168,20 @@ export type InventoryCategory =
   | "self-esteem";
 
 /**
+ * Age bands used by the bundled inventories to say who an instrument is
+ * *about*. `AssessmentDefinition.audience` accepts any string, so custom
+ * assessments are free to define their own bands.
+ */
+export type InventoryAudience = "adult" | "adolescent" | "child";
+
+/**
+ * Whose report the answers are, in the bundled inventories.
+ * `AssessmentDefinition.respondent` accepts any string, so custom
+ * assessments are free to define their own roles.
+ */
+export type InventoryRespondent = "self" | "parent" | "teacher" | "clinician";
+
+/**
  * The complete, serializable description of an assessment.
  *
  * This is the unit you persist, exchange between backend and frontend, and
@@ -184,6 +198,34 @@ export interface AssessmentDefinition {
    * any strings.
    */
   categories?: string[];
+  /**
+   * Age band(s) the instrument is written and validated for — who it is
+   * *about*, which is the person answering only when `respondent` is
+   * `"self"`. An array because one wording is often validated across
+   * bands (the RSES is standard for adolescents and adults alike).
+   *
+   * A retrospective instrument stays with the person answering: an adult
+   * recalling their own childhood is `["adult"]` + `"self"`, and the
+   * childhood framing belongs in `instructions`. Bundled inventories use
+   * `InventoryAudience` values; custom definitions may use any strings.
+   */
+  audience?: string[];
+  /**
+   * Whose report the answers are: the person the assessment is about
+   * (`"self"`) or a proxy informant (`"parent"`, `"teacher"`, ...). Scalar
+   * rather than an array because a definition is written from exactly one
+   * point of view — parent- and teacher-report forms of the same
+   * instrument are separate definitions with their own item wording
+   * ("your child" vs "I"), so they cannot share one entry here.
+   *
+   * Not the administration mode: a clinician reading the K10 aloud as an
+   * interview is still `"self"`, because the answers are the client's own
+   * report. `"clinician"` means the clinician is the informant, rating the
+   * client from their own observation. `ResponseData.respondentId` then
+   * identifies which individual answered. Bundled inventories use
+   * `InventoryRespondent` values; custom definitions may use any strings.
+   */
+  respondent?: string;
   title: LocalizedText;
   description?: LocalizedText;
   /** Instructions shown to the respondent (incl. the recall timeframe). */

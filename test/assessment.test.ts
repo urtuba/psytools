@@ -7,6 +7,7 @@ import {
   inventories,
   loadInventory,
   phq9,
+  rses,
   validateDefinition,
 } from "../src/index.ts";
 
@@ -118,6 +119,43 @@ test("every predefined inventory declares at least one known category", () => {
       assert.ok(known.has(category), `${id}: unknown category "${category}"`);
     }
   }
+});
+
+test("every predefined inventory declares a known audience and respondent", () => {
+  const knownAudiences = new Set(["adult", "adolescent", "child"]);
+  const knownRespondents = new Set(["self", "parent", "teacher", "clinician"]);
+  for (const [id, definition] of Object.entries(inventories)) {
+    const audience = definition.audience ?? [];
+    assert.ok(audience.length > 0, `${id}: audience missing`);
+    for (const band of audience) {
+      assert.ok(knownAudiences.has(band), `${id}: unknown audience "${band}"`);
+    }
+    assert.ok(
+      definition.respondent !== undefined && knownRespondents.has(definition.respondent),
+      `${id}: unknown or missing respondent "${definition.respondent}"`,
+    );
+  }
+});
+
+test("audience and respondent survive a stringify/parse round trip", () => {
+  // The RSES is the one bundled instrument spanning two age bands.
+  const restored = Assessment.parse(new Assessment(rses).stringify());
+  assert.deepEqual(restored.definition.audience, ["adolescent", "adult"]);
+  assert.equal(restored.definition.respondent, "self");
+
+  // Custom definitions may use their own vocabulary in both fields.
+  const custom = new Assessment({
+    id: "custom",
+    audience: ["perinatal"],
+    respondent: "partner",
+    title: { en: "Custom" },
+    defaultLocale: "en",
+    options: [{ value: 0, label: { en: "No" } }],
+    questions: [{ id: "q1", text: { en: "One" } }],
+  });
+  const restoredCustom = Assessment.parse(custom.stringify());
+  assert.deepEqual(restoredCustom.definition.audience, ["perinatal"]);
+  assert.equal(restoredCustom.definition.respondent, "partner");
 });
 
 test("loadInventory rejects unknown ids and unknown locales", async () => {

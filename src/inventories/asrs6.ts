@@ -13,6 +13,8 @@ export const asrs6: AssessmentDefinition = {
   id: "asrs6",
   version: "1.0.0",
   categories: ["adhd"],
+  audience: ["adult"],
+  respondent: "self",
   title: {
     en: "Adult ADHD Self-Report Scale (ASRS-v1.1) Screener",
   },
