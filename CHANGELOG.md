@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.2](https://github.com/urtuba/psytools/compare/v0.6.1...v0.6.2) (2026-07-29)
+
+
+### Features
+
+* **inventories:** add four IPIP instruments — Mini-IPIP6, BIS/BAS, IPIP-NEO-60, IPIP-VIA-R ([8a68c33](https://github.com/urtuba/psytools/commit/8a68c33c279598f3686adf36beed0ea85e63fe1d))
+
+
+### Bug Fixes
+
+* correct the instrument count in LICENSE after the IPIP batch ([6e9ab57](https://github.com/urtuba/psytools/commit/6e9ab57cde0c4db42c28adc79a321c7a873c029f))
+
 ## [0.6.1](https://github.com/urtuba/psytools/compare/v0.6.0...v0.6.1) (2026-07-29)
 
 
