@@ -106,6 +106,16 @@ test("every predefined inventory declares license and translation provenance", (
   }
 });
 
+// The ASRS screener's license makes attribution mandatory and fixes its exact
+// wording, so the string is asserted in full: paraphrasing it is a licensing
+// defect, not a copy edit.
+test("meta.attribution carries license-required credit lines verbatim", () => {
+  assert.equal(
+    inventories["asrs6"]!.meta?.["attribution"],
+    "The 6-question Adult Self-Report Scale-Version1.1 (ASRS-V1.1) Screener is a subset of the 18-question Adult ADHD Self-Report Scale-Version1.1 (Adult ASRSV1.1) Symptom Checklist. © New York University and the President and Fellows of Harvard College.",
+  );
+});
+
 test("every predefined inventory declares at least one known category", () => {
   const known = new Set([
     "depression", "anxiety", "stress", "well-being", "adhd", "autism",

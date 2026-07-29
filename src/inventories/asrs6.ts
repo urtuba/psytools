@@ -3,11 +3,18 @@ import type { AssessmentDefinition } from "../types.ts";
 /**
  * ASRS v1.1 — Adult ADHD Self-Report Scale, 6-item screener (Part A).
  *
- * Developed by the WHO and the Workgroup on Adult ADHD (Harvard Medical
- * School / NYU). Items 1–3 count as screen-positive from "Sometimes" and
- * items 4–6 from "Often"; four or more positive items indicate symptoms
- * highly consistent with adult ADHD and warrant further investigation
- * (Kessler et al., 2005). Free to distribute and score.
+ * A subset of the 18-question ASRS v1.1 Symptom Checklist, developed with the
+ * WHO's Workgroup on Adult ADHD. Items 1–3 count as screen-positive from
+ * "Sometimes" and items 4–6 from "Often"; four or more positive items indicate
+ * symptoms highly consistent with adult ADHD and warrant further investigation
+ * (Kessler et al., 2005).
+ *
+ * Copyright is held by New York University and the President and Fellows of
+ * Harvard College, and licensing is administered by NYU Technology
+ * Opportunities & Ventures — not by the WHO. Free for clinical, non-clinical
+ * and commercial use, but attribution is mandatory: render `meta.attribution`
+ * verbatim wherever the screener or its results appear. See `meta.license` for
+ * the open question about translation.
  */
 export const asrs6: AssessmentDefinition = {
   id: "asrs6",
@@ -103,8 +110,10 @@ export const asrs6: AssessmentDefinition = {
   meta: {
     reference:
       "Kessler, R. C., Adler, L., Ames, M., Demler, O., Faraone, S., Hiripi, E., et al. (2005). The World Health Organization Adult ADHD Self-Report Scale (ASRS): a short screening scale for use in the general population. Psychological Medicine, 35(2), 245-256.",
+    attribution:
+      "The 6-question Adult Self-Report Scale-Version1.1 (ASRS-V1.1) Screener is a subset of the 18-question Adult ADHD Self-Report Scale-Version1.1 (Adult ASRSV1.1) Symptom Checklist. © New York University and the President and Fellows of Harvard College.",
     license:
-      "Free with conditions — (c) WHO / Workgroup on Adult ADHD; free for clinical and research use. Verify licensing with the rights holders before embedding in commercial products.",
+      "Free with conditions — © New York University and the President and Fellows of Harvard College; licensing administered by NYU Technology Opportunities & Ventures (license.tov.med.nyu.edu/product/asrs6Qscreener). Freely available for clinical and non-clinical use, including commercial use, but attribution is required: display meta.attribution verbatim wherever the screener or its results appear. No modifications other than creating electronic versions are permitted, and the license does not say whether translation is a modification — so the standing of the bundled tr/de/zh/es translations is unresolved, pending a question to NYU TOV. See SOURCES.md.",
     licenseFlag: "free-with-conditions",
     translationProvenance:
       "en: reproduced from the original. Other locales (tr, de, zh, es): AI translation (Anthropic Claude, claude-fable-5) from the original English; official translations were not consulted and the texts are unverified. See SOURCES.md.",
