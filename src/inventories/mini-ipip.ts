@@ -1,11 +1,12 @@
 import type { AssessmentDefinition } from "../types.ts";
+import { ipipAccuracyOptions, ipipInstructions } from "./common.ts";
 
 /**
  * Mini-IPIP — 20-item short form of the International Personality Item
  * Pool Five-Factor Model measure (Donnellan et al., 2006).
  *
  * Measures the Big Five personality traits with 4 items each on a 1–5
- * accuracy scale; half the items are reverse-keyed. Trait scores are
+ * accuracy scale; 11 of the 20 items are reverse-keyed. Trait scores are
  * descriptive (4–20 per trait, higher = more of the trait) — there are no
  * clinical cutoffs, so no bands are defined. IPIP items are public domain.
  */
@@ -21,42 +22,9 @@ export const miniIpip: AssessmentDefinition = {
   description: {
     en: "A 20-item public-domain measure of the Big Five personality traits (extraversion, agreeableness, conscientiousness, neuroticism, openness), drawn from the International Personality Item Pool.",
   },
-  instructions: {
-    en: "Describe yourself as you generally are now, not as you wish to be in the future. Indicate how accurately each statement describes you.",
-  },
+  instructions: ipipInstructions,
   defaultLocale: "en",
-  options: [
-    {
-      value: 1,
-      label: {
-        en: "Very inaccurate",
-      },
-    },
-    {
-      value: 2,
-      label: {
-        en: "Moderately inaccurate",
-      },
-    },
-    {
-      value: 3,
-      label: {
-        en: "Neither accurate nor inaccurate",
-      },
-    },
-    {
-      value: 4,
-      label: {
-        en: "Moderately accurate",
-      },
-    },
-    {
-      value: 5,
-      label: {
-        en: "Very accurate",
-      },
-    },
-  ],
+  options: ipipAccuracyOptions,
   questions: [
     {
       id: "mini-ipip-1",

@@ -24,7 +24,7 @@ The same provenance applies to every bundled inventory **except where an invento
 | zh | AI translation (Anthropic Claude) from the original English | No |
 | es | AI translation (Anthropic Claude) from the original English | No |
 
-The exact translating model is stated per inventory in `meta.translationProvenance` (`claude-fable-5` for the original batch, `claude-sonnet-5` for later additions).
+The exact translating model is stated per inventory in `meta.translationProvenance` (`claude-fable-5` for the original batch, `claude-sonnet-5` for later additions, `claude-opus-5` for the IPIP batch).
 
 Official validated translations exist for most of these instruments, but they were **not consulted** in preparing the bundled texts, so they are deliberately not cited as sources. The packaged non-English wording has not been checked against them and has not been psychometrically validated. Validated instruments are only validated for their exact wording — before clinical or research use, obtain the official version for your language and compare or replace the text.
 
@@ -61,6 +61,10 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 | `hsps` | prorate, ≥21 of 27 answered | Total is mean-based in the literature; prorating is equivalent |
 | `swls`, `flourishing`, `k10`, `k6` | require-complete | Short instruments; cutoffs are undefined for partial data (K10 note: the interview form scores skipped items 1 — see its section) |
 | `rses` | prorate, ≥8 of 10 answered | Common research practice (80% completion) |
+| `mini-ipip6` | prorate, ≥3 of 4 per factor | Same as `mini-ipip` |
+| `bis-bas` | prorate, ≥5 per subscale | One threshold serves subscales of 10, 10, 10, and 6 items, so it is pinned to the strictest value the 6-item subscale allows — 5 of 6 there, 5 of 10 on the others |
+| `ipip-neo-60` | prorate, ≥9 of 12 per domain | Common research practice (75% completion) |
+| `ipip-via-r` | prorate, ≥3 of 4 per strength | 75% completion; note that dropping one item of a balanced 2-positive/2-negative scale reintroduces acquiescence bias |
 
 ## PHQ-9 — Patient Health Questionnaire-9 (`phq9`)
 
@@ -102,7 +106,7 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 **License: Free.** The International Personality Item Pool (Lewis Goldberg; <https://ipip.ori.org>) was created explicitly as a public-domain alternative to copyrighted commercial personality tests — items are free for any use, including commercial, without permission.
 
 - **Citation:** Donnellan, M. B., Oswald, F. L., Baird, B. M., & Lucas, R. E. (2006). The Mini-IPIP scales: Tiny-yet-effective measures of the Big Five factors of personality. *Psychological Assessment, 18*(2), 192–203.
-- **Scoring:** Five trait subscales (extraversion, agreeableness, conscientiousness, neuroticism, openness) of 4 items each on a 1–5 accuracy scale, half reverse-keyed; scores 4–20 per trait are descriptive — no clinical cutoffs exist, so no bands are defined.
+- **Scoring:** Five trait subscales (extraversion, agreeableness, conscientiousness, neuroticism, openness) of 4 items each on a 1–5 accuracy scale, 11 of the 20 items reverse-keyed; scores 4–20 per trait are descriptive — no clinical cutoffs exist, so no bands are defined. See [the IPIP shared record](#the-international-personality-item-pool--shared-record) for the license text, item rendering, and scoring rule this instrument shares with the other four IPIP inventories.
 
 ## ASRS v1.1 — Adult ADHD Self-Report Scale, 6-item screener (`asrs6`)
 
@@ -193,6 +197,57 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 - **Citation:** Rosenberg, M. (1965). *Society and the Adolescent Self-Image.* Princeton, NJ: Princeton University Press.
 - **Scoring:** Items scored 0–3 (Strongly disagree = 0 … Strongly agree = 3), items 2, 5, 6, 8, 9 reverse-scored, sum 0–30. Scores 15–25 are commonly described as the normal range (University of Maryland scoring guidance).
 - **Audience — deviates from the default:** `audience: ["adolescent", "adult"]`. Rosenberg developed the scale on high-school students (*Society and the Adolescent Self-Image*), and the same ten items are the standard self-esteem measure for adolescents and adults alike — the wording does not change between bands.
+
+## The International Personality Item Pool — shared record
+
+Five bundled inventories are drawn from the International Personality Item Pool (IPIP), a public-domain item bank maintained by Lewis Goldberg at the Oregon Research Institute: `mini-ipip`, `mini-ipip6`, `bis-bas`, `ipip-neo-60`, and `ipip-via-r`. What they have in common is recorded once here; each has its own section below.
+
+- **License: Free — the least conditional in this package.** IPIP's permissions page states it in full: "Because the IPIP has been placed in the public domain, permission has already been automatically granted for any person to use IPIP items, scales, and inventories for any purpose, commercial or non-commercial" (<https://ipip.ori.org/newPermission.htm>). There is no attribution requirement, no commercial carve-out, and no need to contact anyone. The scientific citation in each `meta.reference` is scholarly courtesy, not a license condition.
+- **Item source.** English item text is transcribed from IPIP's own scoring-key pages, fetched 2026-07-29; each inventory's section names the page it came from and `meta.translationProvenance` carries the URL. Secondary sources and reconstructions from memory were not used.
+- **Item rendering.** IPIP publishes item stems without the subject ("Am the life of the party."). psytools renders them as first-person sentences by prepending "I", lower-casing the stem's first letter, and dropping the trailing period — "I am the life of the party". The transformation is mechanical and applied uniformly; it reproduces the shipped `mini-ipip` wording exactly, which is how it was checked.
+- **Response scale.** All five use IPIP's 1–5 accuracy scale (Very inaccurate … Very accurate), shared as `ipipAccuracyOptions`.
+- **Scoring.** psytools reports subscale **sums**, which is IPIP's own published rule: reverse-keyed items are inverted (6 − answer), then all values in a scale are summed (<https://ipip.ori.org/newScoringInstructions.htm>). Divide by the item count for the item mean if you prefer it. None of the five has clinical cutoffs, so none defines bands.
+- **Reverse keys.** IPIP marks reverse-keyed items with a minus sign on its key pages. A mis-keyed item produces a plausible but wrong score that no test would otherwise catch, so the counts are asserted in `test/ipip-inventories.test.ts`: `mini-ipip` 11 of 20, `mini-ipip6` 15 of 24, `bis-bas` 10 of 36, `ipip-neo-60` 23 of 60, `ipip-via-r` 48 of 96.
+- **Item order.** IPIP publishes its keys grouped by scale and recommends mixing items when administering them. `bis-bas`, `ipip-neo-60`, and `ipip-via-r` keep the key page's grouped order because no authoritative mixed order is published; shuffle the questions in your own presentation layer if order effects matter for your use.
+
+## Mini-IPIP6 — Big Six personality scale (`mini-ipip6`)
+
+**License: Free.** Public domain via the IPIP grant quoted above — any use, commercial or non-commercial, no permission and no attribution required.
+
+- **Citation:** Sibley, C. G., Luyten, N., Purnomo, M., Mobberley, A., Wootton, L. W., Hammond, M. D., Sengupta, N., Perry, R., West-Newman, T., Wilson, M. S., McLellan, V. L., Hoverd, W. J., & Robertson, A. (2011). The Mini-IPIP6: Validation and extension of a short measure of the Big-Six factors of personality in New Zealand. *New Zealand Journal of Psychology, 40*(3), 142–159.
+- **Item source:** IPIP scoring key, <https://ipip.ori.org/MiniIPIP6Key.htm>.
+- **Scoring:** Six factor subscales of 4 items each on the 1–5 accuracy scale — extraversion, agreeableness, conscientiousness, neuroticism, openness to experience, honesty-humility. **15 of the 24 items are reverse-keyed** (2 per factor for the first four, 3 for openness, all 4 for honesty-humility). Sums of 4–20 per factor are descriptive; no clinical cutoffs exist, so no bands are defined.
+- **Item order — deviates from the group note above:** items 1–20 keep the order the bundled `mini-ipip` uses (Donnellan et al., 2006), so the two inventories line up item for item and share their translations; the four honesty-humility items are appended as 21–24. Every one of the 20 shared items appears verbatim on the Mini-IPIP6 key page with the same key, which is asserted in the tests.
+- **Relation to `mini-ipip`:** the Mini-IPIP6 is the Mini-IPIP plus a sixth factor. Both are bundled because the Big Five form is the one most consumers expect; use `mini-ipip6` when honesty-humility matters.
+
+## IPIP BIS/BAS Scales — approach and avoidance motivation (`bis-bas`)
+
+**License: Free.** Public domain via the IPIP grant quoted above.
+
+- **Citation:** Goldberg, L. R., Johnson, J. A., Eber, H. W., Hogan, R., Ashton, M. C., Cloninger, C. R., & Gough, H. G. (2006). The International Personality Item Pool and the future of public-domain personality measures. *Journal of Research in Personality, 40*(1), 84–96. Constructs after Carver, C. S., & White, T. L. (1994). Behavioral inhibition, behavioral activation, and affective responses to impending reward and punishment: The BIS/BAS scales. *Journal of Personality and Social Psychology, 67*(2), 319–333.
+- **Item source:** IPIP scoring key, <https://ipip.ori.org/newBIS_BASkey.htm>; scale statistics from the comparison table at <https://ipip.ori.org/newBIS_BAStable.htm>.
+- **Scoring:** Four subscales on the 1–5 accuracy scale — BIS/anxiety (10 items, 10–50), BAS fun-seeking (10, 10–50), BAS drive (10, 10–50), BAS reward responsiveness (6, 6–30). **10 of the 36 items are reverse-keyed** (2, 3, 3, and 2 respectively). Descriptive trait scores; no cutoffs, so no bands.
+- **These are IPIP's *preliminary* scales, and they are proxies.** IPIP's own pages label them "the Preliminary IPIP Scales Measuring the Constructs in Gray's Behavioral Inhibition and Activation Systems". They measure constructs *similar to* those of Carver and White's BIS/BAS scales — they are not that instrument and are not a translation of it. IPIP reports correlations with the original scales of .69 (BIS), .63 (fun-seeking), .54 (drive), and .41 (reward responsiveness); corrected for unreliability, .86, .92, .72, and .59. The reward-responsiveness proxy is the weakest of the four and its alpha (.68) is the lowest — read that subscale with more caution than the other three. If your protocol requires the Carver and White instrument specifically, these items are not a substitute for it.
+
+## IPIP-NEO-60 — 60-item personality inventory (`ipip-neo-60`)
+
+**License: Free.** Public domain via the IPIP grant quoted above.
+
+- **Citation:** Maples-Keller, J. L., Williamson, R. L., Sleep, C. E., Carter, N. T., Campbell, W. K., & Miller, J. D. (2019). Using item response theory to develop a 60-item representation of the NEO PI-R using the International Personality Item Pool: Development of the IPIP-NEO-60. *Journal of Personality Assessment, 101*(1), 4–15.
+- **Item source:** IPIP scoring key, <https://ipip.ori.org/IPIP-NEO-60ScoringKeys.htm>.
+- **Scoring:** Five domain subscales of 12 items each on the 1–5 accuracy scale — neuroticism, extraversion, openness to experience, agreeableness, conscientiousness. **23 of the 60 items are reverse-keyed** (4, 1, 7, 6, and 5 by domain). Sums of 12–60 per domain are descriptive; no cutoffs, so no bands.
+- **Facets are documented but not scored.** Each domain draws two items from each of six facets (neuroticism: anxiety, anger, depression, self-consciousness, immoderation, vulnerability; extraversion: friendliness, gregariousness, assertiveness, activity level, excitement-seeking, cheerfulness; openness: imagination, artistic interests, emotionality, adventurousness, intellect, liberalism; agreeableness: trust, morality, altruism, cooperation, modesty, sympathy; conscientiousness: self-efficacy, orderliness, dutifulness, achievement-striving, self-discipline, cautiousness). Two items are far too few for a reliable facet score, so psytools scores the five domains only and records the facet composition in `meta.scoringNote`.
+- **Naming.** `IPIP-NEO-60` is IPIP's own scale label and the name the authors gave the measure, which is what IPIP's citation guidance says to use. psytools describes it only as measuring constructs *similar to* five broad personality domains, built from public-domain IPIP items — the framing IPIP itself uses. It is **not** a version, edition, or short form of any commercially published inventory, and psytools claims no relationship with or endorsement by any test publisher. "NEO" and related marks belong to their owners; the one place the string appears in psytools' data is inside `meta.reference`, where it is part of the authors' own article title and is reproduced accurately rather than rewritten. A test asserts that psytools' own prose about this instrument stays clear of it.
+
+## IPIP-VIA-R Short Scales — 24 character strengths (`ipip-via-r`)
+
+**License: Free.** Public domain via the IPIP grant quoted above.
+
+- **Citation:** Bluemke, M., Partsch, M. V., Saucier, G., & Lechner, C. M. (2021, December 16). *Human character in the IPIP: Towards shorter, more content-valid, and cross-culturally comparable IPIP-VIA character strength scales.* PsyArXiv. <https://doi.org/10.31234/osf.io/k79qf>. Strengths taxonomy after Peterson, C., & Seligman, M. E. P. (2004). *Character Strengths and Virtues: A Handbook and Classification.* New York: Oxford University Press / Washington, DC: American Psychological Association.
+- **Item source:** IPIP scoring key, <https://ipip.ori.org/IPIP-VIA-R_Key.html>; reliability figures from <https://ipip.ori.org/IPIP-VIA-R_Table.html>.
+- **Scoring:** Twenty-four strength subscales of 4 items each on the 1–5 accuracy scale, sums of 4–20. **48 of the 96 items are reverse-keyed — exactly half, by design.** Every scale is balanced with two positively and two negatively worded items so that acquiescent responding cancels within the scale; that balance is the instrument's defining feature, and a prorated score computed from three of the four items no longer has it. No cutoffs exist, and scores are most often read as a rank order across a person's strengths rather than against a norm.
+- **Reliability is modest for several scales, by construction.** Four items divided between two wordings buys balance at the cost of internal consistency. The authors report McDonald's ω between .57 and .84 across German and UK samples and argue that Cronbach's α is the wrong estimate for a balanced scale of this shape; α runs as low as .42 (self-regulation, UK). Treat single-strength scores as indicative, not precise. The 2–3 week retest reliabilities (.53–.84) are the more useful number for most applications.
+- **Scale labels.** IPIP lists several strengths under two or three names (for example "Industry/Perseverance/Persistence"). psytools keeps a descriptive label carrying the alternatives and uses a single short id (`perseverance`); the mapping is visible in the definition.
 
 ## Instruments evaluated and not bundled
 

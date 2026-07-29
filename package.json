@@ -1,7 +1,7 @@
 {
   "name": "psytools",
   "version": "0.6.1",
-  "description": "Zero-dependency toolkit for psychological assessments: data models, response validation, scoring, and predefined inventories (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES) in multiple languages.",
+  "description": "Zero-dependency toolkit for psychological assessments: data models, response validation, scoring, and predefined inventories (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, Mini-IPIP6, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES, IPIP BIS/BAS, IPIP-NEO-60, IPIP-VIA-R) in multiple languages.",
   "keywords": [
     "psychology",
     "assessment",
@@ -33,6 +33,14 @@
     "psychological-distress",
     "rosenberg",
     "self-esteem",
+    "mini-ipip6",
+    "big-six",
+    "bis-bas",
+    "motivation",
+    "ipip-neo",
+    "five-factor-model",
+    "ipip-via",
+    "character-strengths",
     "adhd",
     "autism",
     "well-being",

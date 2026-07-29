@@ -107,6 +107,30 @@ export const localePacks: Readonly<Record<string, Readonly<Record<string, Locale
     zh: () => import("./zh/rses.ts"),
     es: () => import("./es/rses.ts"),
   },
+  "mini-ipip6": {
+    tr: () => import("./tr/mini-ipip6.ts"),
+    de: () => import("./de/mini-ipip6.ts"),
+    zh: () => import("./zh/mini-ipip6.ts"),
+    es: () => import("./es/mini-ipip6.ts"),
+  },
+  "bis-bas": {
+    tr: () => import("./tr/bis-bas.ts"),
+    de: () => import("./de/bis-bas.ts"),
+    zh: () => import("./zh/bis-bas.ts"),
+    es: () => import("./es/bis-bas.ts"),
+  },
+  "ipip-neo-60": {
+    tr: () => import("./tr/ipip-neo-60.ts"),
+    de: () => import("./de/ipip-neo-60.ts"),
+    zh: () => import("./zh/ipip-neo-60.ts"),
+    es: () => import("./es/ipip-neo-60.ts"),
+  },
+  "ipip-via-r": {
+    tr: () => import("./tr/ipip-via-r.ts"),
+    de: () => import("./de/ipip-via-r.ts"),
+    zh: () => import("./zh/ipip-via-r.ts"),
+    es: () => import("./es/ipip-via-r.ts"),
+  },
 };
 
 /** Locales available for an inventory (its base locale plus lazy packs). */

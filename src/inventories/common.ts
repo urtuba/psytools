@@ -51,6 +51,24 @@ export const sevenPointAgreementOptions: AssessmentOption[] = [
 ];
 
 /**
+ * The 1–5 accuracy scale every bundled International Personality Item
+ * Pool inventory uses, with IPIP's own anchor wording
+ * (<https://ipip.ori.org/newScoringInstructions.htm>).
+ */
+export const ipipAccuracyOptions: AssessmentOption[] = [
+  { value: 1, label: { en: "Very inaccurate" } },
+  { value: 2, label: { en: "Moderately inaccurate" } },
+  { value: 3, label: { en: "Neither accurate nor inaccurate" } },
+  { value: 4, label: { en: "Moderately accurate" } },
+  { value: 5, label: { en: "Very accurate" } },
+];
+
+/** Instructions shared by the bundled IPIP inventories. */
+export const ipipInstructions: LocalizedText = {
+  en: "Describe yourself as you generally are now, not as you wish to be in the future. Indicate how accurately each statement describes you.",
+};
+
+/**
  * The past-30-days frequency labels shared by the Kessler distress
  * scales. K10 stores them as 1–5 (sum 10–50), K6 as 0–4 (sum 0–24),
  * matching each instrument's published scoring convention.

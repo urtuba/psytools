@@ -20,8 +20,13 @@ import { flourishing } from "./flourishing.ts";
 import { k10 } from "./k10.ts";
 import { k6 } from "./k6.ts";
 import { rses } from "./rses.ts";
+import { miniIpip6 } from "./mini-ipip6.ts";
+import { bisBas } from "./bis-bas.ts";
+import { ipipNeo60 } from "./ipip-neo-60.ts";
+import { ipipViaR } from "./ipip-via-r.ts";
 
 export { phq9, gad7, dass21, who5, asrs6, aq10, audit, miniIpip, cesd, ecrR, erq, hsps, swls, flourishing, k10, k6, rses };
+export { miniIpip6, bisBas, ipipNeo60, ipipViaR };
 export { twoWeekFrequencyOptions, twoWeekInstructions } from "./common.ts";
 
 /** All predefined inventory definitions shipped with psytools, by id. */
@@ -43,6 +48,10 @@ export const inventories: Readonly<Record<string, AssessmentDefinition>> = {
   k10,
   k6,
   rses,
+  "mini-ipip6": miniIpip6,
+  "bis-bas": bisBas,
+  "ipip-neo-60": ipipNeo60,
+  "ipip-via-r": ipipViaR,
 };
 
 export type InventoryId =
@@ -62,7 +71,11 @@ export type InventoryId =
   | "flourishing"
   | "k10"
   | "k6"
-  | "rses";
+  | "rses"
+  | "mini-ipip6"
+  | "bis-bas"
+  | "ipip-neo-60"
+  | "ipip-via-r";
 
 /**
  * Instantiates a predefined inventory as an `Assessment`.

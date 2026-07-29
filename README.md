@@ -19,7 +19,7 @@ That's a complete depression screening: standardized items, answer validation, p
 
 ## Why psytools
 
-- **Batteries included** — seventeen instruments (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES) ship ready to use in up to five languages (English, Turkish, German, Chinese, Spanish — see the table below), with published scoring rules, citations, and filtering metadata (category, target audience, respondent role).
+- **Batteries included** — twenty-one instruments (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, Mini-IPIP6, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES, IPIP BIS/BAS, IPIP-NEO-60, IPIP-VIA-R) ship ready to use in up to five languages (English, Turkish, German, Chinese, Spanish — see the table below), with published scoring rules, citations, and filtering metadata (category, target audience, respondent role).
 - **Your tests too** — therapists and researchers can define their own instruments as one plain JSON object; psytools validates, localizes, and scores them the same way.
 - **Everything is plain JSON** — assessments and responses `stringify()`/`parse()` losslessly, so definitions live in your database and travel between backend and frontend. Scoring rules are data, not code, and survive the round trip.
 - **Safe by default** — every answer is validated against the option scale, incomplete responses can't be scored accidentally, and submitted responses are immutable.
@@ -90,7 +90,8 @@ const response = AssessmentResponse.parse(assessment, rowFromDb); // answers re-
 | `asrs6` | Adult ADHD Self-Report Scale (ASRS-v1.1) screener | adhd | 6 | Count of screen-positive items (per-item thresholds), ≥4 positive | en, tr, de, zh, es |
 | `aq10` | Autism Spectrum Quotient (AQ-10, adult) | autism | 10 | 1 point per item in trait direction (agree/disagree), ≥6 refer | en, tr, de, zh, es |
 | `audit` | Alcohol Use Disorders Identification Test (WHO) | substance-use | 10 | Sum 0–40 with per-question point systems, 4 WHO risk zones | en, tr, de, zh, es |
-| `mini-ipip` | Mini-IPIP Big Five personality scale | personality | 20 | 5 trait subscales (4–20 each), reverse-keyed items, no cutoffs | en, tr, de, zh, es |
+| `mini-ipip` | Mini-IPIP Big Five personality scale | personality | 20 | 5 trait subscales (4–20 each), 11 reverse-keyed, no cutoffs | en, tr, de, zh, es |
+| `mini-ipip6` | Mini-IPIP6 Big Six personality scale | personality | 24 | 6 factor subscales (4–20 each), 15 reverse-keyed, no cutoffs | en, tr, de, zh, es |
 | `cesd` | Center for Epidemiologic Studies Depression Scale (CES-D) | depression | 20 | Sum 0–60, 4 reverse-keyed items, elevated at ≥16 | en, tr, de, zh, es |
 | `ecr-r` | Experiences in Close Relationships-Revised (adult attachment) | attachment, relationships | 36 | 2 subscales × 18 items (anxiety, avoidance), 14 reverse-keyed, no cutoffs | en, tr¹ |
 | `erq` | Emotion Regulation Questionnaire | emotion-regulation | 10 | 2 subscales (reappraisal 6, suppression 4), no reversals, no cutoffs | en, tr, de, zh, es |
@@ -100,6 +101,9 @@ const response = AssessmentResponse.parse(assessment, rowFromDb); // answers re-
 | `k10` | Kessler Psychological Distress Scale (K10) | distress | 10 | Sum 10–50 (1–5 coding), 4 severity bands | en, tr, de, zh, es |
 | `k6` | Kessler Psychological Distress Scale (K6) | distress | 6 | Sum 0–24 (0–4 coding), ≥13 serious distress | en, tr, de, zh, es |
 | `rses` | Rosenberg Self-Esteem Scale | self-esteem | 10 | Sum 0–30, 5 reverse-keyed items, 15–25 normal range | en, tr, de, zh, es |
+| `bis-bas` | IPIP BIS/BAS scales (approach and avoidance motivation) | personality, motivation | 36 | 4 subscales (BIS 10, fun-seeking 10, drive 10, reward responsiveness 6), 10 reverse-keyed, no cutoffs | en, tr, de, zh, es |
+| `ipip-neo-60` | IPIP-NEO-60 personality inventory | personality | 60 | 5 domain subscales × 12 items (12–60 each), 23 reverse-keyed, no cutoffs | en, tr, de, zh, es |
+| `ipip-via-r` | IPIP-VIA-R short scales (24 character strengths) | character-strengths, personality | 96 | 24 strength subscales × 4 items (4–20 each), balanced 2 positive / 2 reverse, no cutoffs | en, tr, de, zh, es |
 
 ¹ The `ecr-r` and `hsps` Turkish packs reproduce **published, validated Turkish adaptations** (Sümer and colleagues — see [SOURCES.md](SOURCES.md)); other locales can follow once verified sources are available. `ecr-r`, `erq`, and `hsps` are licensed for **non-commercial research use only** — check [SOURCES.md](SOURCES.md) before shipping them in a product. `asrs6` is free to ship, commercially included, but its license makes attribution mandatory: render `meta.attribution` wherever it appears.
 
@@ -223,7 +227,7 @@ scoring: {
 
 `ignore` sums what is answered (partial totals understate severity — use deliberately); `prorate` scales the raw score up to the full item count (rounded) and refuses to score below `minAnswered`; `require-complete` throws unless every contributing non-optional item is answered. For subscale scoring the policy applies to each subscale independently.
 
-The bundled inventories ship with policies (PHQ-9/GAD-7/DASS-21/Mini-IPIP prorate with thresholds, WHO-5/ASRS/AQ-10 require-complete, AUDIT ignores to match its skip logic) — see [SOURCES.md](SOURCES.md#missing-data-policies) for the rationale and how to override.
+The bundled inventories ship with policies (PHQ-9/GAD-7/DASS-21 and the five IPIP inventories prorate with thresholds, WHO-5/ASRS/AQ-10 require-complete, AUDIT ignores to match its skip logic) — see [SOURCES.md](SOURCES.md#missing-data-policies) for the rationale and how to override.
 
 ## Custom evaluation
 
@@ -281,17 +285,17 @@ npm run build   # ESM + CJS + type declarations into dist/
 
 - **Not a diagnostic tool.** Scores, severity bands, and flags implement the published scoring rules of screening instruments; they are not diagnoses and do not replace clinical judgment.
 - **Crisis-relevant answers.** PHQ-9 item 9 raises a `suicidality` flag — applications should surface this to a responsible clinician and provide crisis resources to respondents.
-- **Instrument licensing.** [SOURCES.md](SOURCES.md) records who holds the rights to each bundled instrument and flags it **Free** (PHQ-9, GAD-7, DASS-21, WHO-5, AUDIT, Mini-IPIP, CES-D, K10, K6 — usable without permission, including commercially), **Free with conditions** (ASRS screener, AQ-10, SWLS, Flourishing Scale, RSES — free as distributed, but the conditions differ per instrument: the ASRS screener requires attribution, the AQ-10's commercial terms are unstated), or **Research only** (ECR-R, ERQ, HSPS — not licensed for clinical products or personnel selection). Each inventory's `meta.licenseFlag` carries the flag programmatically; read the instrument's section before shipping it.
+- **Instrument licensing.** [SOURCES.md](SOURCES.md) records who holds the rights to each bundled instrument and flags it **Free** (PHQ-9, GAD-7, DASS-21, WHO-5, AUDIT, CES-D, K10, K6, and the five IPIP inventories — usable without permission, including commercially), **Free with conditions** (ASRS screener, AQ-10, SWLS, Flourishing Scale, RSES — free as distributed, but the conditions differ per instrument: the ASRS screener requires attribution, the AQ-10's commercial terms are unstated), or **Research only** (ECR-R, ERQ, HSPS — not licensed for clinical products or personnel selection). Each inventory's `meta.licenseFlag` carries the flag programmatically; read the instrument's section before shipping it.
 - **Required attribution.** Where a license fixes the exact credit line that must be displayed, the inventory carries it verbatim in `meta.attribution` — render it wherever the instrument or its results appear. Today only `asrs6` sets it (© New York University and the President and Fellows of Harvard College). It is deliberately separate from `meta.reference`, which is the scientific citation: an academic reference is not a copyright attribution, and only one of the two is a license obligation.
-- **Translation provenance.** English texts are reproduced from the original instruments. Turkish, German, Simplified Chinese, and Spanish texts are AI translations (Anthropic Claude, model `claude-fable-5`) of the original English — official translations were **not** consulted and the texts are unverified. This status is documentation-only: psytools does not track or expose per-pack verification programmatically (no `verified` field, no gating option, no status API) — read [SOURCES.md](SOURCES.md) and decide for yourself whether the bundled wording is fit for your use case. If it isn't for a specific item, use [local overrides](#local-translation-overrides) rather than forking the package. Obtain and compare the official version for your language before clinical use. Corrections: <samed@luckys.dev>.
+- **Translation provenance.** English texts are reproduced from the original instruments. Turkish, German, Simplified Chinese, and Spanish texts are AI translations (Anthropic Claude — the exact model is named per inventory in `meta.translationProvenance`) of the original English — official translations were **not** consulted and the texts are unverified. This status is documentation-only: psytools does not track or expose per-pack verification programmatically (no `verified` field, no gating option, no status API) — read [SOURCES.md](SOURCES.md) and decide for yourself whether the bundled wording is fit for your use case. If it isn't for a specific item, use [local overrides](#local-translation-overrides) rather than forking the package. Obtain and compare the official version for your language before clinical use. Corrections: <samed@luckys.dev>.
 
 ## License
 
 The code is MIT — Samed Kahyaoglu, 2026. See [LICENSE](LICENSE).
 
-The bundled instrument text is a separate matter: each of the seventeen instruments is licensed by its own rights holder, on terms that differ instrument to instrument. The quick answer:
+The bundled instrument text is a separate matter: each of the twenty-one instruments is licensed by its own rights holder, on terms that differ instrument to instrument. The quick answer:
 
-- **Nine ship free, including in commercial products, no permission needed:** PHQ-9, GAD-7, DASS-21, WHO-5, AUDIT, Mini-IPIP, CES-D, K10, K6.
+- **Thirteen ship free, including in commercial products, no permission needed:** PHQ-9, GAD-7, DASS-21, WHO-5, AUDIT, CES-D, K10, K6, and the five International Personality Item Pool inventories — Mini-IPIP, Mini-IPIP6, IPIP BIS/BAS, IPIP-NEO-60, IPIP-VIA-R. The IPIP five carry the least conditional terms in the package: "Because the IPIP has been placed in the public domain, permission has already been automatically granted for any person to use IPIP items, scales, and inventories for any purpose, commercial or non-commercial" — no attribution required, no one to ask.
 - **The ASRS-v1.1 screener (`asrs6`) ships free, including commercially, with one mandatory condition — attribution.** Render the credit line psytools ships in `meta.attribution` wherever the screener or its results appear.
 - **Three ship for non-commercial research only: ECR-R, ERQ, and HSPS.** Commercial use of any of these needs permission directly from that instrument's own rights holder (R. C. Fraley for the ECR-R; the Stanford Psychophysiology Laboratory for the ERQ; Elaine Aron for the HSPS) — that permission is theirs to give, not psytools'.
 - **AQ-10, RSES, SWLS, and the Flourishing Scale ship free with conditions of their own, and the conditions aren't uniform.** AQ-10's and RSES's rights holders haven't addressed commercial use (confirm with them before shipping commercially). SWLS's and the Flourishing Scale's rights holder (Ed Diener and co-authors) licenses them for non-commercial purposes only — treat those two like the research-only three for commercial shipping.

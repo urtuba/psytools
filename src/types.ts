@@ -165,7 +165,11 @@ export type InventoryCategory =
   | "emotion-regulation"
   | "sensory-processing"
   | "distress"
-  | "self-esteem";
+  | "self-esteem"
+  /** Approach and avoidance motivation — what drives a person towards reward or away from punishment. */
+  | "motivation"
+  /** Positively valued traits of character, such as gratitude, curiosity, or perseverance. */
+  | "character-strengths";
 
 /**
  * Age bands used by the bundled inventories to say who an instrument is
