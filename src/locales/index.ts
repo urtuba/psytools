@@ -161,6 +161,12 @@ export const localePacks: Readonly<Record<string, Readonly<Record<string, Locale
     zh: () => import("./zh/ucla-ls3.ts"),
     es: () => import("./es/ucla-ls3.ts"),
   },
+  "cbi": {
+    tr: () => import("./tr/cbi.ts"),
+    de: () => import("./de/cbi.ts"),
+    zh: () => import("./zh/cbi.ts"),
+    es: () => import("./es/cbi.ts"),
+  },
 };
 
 /** Locales available for an inventory (its base locale plus lazy packs). */

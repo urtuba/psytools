@@ -166,6 +166,7 @@ export type InventoryCategory =
   | "sensory-processing"
   | "distress"
   | "self-esteem"
+  | "burnout"
   /** Approach and avoidance motivation — what drives a person towards reward or away from punishment. */
   | "motivation"
   /** Positively valued traits of character, such as gratitude, curiosity, or perseverance. */

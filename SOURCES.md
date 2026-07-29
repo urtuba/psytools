@@ -72,6 +72,7 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 | `eat26` | prorate, ≥21 of 26 | Common research practice (≈80% completion) |
 | `csi16` | require-complete | The authors' scoring instruction is a plain sum over all sixteen items, and their 51.5 cutoff is calibrated to the full 0–81 range. No prorating rule is published, and inventing one would move a clinical threshold |
 | `ucla-ls3` | prorate, ≥16 of 20 | Common research practice (≈80% completion); the score is continuous with no cutoff, so prorating carries no risk of tipping a respondent across a threshold |
+| `cbi` | prorate, ≥4 per scale | The authors' own rule is 3 of 6 (personal), 4 of 7 (work), 3 of 6 (client). One policy cannot carry three thresholds, so it is pinned to the strictest — stricter than the authors on the two 6-item scales, which fails safe. Prorating is the authors' method: their score is the mean of the answered items |
 
 ## PHQ-9 — Patient Health Questionnaire-9 (`phq9`)
 
@@ -322,6 +323,27 @@ Set against it, without contradicting it: HealthMeasures lists Russell and the U
 - **They disagree on the top anchor, and psytools follows "Always".** One prints Never / Rarely / Sometimes / **Often**, the other Never / Rarely / Sometimes / **Always**. Russell's own instruction example settles it — it ends "if you always feel happy, you would respond 'always'" — and "Often" belongs to the earlier Revised UCLA Loneliness Scale, a different instrument. This is exactly the kind of drift a single source would have shipped unnoticed.
 - **Scoring:** Sum 20–80 on a 1–4 frequency scale, higher is lonelier. **Nine of the twenty items are reverse-keyed** — 1, 5, 6, 9, 10, 15, 16, 19 and 20, the positively worded ones. (Nine, not ten: descriptions of this scale sometimes quote "10 of the 20 items reverse scored", which is a statement about the earlier Revised version, not about Version 3.)
 - **No bands, because Russell publishes no cutoffs.** The scale is scored continuously. Severity bandings for it circulate widely on the web; none of them traces back to Russell, so none is bundled.
+
+## CBI — Copenhagen Burnout Inventory (`cbi`)
+
+**License: Free with conditions.** Like the UCLA scale above, this record has two halves and you should have both.
+
+**What supports it.** NFA — Det Nationale Forskningscenter for Arbejdsmiljø, Denmark's national occupational-health research institute — hosts the complete instrument in its public questionnaire library with no registration, no fee and no gate of any kind, under a named live contact (Thomas Clausen, <tcl@nfa.dk>). An independent peer-reviewed validation study describes it, citing Kristensen et al. by name, as "a public domain questionnaire." And the two published Turkish adaptations (2009, 2013) describe their method without describing a permission-seeking step — which carries some weight in this file specifically, because the Turkish teams behind the WURS-25, the WFIRS and the Athens Insomnia Scale all state plainly that they wrote and asked first.
+
+**What is missing.** No statement from the rights holders themselves. NFA stewards and distributes the instrument; it did not write it. Two independent research passes went looking for a first-party grant and neither found one, and the original Kristensen et al. (2005) paper stayed paywalled across every route tried, so if it settles the question either way we have not read it. Nothing in the first-edition document itself — read in full — carries a copyright line, a licence, or a permission statement.
+
+**Our position:** bundled on the strength of NFA's open hosting, and flagged `free-with-conditions` rather than `free` because there is no grant to point at. If your use is commercial and you want certainty, write to NFA. We have not.
+
+- **Citation:** Kristensen, T. S., Borritz, M., Villadsen, E., & Christensen, K. B. (2005). The Copenhagen Burnout Inventory: A new tool for the assessment of burnout. *Work & Stress, 19*(3), 192–207.
+- **Item source:** the authors' own English first edition (February 2004), by Marianne Borritz and Tage S. Kristensen at the National Institute of Occupational Health, Copenhagen, as hosted by NFA. Read in full, including the normative tables. **Single source** — unlike `ucla-ls3` there was no second reproduction to cross-check against, but unlike `ucla-ls3` this one comes from the authors themselves.
+- **Development language was Danish**, for the PUMA study on a Danish population. The English text bundled here is the authors' own, not a third-party translation, so the file's general provenance rule still holds — but this is the first bundled instrument whose *development* language is not English, and that distinction is worth keeping in view as more non-English-origin instruments are considered.
+- **Three scales, scored separately, no total.** Personal burnout (6 items), work-related burnout (7), client-related burnout (6). There is deliberately no score across all nineteen: the three ask about the same exhaustion under different attributions, and the authors treat them as independent.
+- **Two response scales are mixed within a scale.** Items phrased as "is your work…" take a degree scale (To a very high degree … To a very low degree); items phrased as "how often…" take a frequency scale (Always … Never/almost never). Both map to the same 100 / 75 / 50 / 25 / 0 key, so a mis-assigned scale would produce a wrong score rather than an out-of-range answer — `test/evaluation.test.ts` pins which items carry which.
+- **Scoring:** the published score for each scale is the **mean** of its items, on 0–100. psytools reports subscale sums; divide by 6, 7 and 6 respectively — the same convention the ECR-R, ERQ and HSPS entries follow. **One item is reverse-keyed**: work-burnout item 7 (`cbi-13`), on having energy left for family and friends, where more energy means less burnout.
+- **Missing data:** the authors' own rule classifies a respondent as a non-responder below 3 of 6 answered (personal), 4 of 7 (work) and 3 of 6 (client). A single policy cannot carry three thresholds, so `minAnswered` is pinned to 4 — stricter than the authors on the two 6-item scales, which fails safe by refusing to score rather than scoring thin data.
+- **No bands, because the authors publish norms rather than cutoffs.** The first edition gives population means (around 32.7 for personal burnout in a representative Danish sample, SD 15.7) and no severity thresholds, so none are bundled.
+- **The authors ask that the items not be presented in the printed order**, and say they may be interleaved with questions on other topics, to avoid stereotyped response patterns. psytools keeps the published order so the definition stays checkable against the source — shuffle at presentation time if you follow the recommendation.
+- **"Clients" is meant to be substituted.** The authors instruct that the term should match the setting — patients for nurses, students or children for teachers. The bundled instructions say so; the Turkish pack uses *danışan*, which is already the right word for a therapy setting.
 
 ## Instruments evaluated and not bundled
 

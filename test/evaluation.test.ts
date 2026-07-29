@@ -482,3 +482,51 @@ test("evaluate rejects out-of-scale values and unknown questions in raw maps", (
     (error: unknown) => error instanceof PsytoolsError && error.code === "invalid_argument",
   );
 });
+
+test("CBI: three scales, two mixed option scales, one reverse-keyed item", () => {
+  const assessment = new Assessment(inventories["cbi"]!);
+  const definition = assessment.definition;
+
+  // The work and client scales mix a degree scale onto some items. Both
+  // scales run 100 down to 0, so a wrong per-question scale would not show
+  // up as an out-of-range answer — only as a wrong score.
+  const degreeIds = ["cbi-7", "cbi-8", "cbi-9", "cbi-14", "cbi-15", "cbi-16", "cbi-17"];
+  for (const question of definition.questions) {
+    const ownScale = question.options !== undefined;
+    assert.equal(ownScale, degreeIds.includes(question.id), `${question.id}: option scale`);
+  }
+  assert.deepEqual(
+    definition.questions.filter((q) => q.reverseScored).map((q) => q.id),
+    ["cbi-13"],
+  );
+
+  // Answer the top option (100) everywhere. Every item is keyed so that the
+  // top option means most burnout, except cbi-13 ("enough energy for family
+  // and friends"), which reverses against its own frequency scale to 0.
+  const worst = assessment.evaluate(
+    Object.fromEntries(definition.questions.map((q) => [q.id, 100])),
+  );
+  assert.equal(worst.kind, "multiscale");
+  if (worst.kind !== "multiscale") return;
+
+  const byId = Object.fromEntries(worst.scales.map((scale) => [scale.id, scale]));
+  assert.deepEqual(Object.keys(byId).sort(), ["client", "personal", "work"]);
+  assert.equal(byId["personal"]?.score, 600); // 6 x 100; published mean 100
+  assert.equal(byId["work"]?.score, 600); // 6 x 100 + reversed cbi-13 at 0
+  assert.equal(byId["client"]?.score, 600); // 6 x 100
+  assert.equal(byId["work"]?.max, 700);
+  for (const scale of worst.scales) {
+    assert.equal(scale.band, undefined, `${scale.id}: CBI defines no cutoffs`);
+  }
+
+  // The floor is the mirror image: everything at 0 leaves only the reversed
+  // item contributing, at its own scale's top value.
+  const best = assessment.evaluate(
+    Object.fromEntries(definition.questions.map((q) => [q.id, 0])),
+  );
+  if (best.kind !== "multiscale") return assert.fail();
+  const bestById = Object.fromEntries(best.scales.map((scale) => [scale.id, scale]));
+  assert.equal(bestById["personal"]?.score, 0);
+  assert.equal(bestById["work"]?.score, 100);
+  assert.equal(bestById["client"]?.score, 0);
+});
