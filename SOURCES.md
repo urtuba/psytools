@@ -32,6 +32,17 @@ Non-English texts live as one file per inventory per language under [`src/locale
 
 This table is the only place translation status is tracked — psytools has no `verified` field, no gating option, and no API to query pack status at runtime; that would overstate a confidence level nobody has confirmed. If you've corrected a specific item's wording for your own use and don't want to wait on an upstream fix, apply it locally with `loadInventory(id, { overrides })` (see the README's [local translation overrides](README.md#local-translation-overrides)) rather than forking the package — or, better, send the correction upstream so everyone benefits.
 
+## Target audience & respondent
+
+Each inventory declares two independent axes in its definition: `audience`, the age band(s) the instrument is written and validated for — who it is *about* — and `respondent`, whose report the answers are. They are separate because instruments about children are commonly completed by a parent or a teacher rather than by the child.
+
+**Every bundled inventory is `respondent: "self"` and `audience: ["adult"]`, except where its section below states otherwise.** One deviates today: the RSES is `["adolescent", "adult"]`.
+
+Two things `audience` and `respondent` deliberately do *not* encode:
+
+- **The recall timeframe.** A retrospective instrument answered by an adult about their own childhood is `audience: ["adult"]`, `respondent: "self"` — the childhood framing lives in `instructions` and `meta.timeframe`, not here.
+- **The administration mode.** An interviewer-read self-report — the K10's full interview form, for example — is still `respondent: "self"`, because the answers are the client's own report. `"clinician"` is reserved for instruments where the clinician is the informant, rating the client from their own observation.
+
 ## Missing-data policies
 
 Bundled inventories ship with declarative missing-data policies (`scoring.missing`). **The prorating thresholds are implementation choices reflecting common research practice — they are not part of the instruments' official scoring rules.** Override by cloning the definition if your protocol differs.
@@ -106,6 +117,7 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 
 - **Citation:** Allison, C., Auyeung, B., & Baron-Cohen, S. (2012). Toward brief "Red Flags" for autism screening: The Short Autism Spectrum Quotient and the Short Quantitative Checklist in 1,000 cases and 3,000 controls. *Journal of the American Academy of Child & Adolescent Psychiatry, 51*(2), 202–212.
 - **Scoring:** 1 point per item in the trait direction (agree on items 1, 7, 8, 10; disagree on the rest); ≥6 suggests specialist referral, per Allison et al. (2012).
+- **Audience:** Allison et al. (2012) published three AQ-10 forms — adult, adolescent, and child. psytools bundles the **adult self-report** form only (`audience: ["adult"]`, `respondent: "self"`); the adolescent and child forms are completed by a parent and are not included.
 
 ## CES-D — Center for Epidemiologic Studies Depression Scale (`cesd`)
 
@@ -172,3 +184,4 @@ Bundled inventories ship with declarative missing-data policies (`scoring.missin
 
 - **Citation:** Rosenberg, M. (1965). *Society and the Adolescent Self-Image.* Princeton, NJ: Princeton University Press.
 - **Scoring:** Items scored 0–3 (Strongly disagree = 0 … Strongly agree = 3), items 2, 5, 6, 8, 9 reverse-scored, sum 0–30. Scores 15–25 are commonly described as the normal range (University of Maryland scoring guidance).
+- **Audience — deviates from the default:** `audience: ["adolescent", "adult"]`. Rosenberg developed the scale on high-school students (*Society and the Adolescent Self-Image*), and the same ten items are the standard self-esteem measure for adolescents and adults alike — the wording does not change between bands.

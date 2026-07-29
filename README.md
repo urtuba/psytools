@@ -19,7 +19,7 @@ That's a complete depression screening: standardized items, answer validation, p
 
 ## Why psytools
 
-- **Batteries included** — seventeen instruments (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES) ship ready to use in up to five languages (English, Turkish, German, Chinese, Spanish — see the table below), with published scoring rules, citations, and categories for filtering.
+- **Batteries included** — seventeen instruments (PHQ-9, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES) ship ready to use in up to five languages (English, Turkish, German, Chinese, Spanish — see the table below), with published scoring rules, citations, and filtering metadata (category, target audience, respondent role).
 - **Your tests too** — therapists and researchers can define their own instruments as one plain JSON object; psytools validates, localizes, and scores them the same way.
 - **Everything is plain JSON** — assessments and responses `stringify()`/`parse()` losslessly, so definitions live in your database and travel between backend and frontend. Scoring rules are data, not code, and survive the round trip.
 - **Safe by default** — every answer is validated against the option scale, incomplete responses can't be scored accidentally, and submitted responses are immutable.
@@ -101,7 +101,7 @@ const response = AssessmentResponse.parse(assessment, rowFromDb); // answers re-
 | `k6` | Kessler Psychological Distress Scale (K6) | distress | 6 | Sum 0–24 (0–4 coding), ≥13 serious distress | en, tr, de, zh, es |
 | `rses` | Rosenberg Self-Esteem Scale | self-esteem | 10 | Sum 0–30, 5 reverse-keyed items, 15–25 normal range | en, tr, de, zh, es |
 
-¹ The `ecr-r` and `hsps` Turkish packs reproduce **published, validated Turkish adaptations** (Sümer and colleagues — see [SOURCES.md](SOURCES.md)); other locales can follow once verified sources are available. `ecr-r`, `erq`, and `hsps` are licensed for **non-commercial research use only** — check [SOURCES.md](SOURCES.md) before shipping them in a product. Each definition also carries `categories` for filtering (e.g. `inventories` entries with `categories.includes("depression")`).
+¹ The `ecr-r` and `hsps` Turkish packs reproduce **published, validated Turkish adaptations** (Sümer and colleagues — see [SOURCES.md](SOURCES.md)); other locales can follow once verified sources are available. `ecr-r`, `erq`, and `hsps` are licensed for **non-commercial research use only** — check [SOURCES.md](SOURCES.md) before shipping them in a product.
 
 ```ts
 import { loadInventory, inventories, dass21 } from "psytools";
@@ -120,6 +120,14 @@ const result = assessment.evaluate(response);
 //     { id: "anxiety", ... }, { id: "stress", ... }
 //   ], flags: [] }
 ```
+
+### Filtering metadata
+
+Every definition carries three optional fields for picking the right instrument: `categories` (what it measures — e.g. `inventories` entries with `categories.includes("depression")`), `audience` (the age band(s) it is written and validated for — `adult`, `adolescent`, `child`), and `respondent` (whose report the answers are — `self`, `parent`, `teacher`, `clinician`). Bundled inventories draw from the vocabularies exported as `InventoryCategory`, `InventoryAudience`, and `InventoryRespondent`; the fields themselves are plain strings, so your own definitions can use their own taxonomy.
+
+Audience and respondent are separate axes because instruments *about* children are commonly filled in by someone else — a parent-report ADHD scale is `audience: ["child"]`, `respondent: "parent"`. `audience` is an array, since one wording is often validated across bands; `respondent` is a single value, since a definition is written from exactly one point of view. Parent- and teacher-report forms of the same instrument say "your child" and "this student", so they are separate definitions with separate ids, not one definition with two respondents.
+
+Neither field encodes the recall timeframe or the administration mode: a retrospective instrument answered by an adult about their own childhood is `["adult"]` + `"self"`, with the childhood framing in `instructions`, and a clinician reading items aloud to a client is still `"self"` because the answers are the client's own report. Every bundled inventory is `respondent: "self"` and `audience: ["adult"]`, except `rses` — Rosenberg developed the scale on high-school students and the same ten items are standard for both bands, so it is `["adolescent", "adult"]`.
 
 ## Defining your own assessment
 
