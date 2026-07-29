@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.6.0](https://github.com/urtuba/psytools/compare/v0.5.4...v0.6.0) (2026-07-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* psytools is no longer offered as a wholly MIT-licensed package, and `package.json`'s license field no longer reads `"MIT"`.
+
+  **There are no API changes.** What changes is the terms you hold this package under.
+
+  The MIT text itself is unchanged, byte for byte. What changed is the scope it claims: `LICENSE` now states that the MIT grant covers psytools' own source, build output, type definitions, scoring engine, and schema — and that it does not cover the titles, descriptions, instructions, item wording, and answer-option labels of the third-party instruments the package bundles, in any language. Those are licensed by each instrument's own rights holder.
+
+  If an automated license scan cleared psytools on the strength of the `"MIT"` string, that approval no longer describes the package, and the scan will likely now flag it for manual review. **That flag is correct.** The package has always bundled third-party instrument text that the MIT grant never covered, and the old field overstated what recipients received. Correcting the field is the point of this release.
+
+  **What to check before upgrading** — whether the specific instruments you use are licensed for what you do with them:
+
+  - **Free, including commercial use:** PHQ-9, GAD-7, DASS-21, WHO-5, AUDIT, Mini-IPIP, CES-D, K10, K6.
+  - **Free including commercial use, attribution mandatory:** the ASRS-v1.1 screener. Its required credit line ships in `meta.attribution` — render it verbatim wherever the screener or its results appear.
+  - **Not licensed for commercial use:** ECR-R, ERQ and HSPS are for non-commercial research only; SWLS and the Flourishing Scale are licensed by their rights holder for non-commercial purposes only.
+  - **Commercial use not addressed either way by the rights holder:** AQ-10, RSES.
+
+  [SOURCES.md](https://github.com/urtuba/psytools/blob/main/SOURCES.md) carries the full per-instrument record — rights holder, exact conditions, citation, and translation provenance. For any specific instrument, that file is the answer, not this one.
+
+  Hold rights to a bundled instrument, or know of a grant recorded here incorrectly? Please write to <samed@luckys.dev> or open an issue.
+
+### Features
+
+* scope the MIT license to the code, not the bundled instrument text ([1687695](https://github.com/urtuba/psytools/commit/168769512ccbdde0a9c973747d97010f0f67745d))
+
 ## [0.5.4](https://github.com/urtuba/psytools/compare/v0.5.3...v0.5.4) (2026-07-29)
 
 
