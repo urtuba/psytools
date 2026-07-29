@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.6.0](https://github.com/urtuba/psytools/compare/v0.5.4...v0.6.0) (2026-07-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* psytools is no longer offered as a wholly MIT-licensed package, and package.json's license field no longer reads "MIT".
+
+### Features
+
+* scope the MIT license to the code, not the bundled instrument text ([1687695](https://github.com/urtuba/psytools/commit/168769512ccbdde0a9c973747d97010f0f67745d))
+
 ## [0.5.4](https://github.com/urtuba/psytools/compare/v0.5.3...v0.5.4) (2026-07-29)
 
 
