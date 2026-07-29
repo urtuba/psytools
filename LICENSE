@@ -6,7 +6,7 @@ everything that makes psytools run — is licensed under the MIT
 License below. Copyright (c) 2026 Samed Kahyaoglu.
 
 The bundled instrument text — the titles, descriptions, instructions,
-item wording, and answer-option labels of the twenty-one third-party
+item wording, and answer-option labels of the twenty-six third-party
 psychological assessment instruments psytools ships, in every
 language psytools provides them — is licensed by each instrument's
 own rights holder, on the terms recorded instrument by instrument in
@@ -20,10 +20,13 @@ permission before commercial use: the ECR-R, the ERQ, and the HSPS,
 which SOURCES.md tags "Research only," and the SWLS and the
 Flourishing Scale, which SOURCES.md tags "Free with conditions" but
 whose own terms are non-commercial-only — the same restriction in
-substance, under a different tag. Two more, the AQ-10 and the RSES,
-are neither free nor restricted for commercial use: their rights
-holders simply haven't addressed it, so confirm with them before
-shipping commercially. Read SOURCES.md before you rely on any
+substance, under a different tag. One more, the EAT-26, is free for
+individual use but requires a licensing agreement from its copyright
+holder for commercial web platforms that charge user fees. Four
+others — the AQ-10, the RSES, the CSI-16, and the UCLA Loneliness
+Scale — are neither free nor restricted for commercial use: their
+rights holders simply haven't addressed it, so confirm with them
+before shipping commercially. Read SOURCES.md before you rely on any
 instrument's text, particularly before commercial use.
 
 The MIT License below is the license for the code. The bundled
