@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/urtuba/psytools/compare/v0.6.0...v0.6.1) (2026-07-29)
+
+
+### Bug Fixes
+
+* name all five commercially-restricted instruments in LICENSE ([3150e0f](https://github.com/urtuba/psytools/commit/3150e0f4b5b26f9cc500dca1e8b064cacb541cc1))
+
 ## [0.6.0](https://github.com/urtuba/psytools/compare/v0.5.4...v0.6.0) (2026-07-29)
 
 
