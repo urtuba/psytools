@@ -19,7 +19,7 @@ That's a complete depression screening: standardized items, answer validation, p
 
 ## Why psytools
 
-- **Batteries included** — twenty-six instruments (PHQ-9, PHQ-15, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, Mini-IPIP6, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES, IPIP BIS/BAS, IPIP-NEO-60, IPIP-VIA-R, PCL-5, EAT-26, CSI-16, UCLA Loneliness Scale) ship ready to use in up to five languages (English, Turkish, German, Chinese, Spanish — see the table below), with published scoring rules, citations, and filtering metadata (category, target audience, respondent role).
+- **Batteries included** — twenty-seven instruments (PHQ-9, PHQ-15, GAD-7, DASS-21, WHO-5, ASRS, AQ-10, AUDIT, Mini-IPIP, Mini-IPIP6, CES-D, ECR-R, ERQ, HSPS, SWLS, Flourishing, K10, K6, RSES, IPIP BIS/BAS, IPIP-NEO-60, IPIP-VIA-R, PCL-5, EAT-26, CSI-16, UCLA Loneliness Scale, CBI) ship ready to use in up to five languages (English, Turkish, German, Chinese, Spanish — see the table below), with published scoring rules, citations, and filtering metadata (category, target audience, respondent role).
 - **Your tests too** — therapists and researchers can define their own instruments as one plain JSON object; psytools validates, localizes, and scores them the same way.
 - **Everything is plain JSON** — assessments and responses `stringify()`/`parse()` losslessly, so definitions live in your database and travel between backend and frontend. Scoring rules are data, not code, and survive the round trip.
 - **Safe by default** — every answer is validated against the option scale, incomplete responses can't be scored accidentally, and submitted responses are immutable.
