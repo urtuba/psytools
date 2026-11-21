@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { inventories, loadInventory, PsytoolsError } from "../src/index.ts";
-import type { AssessmentDefinition, ScaleResult } from "../src/index.ts";
+import type { AssessmentDefinition, MultiScaleResult, ScaleResult } from "../src/index.ts";
 
 /** The 2026-07 coverage wave: five instruments, five rights holders. */
 const IDS = ["phq15", "pcl5", "eat26", "csi16", "ucla-ls3"] as const;
@@ -257,5 +257,240 @@ test("locale packs translate the per-question answer scales too", async () => {
     // restates the same digits rather than inventing words for them.
     assert.deepEqual(optionLabels(csi16, "csi16-11", locale), ["5", "4", "3", "2", "1", "0"]);
     assert.deepEqual(optionLabels(csi16, "csi16-12", locale), ["0", "1", "2", "3", "4", "5"]);
+  }
+});
+
+/**
+ * The 2026-11 free-screeners wave: five instruments whose rights holders
+ * grant reproduction without permission. Shapes are transcribed from each
+ * rights holder's own form; see SOURCES.md for the source per instrument.
+ */
+const FREE_WAVE = ["pc-ptsd-5", "phq4", "phq8", "gds15", "tipi"] as const;
+
+const FREE_WAVE_ITEMS: Record<string, { items: number; reverse: number }> = {
+  "pc-ptsd-5": { items: 6, reverse: 0 },
+  phq4: { items: 4, reverse: 0 },
+  phq8: { items: 8, reverse: 0 },
+  gds15: { items: 15, reverse: 5 },
+  tipi: { items: 10, reverse: 5 },
+};
+
+const answerAllWith = async (id: string, pick: (values: number[], index: number) => number) => {
+  const assessment = await loadInventory(id);
+  const definition = assessment.definition;
+  const response = assessment.createResponse();
+  definition.questions.forEach((question, index) => {
+    response.answer(question.id, pick((question.options ?? definition.options).map((o) => o.value), index));
+  });
+  return assessment.evaluate(response.submit());
+};
+
+test("the free-screeners wave carries the item and reverse-key counts of its sources", () => {
+  for (const id of FREE_WAVE) {
+    const definition = inventories[id]!;
+    const expected = FREE_WAVE_ITEMS[id]!;
+    assert.equal(definition.questions.length, expected.items, `${id}: item count`);
+    assert.equal(
+      definition.questions.filter((q) => q.reverseScored).length,
+      expected.reverse,
+      `${id}: reverse-keyed count`,
+    );
+  }
+});
+
+test("PC-PTSD-5 scores 0 when trauma exposure is denied and the symptom items are skipped", async () => {
+  const assessment = await loadInventory("pc-ptsd-5");
+  const response = assessment.createResponse();
+  response.answer("pc-ptsd-5-trauma", 0);
+  const result = assessment.evaluate(response.submit()) as ScaleResult;
+  assert.equal(result.score, 0);
+  assert.equal(result.min, 0);
+  assert.equal(result.max, 5);
+});
+
+test("PC-PTSD-5 counts yes answers on the five symptom items only, and ships no bands", async () => {
+  const definition = inventories["pc-ptsd-5"]!;
+  assert.equal(definition.scoring?.kind, "count");
+  if (definition.scoring?.kind !== "count") return;
+  assert.deepEqual(
+    definition.scoring.items.map((item) => item.questionId),
+    [1, 2, 3, 4, 5].map((n) => `pc-ptsd-5-${n}`),
+    "the exposure question is not scored",
+  );
+  assert.equal(definition.scoring.bands, undefined);
+  assert.match(String(definition.meta!["scoringNote"]), /No bands are defined/);
+  // Only the five gated symptom items are optional; the exposure question is required.
+  assert.deepEqual(
+    definition.questions.filter((q) => q.optional).map((q) => q.id),
+    [1, 2, 3, 4, 5].map((n) => `pc-ptsd-5-${n}`),
+  );
+  for (const question of definition.questions.slice(1)) {
+    assert.match(question.text["en"]!, /^In the past month, have you /, `${question.id}: lead-in`);
+  }
+
+  // Exposure yes, four of five symptoms yes: the score is 4.
+  const result = (await answerAllWith("pc-ptsd-5", (_values, index) => (index === 5 ? 0 : 1))) as ScaleResult;
+  assert.equal(result.score, 4);
+  assert.equal(result.band, undefined);
+});
+
+test("PHQ-4 follows Pfizer's form order and scores anxiety, depression, and the total", async () => {
+  const definition = inventories["phq4"]!;
+  assert.deepEqual(
+    definition.questions.map((q) => q.text["en"]),
+    [
+      "Feeling nervous, anxious or on edge",
+      "Not being able to stop or control worrying",
+      "Little interest or pleasure in doing things",
+      "Feeling down, depressed, or hopeless",
+    ],
+  );
+  const assessment = await loadInventory("phq4");
+  // Anxiety 3 (screen positive), depression 2 (below the cutpoint).
+  const result = assessment.evaluate(assessment.createResponse().answerAll([2, 1, 1, 1]).submit()) as MultiScaleResult;
+  const byId = Object.fromEntries(result.scales.map((s) => [s.id, s]));
+  assert.equal(byId["anxiety"]!.score, 3);
+  assert.equal(byId["anxiety"]!.band?.id, "positive");
+  assert.equal(byId["depression"]!.score, 2);
+  assert.equal(byId["depression"]!.band?.id, "below-cutoff");
+  assert.equal(byId["total"]!.score, 5);
+  assert.equal(byId["total"]!.min, 0);
+  assert.equal(byId["total"]!.max, 12);
+  assert.equal(byId["total"]!.band, undefined, "total-score bands could not be verified, so none ship");
+  assert.equal(byId["anxiety"]!.max, 6);
+
+  const partial = assessment.createResponse();
+  partial.answer("phq4-1", 3);
+  assert.throws(
+    () => assessment.evaluate(partial, { allowIncomplete: true }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "incomplete_response",
+  );
+});
+
+test("PHQ-8 is the PHQ-9 without item 9, on the PHQ-9's scale and cutpoints", async () => {
+  const phq8 = inventories["phq8"]!;
+  const phq9 = inventories["phq9"]!;
+  assert.deepEqual(
+    phq8.questions.map((q) => q.text["en"]),
+    phq9.questions.slice(0, 8).map((q) => q.text["en"]),
+  );
+  assert.deepEqual(phq8.options, phq9.options);
+  assert.equal(phq8.scoring?.kind === "sum" ? phq8.scoring.flags : "not-sum", undefined, "no self-harm flag");
+
+  const nine = (await answerAllWith("phq8", (_values, index) => (index < 3 ? 3 : 0))) as ScaleResult;
+  assert.equal(nine.score, 9);
+  assert.equal(nine.band?.id, "mild");
+  const ten = (await answerAllWith("phq8", (_values, index) => (index < 3 ? 3 : index === 3 ? 1 : 0))) as ScaleResult;
+  assert.equal(ten.score, 10);
+  assert.equal(ten.band?.id, "moderate");
+  const top = (await answerAllWith("phq8", (values) => Math.max(...values))) as ScaleResult;
+  assert.equal(top.score, 24);
+  assert.equal(top.max, 24);
+  assert.equal(top.band?.id, "severe");
+});
+
+test("GDS-15 keys 'no' as depressive on items 1, 5, 7, 11 and 13", async () => {
+  const reversed = inventories["gds15"]!.questions.filter((q) => q.reverseScored).map((q) => q.id);
+  assert.deepEqual(reversed, [1, 5, 7, 11, 13].map((n) => `gds15-${n}`));
+
+  // "Yes" everywhere: ten depressive answers.
+  const allYes = (await answerAllWith("gds15", () => 1)) as ScaleResult;
+  assert.equal(allYes.score, 10);
+  assert.equal(allYes.band?.id, "suggestive");
+  // Every answer in the depressive direction.
+  const allDepressive = (await answerAllWith("gds15", (_values, index) =>
+    [0, 4, 6, 10, 12].includes(index) ? 0 : 1,
+  )) as ScaleResult;
+  assert.equal(allDepressive.score, 15);
+  assert.equal(allDepressive.band?.id, "likely");
+  // "No" everywhere: five depressive answers, just below the follow-up threshold.
+  const allNo = (await answerAllWith("gds15", () => 0)) as ScaleResult;
+  assert.equal(allNo.score, 5);
+  assert.equal(allNo.band?.id, "below-cutoff");
+});
+
+test("GDS-15 prorates like its authors and refuses more than five missing items", async () => {
+  const assessment = await loadInventory("gds15");
+  const ten = assessment.createResponse();
+  // "Yes" on items 2-11: seven depressive answers (5, 7 and 11 are keyed "no").
+  for (let i = 2; i <= 11; i += 1) ten.answer(`gds15-${i}`, 1);
+  const result = assessment.evaluate(ten, { allowIncomplete: true }) as ScaleResult;
+  assert.equal(result.score, Math.round((7 * 15) / 10)); // 10.5 -> 11
+  const nine = assessment.createResponse();
+  for (let i = 1; i <= 9; i += 1) nine.answer(`gds15-${i}`, 1);
+  assert.throws(
+    () => assessment.evaluate(nine, { allowIncomplete: true }),
+    (error: unknown) => error instanceof PsytoolsError && error.code === "incomplete_response",
+  );
+});
+
+test("TIPI scores five 2-item scales, each with one reverse-keyed item", async () => {
+  const definition = inventories["tipi"]!;
+  assert.deepEqual(
+    definition.questions.filter((q) => q.reverseScored).map((q) => q.id),
+    [2, 4, 6, 8, 10].map((n) => `tipi-${n}`),
+  );
+  if (definition.scoring?.kind !== "subscales") return assert.fail("tipi should use subscales");
+  const reverse = new Set(definition.questions.filter((q) => q.reverseScored).map((q) => q.id));
+  for (const subscale of definition.scoring.subscales) {
+    assert.equal(subscale.questionIds.length, 2, subscale.id);
+    assert.equal(subscale.questionIds.filter((id) => reverse.has(id)).length, 1, `${subscale.id}: one reverse item`);
+    assert.equal(subscale.bands, undefined, `${subscale.id}: no bands`);
+  }
+  assert.deepEqual(definition.options.map((o) => o.value), [1, 2, 3, 4, 5, 6, 7]);
+
+  // Gosling's worked example: item 1 = 5, item 6 = 2 -> (5 + 6) / 2 = 5.5, a sum of 11.
+  const result = (await answerAllWith("tipi", (_values, index) =>
+    index === 0 ? 5 : index === 5 ? 2 : 4,
+  )) as MultiScaleResult;
+  const extraversion = result.scales.find((s) => s.id === "extraversion")!;
+  assert.equal(extraversion.score, 11);
+  assert.equal(extraversion.min, 2);
+  assert.equal(extraversion.max, 14);
+});
+
+test("every free-screeners-wave inventory is flagged free and records its source and translator", () => {
+  for (const id of FREE_WAVE) {
+    const definition = inventories[id]!;
+    const meta = definition.meta ?? {};
+    assert.equal(meta["licenseFlag"], "free", `${id}: licenseFlag`);
+    assert.ok(String(meta["license"]).length > 0, `${id}: license text`);
+    assert.ok(String(meta["reference"]).length > 0, `${id}: citation`);
+    assert.match(String(meta["translationProvenance"]), /AI translation \(Anthropic Claude, claude-opus-5-5\)/, `${id}: provenance`);
+    assert.equal(definition.respondent, "self", `${id}: respondent`);
+    assert.deepEqual(definition.audience, ["adult"], `${id}: audience`);
+  }
+});
+
+test("the free-screeners wave ships complete tr, de, zh, and es packs", async () => {
+  for (const id of FREE_WAVE) {
+    for (const locale of ["tr", "de", "zh", "es"]) {
+      const assessment = await loadInventory(id, { locales: [locale] });
+      const view = assessment.localize(locale);
+      const where = `${id}/${locale}`;
+      assert.ok(view.title.length > 0, `${where}: title`);
+      assert.ok(view.instructions && view.instructions.length > 0, `${where}: instructions`);
+      assert.equal(view.questions.length, FREE_WAVE_ITEMS[id]!.items, `${where}: questions`);
+      for (const question of view.questions) {
+        assert.notEqual(
+          question.text,
+          inventories[id]!.questions.find((q) => q.id === question.id)!.text["en"],
+          `${where}/${question.id}: untranslated`,
+        );
+        for (const option of question.options) {
+          // Spanish "No" is legitimately identical to English, so only presence is checked.
+          assert.ok(option.label.length > 0, `${where}/${question.id}: option ${option.value}`);
+        }
+      }
+      const scoring = assessment.definition.scoring!;
+      if (scoring.kind === "subscales") {
+        for (const subscale of scoring.subscales) {
+          assert.ok(subscale.label[locale], `${where}: subscale ${subscale.id}`);
+          for (const band of subscale.bands ?? []) assert.ok(band.label[locale], `${where}: band ${subscale.id}/${band.id}`);
+        }
+      } else {
+        for (const band of scoring.bands ?? []) assert.ok(band.label[locale], `${where}: band ${band.id}`);
+      }
+    }
   }
 });

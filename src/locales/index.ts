@@ -167,6 +167,36 @@ export const localePacks: Readonly<Record<string, Readonly<Record<string, Locale
     zh: () => import("./zh/cbi.ts"),
     es: () => import("./es/cbi.ts"),
   },
+  "pc-ptsd-5": {
+    tr: () => import("./tr/pc-ptsd-5.ts"),
+    de: () => import("./de/pc-ptsd-5.ts"),
+    zh: () => import("./zh/pc-ptsd-5.ts"),
+    es: () => import("./es/pc-ptsd-5.ts"),
+  },
+  "phq4": {
+    tr: () => import("./tr/phq4.ts"),
+    de: () => import("./de/phq4.ts"),
+    zh: () => import("./zh/phq4.ts"),
+    es: () => import("./es/phq4.ts"),
+  },
+  "phq8": {
+    tr: () => import("./tr/phq8.ts"),
+    de: () => import("./de/phq8.ts"),
+    zh: () => import("./zh/phq8.ts"),
+    es: () => import("./es/phq8.ts"),
+  },
+  "gds15": {
+    tr: () => import("./tr/gds15.ts"),
+    de: () => import("./de/gds15.ts"),
+    zh: () => import("./zh/gds15.ts"),
+    es: () => import("./es/gds15.ts"),
+  },
+  "tipi": {
+    tr: () => import("./tr/tipi.ts"),
+    de: () => import("./de/tipi.ts"),
+    zh: () => import("./zh/tipi.ts"),
+    es: () => import("./es/tipi.ts"),
+  },
 };
 
 /** Locales available for an inventory (its base locale plus lazy packs). */

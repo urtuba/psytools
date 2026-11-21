@@ -30,10 +30,16 @@ import { eat26 } from "./eat26.ts";
 import { csi16 } from "./csi16.ts";
 import { uclaLs3 } from "./ucla-ls3.ts";
 import { cbi } from "./cbi.ts";
+import { pcPtsd5 } from "./pc-ptsd-5.ts";
+import { phq4 } from "./phq4.ts";
+import { phq8 } from "./phq8.ts";
+import { gds15 } from "./gds15.ts";
+import { tipi } from "./tipi.ts";
 
 export { phq9, gad7, dass21, who5, asrs6, aq10, audit, miniIpip, cesd, ecrR, erq, hsps, swls, flourishing, k10, k6, rses };
 export { miniIpip6, bisBas, ipipNeo60, ipipViaR };
 export { phq15, pcl5, eat26, csi16, uclaLs3, cbi };
+export { pcPtsd5, phq4, phq8, gds15, tipi };
 export { twoWeekFrequencyOptions, twoWeekInstructions } from "./common.ts";
 
 /** All predefined inventory definitions shipped with psytools, by id. */
@@ -65,6 +71,11 @@ export const inventories: Readonly<Record<string, AssessmentDefinition>> = {
   csi16,
   "ucla-ls3": uclaLs3,
   cbi,
+  "pc-ptsd-5": pcPtsd5,
+  phq4,
+  phq8,
+  gds15,
+  tipi,
 };
 
 export type InventoryId =
@@ -94,7 +105,12 @@ export type InventoryId =
   | "eat26"
   | "csi16"
   | "ucla-ls3"
-  | "cbi";
+  | "cbi"
+  | "pc-ptsd-5"
+  | "phq4"
+  | "phq8"
+  | "gds15"
+  | "tipi";
 
 /**
  * Instantiates a predefined inventory as an `Assessment`.
