@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.4](https://github.com/urtuba/psytools/compare/v0.6.3...v0.6.4) (2026-11-21)
+
+
+### Features
+
+* **inventories:** add five free instruments: PC-PTSD-5, PHQ-4, PHQ-8, GDS-15, TIPI ([bffca07](https://github.com/urtuba/psytools/commit/bffca07ad7d6ddd906827660d991eea508abf686))
+
+
+### Bug Fixes
+
+* update LICENSE for the five instruments of the free-screeners wave ([1fc6c90](https://github.com/urtuba/psytools/commit/1fc6c9056233fdcedd1eaec51f9bb9c46e04f3e5))
+
 ## [0.6.3](https://github.com/urtuba/psytools/compare/v0.6.2...v0.6.3) (2026-07-29)
 
 
